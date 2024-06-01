@@ -9,10 +9,10 @@
     <div class="Login">
         <div class="LoginForm">
             <h1 class="LoginSticker">Login</h1>
-            <form method="post" asp-action="Login">
-                <input class="EmailLog" asp-for="LoginUser.Email" type="text" placeholder="Email" />
+            <form id="loginForm" method="post" asp-action="Login">
+                <input id="LoginEmail" class="EmailLog" asp-for="LoginUser.Email" type="text" placeholder="Email" />
                 <span asp-validation-for="LoginUser.Email" class="text-danger"></span>
-                <input class="PasswordLog" asp-for="LoginUser.Password" type="password" placeholder="Hasło" />
+                <input id="LoginPassword" class="PasswordLog" asp-for="LoginUser.Password" type="password" placeholder="Hasło" />
                 <span asp-validation-for="LoginUser.Password" class="text-danger"></span>
                 <button class="LoginBttn" type="submit">Zaloguj</button>
             </form>
@@ -24,24 +24,25 @@
     <div class="Register">
         <div class="RegisterForm">
             <h1 class="RegisterSticker">Rejestracja</h1>
-            <form method="post" asp-action="Register">
-                <input class="FirstNameReg" asp-for="RegisterUser.FirstName" type="text" placeholder="Imię" />
+            <form id="registerForm" method="post" asp-action="Register">
+                <input id="FirstName" class="FirstNameReg" asp-for="RegisterUser.FirstName" type="text" placeholder="Imię" />
                 <span asp-validation-for="RegisterUser.FirstName" class="text-danger"></span>
-                <input class="LastNameReg" asp-for="RegisterUser.LastName" type="text" placeholder="Nazwisko" />
+                <input id="LastName" class="LastNameReg" asp-for="RegisterUser.LastName" type="text" placeholder="Nazwisko" />
                 <span asp-validation-for="RegisterUser.LastName" class="text-danger"></span>
-                <input class="PhoneNumberReg" asp-for="RegisterUser.PhoneNumber" type="text" placeholder="Telefon" />
+                <input id="PhoneNumber" class="PhoneNumberReg" asp-for="RegisterUser.PhoneNumber" type="text" placeholder="Telefon" />
                 <span asp-validation-for="RegisterUser.PhoneNumber" class="text-danger"></span>
-                <input class="EmailReg" asp-for="RegisterUser.Email" type="text" placeholder="Email" />
+                <input id="Email" class="EmailReg" asp-for="RegisterUser.Email" type="text" placeholder="Email" />
                 <span asp-validation-for="RegisterUser.Email" class="text-danger"></span>
-                <input class="PasswordReg" asp-for="RegisterUser.Password" type="password" placeholder="Hasło" />
+                <input id="Password" class="PasswordReg" asp-for="RegisterUser.Password" type="password" placeholder="Hasło" />
                 <span asp-validation-for="RegisterUser.Password" class="text-danger"></span>
                 <button class="RegisterBttn" type="submit">Zarejestruj</button>
             </form>
         </div>
     </div>
 </div>
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div id="errorMessages"></div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/ValidationLoginRegister.js"></script>
 }
