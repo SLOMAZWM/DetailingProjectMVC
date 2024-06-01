@@ -1,0 +1,4 @@
+﻿Dodać walidacje do zmiany danych JS i strona serwera
+Dodać mozliwosc zmiany danych dla klienta
+
+Zrealizowane zamowienia beda usuwane z uslug i dodawane do historii (dodac wyszukiwarke do wyszukiwania zamowien)
