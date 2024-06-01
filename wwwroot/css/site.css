@@ -1,0 +1,1052 @@
+h1:focus {
+    outline: none;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+.blazor-error-boundary {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
+    padding: 1rem 1rem 1rem 3.7rem;
+    color: white;
+}
+
+    .blazor-error-boundary::after {
+        content: "An error has occurred."
+    }
+
+body {
+    background-color: #424242;
+    color: white;
+    font-family: 'Century Gothic';
+}
+
+/*========================================================================================================================Menu========================================================================================================================*/
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    background-image: linear-gradient(to right top, #ffc75f, #ffbd61, #ffb363, #ffaa67, #ffa16b, #ff9a6e, #ff9372, #ff8c76, #ff847b, #ff7d81, #ff7689, #ff6f91);
+    margin-top: 0%;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+    font-family: 'Century Gothic';
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    border-radius: 20px;
+}
+
+    .menu a {
+        text-decoration: none;
+        color: black;
+        opacity: 100%;
+        font-family: 'Century Gothic';
+        margin-right: 11%;
+        font-size: 130%;
+        transition: ease-in-out 2s;
+        letter-spacing: 3px;
+    }
+
+        .menu a:hover {
+            color: white;
+            transition: 0.5s;
+            cursor: pointer;
+        }
+
+.Cardshop {
+    width: 5%;
+    height: 10%;
+    margin: 1px;
+}
+
+/*========================================================================================================================Menu========================================================================================================================*/
+
+
+/*========================================================================================================================Login=======================================================================================================================*/
+
+.LoginForm {
+    margin-bottom: 30%;
+}
+
+.Login {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-top: 0%;
+    padding-bottom: 3%;
+    margin-top: 10%;
+    margin-left: 30%;
+    border-radius: 5%;
+    border: 5px solid #fe935c;
+    clear: both;
+}
+
+.EmailLog {
+    width: 80%;
+    padding-top: 2%;
+    margin-top: 12%;
+    border: none;
+    background: none;
+    color: white;
+    text-align: center;
+}
+
+.PasswordLog {
+    width: 80%;
+    padding-top: 2%;
+    margin-top: 10%;
+    background: none;
+    border: none;
+    text-align: center;
+    color: white;
+}
+
+.LoginBttn {
+    margin-top: 20%;
+    width: 80%;
+    padding: 5%;
+    background-color: #fe935c;
+    border: none;
+    border-radius: 3%;
+    transition: ease-in-out 0.5s;
+    font-size: 100%;
+    cursor: pointer;
+    font-size: 120%;
+}
+
+    .LoginBttn:hover {
+        background-color: #ff7689;
+        transition: 0.5s;
+        color: white;
+    }
+
+/*========================================================================================================================Login=======================================================================================================================*/
+
+.Line {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: white;
+    width: 0.1%;
+    padding-top: 1%;
+    padding-bottom: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    border-radius: 20px;
+}
+
+.container {
+    display: flex;
+}
+
+/*========================================================================================================================Register========================================================================================================================*/
+
+.Register {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-top: 1%;
+    padding-bottom: 3%;
+    margin-top: 10%;
+    margin-right: 30%;
+    border-radius: 5%;
+    border: 5px solid #fe935c;
+    clear: both;
+}
+
+.FirstNameReg {
+    width: 80%;
+    padding-top: 2%;
+    margin-top: 5%;
+    border: none;
+    background: none;
+    color: white;
+    text-align: center;
+}
+
+.LastNameReg {
+    width: 80%;
+    padding-top: 2%;
+    margin-top: 10%;
+    border: none;
+    background: none;
+    color: white;
+    text-align: center;
+}
+
+.PhoneNumberReg {
+    width: 80%;
+    padding-top: 2%;
+    margin-top: 10%;
+    border: none;
+    background: none;
+    color: white;
+    text-align: center;
+}
+
+.EmailReg {
+    width: 80%;
+    padding-top: 2%;
+    margin-top: 10%;
+    border: none;
+    background: none;
+    color: white;
+    text-align: center;
+}
+
+.PasswordReg {
+    width: 80%;
+    padding-top: 2%;
+    margin-top: 10%;
+    border: none;
+    background: none;
+    color: white;
+    text-align: center;
+}
+
+.RegisterBttn {
+    margin-top: 10%;
+    width: 80%;
+    padding: 5%;
+    background-color: #fe935c;
+    border: none;
+    border-radius: 3%;
+    transition: ease-in-out 0.5s;
+    font-size: 100%;
+    cursor: pointer;
+    font-size: 120%;
+}
+
+    .RegisterBttn:hover {
+        background-color: #ff7689;
+        transition: 0.5s;
+        color: white;
+    }
+
+/*========================================================================================================================Register========================================================================================================================*/
+
+
+
+/*========================================================================================================================Client Menu======================================================================================================================*/
+
+.client {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-image: linear-gradient(to left bottom, #ffc75f, #ffbd61, #ffb363, #ffaa67, #ffa16b, #ff9a6e, #ff9372, #ff8c76, #ff847b, #ff7d81, #ff7689, #ff6f91);
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+    .client a {
+        text-decoration: none;
+        color: black;
+        opacity: 100%;
+        font-family: 'Century Gothic';
+        font-size: 120%;
+    }
+
+        .client a:hover {
+            color: white;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+/*========================================================================================================================Client Menu=====================================================================================================================*/
+
+
+
+/*========================================================================================================================Employee Menu===================================================================================================================*/
+
+.Employeecss {
+    margin-top: 2%;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    font-family: 'Century Gothic';
+}
+
+
+
+.Functionsemployees {
+    text-align: center;
+    margin-top: 5%;
+    text-decoration: none;
+    color: white;
+    font-family: 'Century Gothic';
+}
+
+
+.FirstNav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 5%;
+}
+
+.Services {
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    border-radius: 5%;
+    border: 3px solid #fe935c;
+    margin-left: 33%;
+    transition: 0.3s;
+}
+
+    .Services:hover {
+        width: 16%;
+        padding-top: 6%;
+        padding-bottom: 6%;
+        border: 3px solid #ff7689;
+    }
+
+.Orders {
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    border-radius: 5%;
+    border: 3px solid #fe935c;
+    margin-right: 33%;
+    transition: 0.3s;
+}
+
+    .Orders:hover {
+        width: 16%;
+        padding-top: 6%;
+        padding-bottom: 6%;
+        border: 3px solid #ff7689;
+    }
+
+.SecondNav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.History {
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    border-radius: 5%;
+    border: 3px solid #fe935c;
+    margin-top: 2%;
+    margin-left: 33%;
+    transition: 0.3s;
+}
+
+    .History:hover {
+        width: 16%;
+        padding-top: 6%;
+        padding-bottom: 6%;
+        border: 3px solid #ff7689;
+    }
+
+.Security {
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    border-radius: 5%;
+    border: 3px solid #fe935c;
+    margin-top: 2%;
+    margin-right: 33%;
+    transition: 0.3s;
+}
+
+    .Security:hover {
+        width: 16%;
+        padding-top: 6%;
+        padding-bottom: 6%;
+        border: 3px solid #ff7689;
+    }
+
+
+.Services,
+.Orders,
+.History,
+.Security, a {
+    text-decoration: none;
+    color: white;
+    font-family: 'Century Gothic';
+    font-size: 110%;
+}
+
+/*========================================================================================================================Employee Menu====================================================================================================================*/
+
+
+/*========================================================================================================================Logout Button====================================================================================================================*/
+
+.LogOutBttn {
+    padding: 1%;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+    background-color: #fe935c;
+    transition: ease-in-out 0.5s;
+    font-size: 100%;
+    cursor: pointer;
+    font-size: 120%;
+    text-align: center;
+    margin-bottom: 2%;
+    margin-right: 2%;
+    float: right;
+    border-radius: 100%;
+    border: 1px solid black;
+    transition: ease-in-out 0.5s;
+}
+
+    .LogOutBttn:hover {
+        background-color: #ff7689;
+        transition: 0.5s;
+        color: white;
+        border-radius: 20%;
+        border: 1px solid black;
+        transition: 0.5s;
+    }
+
+/*========================================================================================================================Logout Button====================================================================================================================*/
+
+
+
+/*========================================================================================================================Produkty=========================================================================================================================*/
+
+.Produkty {
+    margin-top: 4%;
+    margin-bottom: 5%;
+    display: flex;
+    text-align: center;
+}
+
+.Quick_Detailer {
+    background-image: radial-gradient(circle, #ffa16b, #ff9367, #ff8465, #ff7465, #ff6468);
+    padding: 4%;
+    border-radius: 10%;
+    margin: 2%;
+    transition: 0.5s;
+    border: 3px solid #FF4660;
+    color: black;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    text-decoration: none;
+}
+
+.APC_Interior {
+    background-image: radial-gradient(circle, #ffa16b, #ff9367, #ff8465, #ff7465, #ff6468);
+    padding: 4%;
+    border-radius: 10%;
+    margin: 2%;
+    transition: 0.5s;
+    border: 3px solid #FF4660;
+    color: black;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    text-decoration: none;
+}
+
+.Glass_cleaner {
+    background-image: radial-gradient(circle, #ffa16b, #ff9367, #ff8465, #ff7465, #ff6468);
+    padding: 4%;
+    border-radius: 10%;
+    margin: 2%;
+    transition: 0.5s;
+    border: 3px solid #FF4660;
+    color: black;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    text-decoration: none;
+}
+
+.Wax {
+    background-image: radial-gradient(circle, #ffa16b, #ff9367, #ff8465, #ff7465, #ff6468);
+    padding: 4%;
+    border-radius: 10%;
+    margin: 2%;
+    transition: 0.5s;
+    border: 3px solid #FF4660;
+    color: black;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    text-decoration: none;
+}
+
+.Quick_Detailer:hover {
+    padding-left: 4.5%;
+    padding-right: 4.5%;
+    transition: 0.5s;
+    border-color: #fe935c;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.40);
+}
+
+.APC_Interior:hover {
+    padding-left: 4.5%;
+    padding-right: 4.5%;
+    transition: 0.5s;
+    border-color: #fe935c;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.40);
+}
+
+.Glass_cleaner:hover {
+    padding-left: 4.5%;
+    padding-right: 4.5%;
+    transition: 0.5s;
+    border-color: #fe935c;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.40);
+}
+
+.Wax:hover {
+    padding-left: 4.5%;
+    padding-right: 4.5%;
+    transition: 0.5s;
+    border-color: #fe935c;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.40);
+}
+
+/*========================================================================================================================Produkty=========================================================================================================================*/
+
+
+
+/*======================================================================================================================Zdjêcia Produkty===================================================================================================================*/
+
+.QckJpg {
+    margin-top: 20%;
+    width: 250px;
+    height: auto;
+}
+
+.ApcJpg {
+    margin-top: 5%;
+    width: 250px;
+    height: auto;
+}
+
+.GlassJpg {
+    margin-top: 10%;
+    width: 215px;
+    height: auto;
+}
+
+.WaxJpg {
+    margin-top: 20%;
+    width: 200px;
+    height: 200px;
+}
+
+/*======================================================================================================================Zdjêcia Produkty===================================================================================================================*/
+
+
+
+/*=======================================================================================================================Main Web Line=====================================================================================================================*/
+
+.LineAboveGallery {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    width: 90%;
+    padding-top: 0.1%;
+    padding-bottom: 0.1%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15%;
+    transition: 1s;
+    box-shadow: 0px 10px 10px 5px rgba(0,0,0,0.25);
+    border-radius: 20px;
+}
+
+.LineAboveProducts {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    width: 90%;
+    padding-top: 0.1%;
+    padding-bottom: 0.1%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0%;
+    transition: 1s;
+    box-shadow: 0px 10px 10px 5px rgba(0,0,0,0.25);
+    border-radius: 20px;
+}
+
+.OurProducts {
+    margin-top: 3%;
+    letter-spacing: 3px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.Line2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    width: 90%;
+    padding-top: 0.1%;
+    padding-bottom: 0.1%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1%;
+    transition: 1s;
+    box-shadow: 0px 10px 10px 5px rgba(0,0,0,0.25);
+    border-radius: 20px;
+}
+
+/*=======================================================================================================================Main Web Line=====================================================================================================================*/
+
+
+
+
+
+
+
+
+
+
+/*===========================================================================================================================Gallery=======================================================================================================================*/
+
+.Gallery {
+    position: relative;
+    width: 50%;
+    margin: 10%;
+    border-radius: 5%;
+    margin-bottom: 20%;
+    margin-top: 10%;
+    margin-bottom: 40%;
+    float: left;
+}
+
+    .Gallery img {
+        position: absolute;
+        width: 85%;
+        height: 550px;
+        border-radius: 5%;
+        border: #FF4660 5px solid;
+        transition: opacity 1s;
+    }
+
+.hidden {
+    opacity: 0;
+}
+
+.AboutUs {
+    margin-top: 15%;
+    letter-spacing: 3px;
+    margin-right: 15%;
+    margin-left: 30%;
+    font-size: 130%;
+}
+
+/*===========================================================================================================================Gallery=======================================================================================================================*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*===========================================================================================================================Data==========================================================================================================================*/
+
+.ActualData {
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-bottom: 3%;
+    padding-left: 3%;
+    padding-right: 7%;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5%;
+    border: 5px solid #fe935c;
+    transition: 0.7s;
+}
+
+    .ActualData:hover {
+        border: 5px solid #ff7689;
+        box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    }
+
+/*===========================================================================================================================Data==========================================================================================================================*/
+
+
+
+/*=====================================================================================================================Changing Data========================================================================================================================*/
+
+.Line3 {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    width: 90%;
+    padding-top: 0.1%;
+    padding-bottom: 0.1%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    transition: 1s;
+    box-shadow: 0px 10px 10px 5px rgba(0,0,0,0.25);
+}
+
+.ChangingOldData {
+    margin-left: auto;
+    margin-right: auto;
+    letter-spacing: 3px;
+}
+
+/*=====================================================================================================================Changing Data========================================================================================================================*/
+
+
+/*=======================================================================================================================Changing Data=====================================================================================================================*/
+.CDUInputPasswords {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-bottom: 3%;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5%;
+    border: 5px solid #fe935c;
+    clear: both;
+    transition: 0.7s;
+}
+
+    .CDUInputPasswords:hover {
+        border: 5px solid #ff7689;
+        box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    }
+
+.InputPassword {
+    margin: 5%;
+}
+
+.Csspassword {
+    border: none;
+    background: none;
+    color: white;
+    text-align: center;
+}
+
+
+.CDUInputEmail {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-bottom: 3%;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5%;
+    border: 5px solid #fe935c;
+    clear: both;
+    transition: 0.7s;
+}
+
+    .CDUInputEmail:hover {
+        border: 5px solid #ff7689;
+        box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    }
+
+.InputMail {
+    margin: 5%;
+}
+
+.CssMail {
+    border: none;
+    background: none;
+    color: white;
+    text-align: center;
+}
+
+
+.CDUInputNumber {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+    background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
+    width: 15%;
+    padding-bottom: 3%;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5%;
+    border: 5px solid #fe935c;
+    clear: both;
+    transition: 0.7s;
+}
+
+    .CDUInputNumber:hover {
+        border: 5px solid #ff7689;
+        box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    }
+
+.InputNumber {
+    margin: 5%;
+}
+
+.CssNumber {
+    border: none;
+    background: none;
+    color: white;
+    text-align: center;
+}
+
+::placeholder {
+    color: #B3B3B3;
+}
+
+/*====================================================================================================================Changing Data Button==================================================================================================================*/
+
+.CDUButton button {
+    margin-top: 10%;
+    background-color: #fe935c;
+    border: none;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    border-radius: 3%;
+    transition: ease-in-out 0.5s;
+    font-size: 110%;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .CDUButton button:hover {
+        background-color: #C45C5F;
+        transition: 0.5s;
+        color: white;
+    }
+
+
+/*====================================================================================================================Changing Data Button==================================================================================================================*/
+
+
+/*=======================================================================================================================Changing Data=====================================================================================================================*/
+
+
+
+/*========================================================================================================================Gdzie nas znaleŸæ================================================================================================================*/
+
+.Contact {
+    background-image: linear-gradient(to left top, #ffc75f, #ffbd61, #ffb363, #ffaa67, #ffa16b, #ff9a6e, #ff9372, #ff8c76, #ff847b, #ff7d81, #ff7689, #ff6f91);
+    margin-top: 20%;
+    color: white;
+    text-align: center;
+    padding-top: 0.01%;
+    border-radius: 20px;
+    letter-spacing: 2px;
+}
+
+.ContactContent {
+    display: flex;
+    justify-content: space-between;
+}
+
+/*========================================================================================================================Gdzie nas znaleŸæ================================================================================================================*/
+
+.ContactData {
+    padding-left: 20%;
+    padding-right: 15%;
+    padding-top: 4%;
+    padding-bottom: 5%;
+    color: White;
+    font-size: 150%;
+}
+
+.Facebook {
+    position: fixed;
+    width: 4%;
+    height: 5%;
+    z-index: 5;
+    opacity: 15%;
+    left: 0.5%;
+    top: 71%;
+    transition: 1s;
+}
+
+    .Facebook:hover {
+        opacity: 90%;
+        transition: 1s;
+    }
+
+.Instagram {
+    position: fixed;
+    width: 4%;
+    height: 5%;
+    z-index: 5;
+    opacity: 15%;
+    left: 0.5%;
+    top: 78%;
+    transition: 1s;
+}
+
+    .Instagram:hover {
+        opacity: 90%;
+        transition: 1s;
+    }
+
+.Youtube {
+    position: fixed;
+    width: 4%;
+    height: 5%;
+    z-index: 5;
+    opacity: 20%;
+    left: 0.5%;
+    top: 85%;
+    transition: 1s;
+}
+
+    .Youtube:hover {
+        opacity: 90%;
+        transition: 1s;
+    }
+
+.WaterMark {
+    position: fixed;
+    width: 3%;
+    height: 4%;
+    z-index: 5;
+    opacity: 10%;
+    left: 1%;
+    top: 92%;
+    transition: 1s;
+}
+
+    .WaterMark:hover {
+        opacity: 90%;
+        transition: 1s;
+    }
+
+
+/*========================================================================================================================Map============================================================================================================================*/
+
+.Map {
+    border-radius: 20px;
+    margin-right: 0.4%;
+    margin-bottom: 0.09%;
+}
+
+/*========================================================================================================================Map============================================================================================================================*/
+
+
+
+/*===================================================================================================================BackToTopButton=======================================================================================================================*/
+
+.backToTopBtn {
+    background-color: rgb(75, 75, 75);
+    color: #fff;
+    border: none;
+    border-radius: 5%;
+    cursor: pointer;
+    position: fixed;
+    bottom: 2%;
+    right: 50%;
+    opacity: 0;
+    padding: 0.5%;
+    transition: 0.7s ease-in-out;
+}
+
+    .backToTopBtn.show {
+        opacity: 1;
+    }
+
+/*===================================================================================================================BackToTopButton=======================================================================================================================*/
+
+.Tableservices {
+    border-radius: 10px;
+    margin-top: 10%;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #04AA6D;
+    border: 5px solid #ff9372;
+    text-align: center;
+    padding: 5%;
+}
+
+
+.TableInfo {
+    border-radius: 10px;
+    margin-top: 10%;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    border: 5px solid #ff9372;
+}
+
+.buttonsTable {
+    margin-top: 2%;
+    margin-left: 47%;
+}
+/*=======================================================================TablesEmploeeHistory====================================================================*/
+
+.Tables {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    letter-spacing: 1px;
+    margin: 5%;
+}
+
+
+.TablesLeft {
+    width: 40%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    border: 3px solid #ff9372;
+    border-radius: 5px;
+    border-style: solid;
+}
+
+.TablesRight {
+    width: 40%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    border: 3px solid #ff9372;
+    border-radius: 5px;
+}

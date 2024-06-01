@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Panel Klienta";
+}
+
+<head>
+    <title>Klient - panel</title>
+</head>
+
+<body>
+    <main>
+        <div style="text-align: center;">
+            <h1>Zalogowałeś się jako Klient!</h1>
+        </div>
+
+        <div class="client">
+            <a href="OrderHistory">Historia zamówień</a>
+            <a href="ServiceHistory">Historia usług</a>
+            <a href="ChangeDataUser">Zmiana danych</a>
+        </div>
+
+        <form method="post" asp-action="Logout">
+            <button type="submit" class="LogOutBttn">Wyloguj</button>
+        </form>
+    </main>
+</body>

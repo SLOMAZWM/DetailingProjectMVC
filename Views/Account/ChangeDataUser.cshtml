@@ -1,0 +1,132 @@
+﻿@model ProjektLABDetailing.Models.User.ViewModels.ChangeDataUserViewModel
+
+@{
+    ViewData["Title"] = "Zmiana Danych";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <title>Zmiana danych</title>
+    <link rel="stylesheet" href="~/css/site.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.validator.addMethod("phonePattern", function (value, element) {
+                return this.optional(element) || /^\+\d{1,3}\s\d{3}\s\d{3}\s\d{3}$/.test(value);
+            }, "Numer telefonu musi być w formacie +00 000 000 000.");
+
+            $("#changePhoneNumberForm").validate({
+                rules: {
+                    "ChangePhoneNumberData.NewPhoneNumber": {
+                        phonePattern: true
+                    }
+                },
+                messages: {
+                    "ChangePhoneNumberData.NewPhoneNumber": {
+                        required: "Nowy numer telefonu jest wymagany."
+                    },
+                    "ChangePhoneNumberData.ConfirmPhoneNumber": {
+                        required: "Potwierdzenie numeru telefonu jest wymagane.",
+                        equalTo: "Numery telefonów nie są zgodne."
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (Model.CurrentUser != null)
+    {
+        <div class="ActualData">
+            <center><h1>Aktualne Dane:</h1></center>
+            <p>Imię: @Model.CurrentUser.FirstName</p>
+            <p>Nazwisko: @Model.CurrentUser.LastName</p>
+            <p>Telefon: @Model.CurrentUser.PhoneNumber</p>
+            <p>Email: @Model.CurrentUser.Email</p>
+        </div>
+    }
+    else
+    {
+        <p>Wystąpił błąd podczas ładowania danych użytkownika.</p>
+    }
+
+    <div class="Line3"></div>
+
+    <div class="ChangingOldData">
+        <center><h1>Zmiana Danych</h1></center>
+    </div>
+
+    <div class="container">
+        <form method="post" asp-action="ChangePassword">
+            <div class="CDUInputPasswords">
+                <h1>Hasło</h1>
+                <div class="InputPassword">
+                    <input asp-for="ChangePasswordData.CurrentPassword" class="Csspassword" placeholder="Aktualne Hasło" />
+                    <span asp-validation-for="ChangePasswordData.CurrentPassword" class="text-danger"></span>
+                </div>
+                <div class="InputPassword">
+                    <input asp-for="ChangePasswordData.NewPassword" class="Csspassword" placeholder="Nowe Hasło" />
+                    <span asp-validation-for="ChangePasswordData.NewPassword" class="text-danger"></span>
+                </div>
+                <div class="InputPassword">
+                    <input asp-for="ChangePasswordData.ConfirmPassword" class="Csspassword" placeholder="Potwierdź Hasło" />
+                    <span asp-validation-for="ChangePasswordData.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="CDUButton">
+                    <button type="submit">Zatwierdź</button>
+                </div>
+                <span asp-validation-summary="All" class="text-danger"></span>
+            </div>
+        </form>
+
+        <form method="post" asp-action="ChangeEmail">
+            <div class="CDUInputEmail">
+                <h1>Email</h1>
+                <div class="InputMail">
+                    <input asp-for="ChangeEmailData.NewEmail" class="CssMail" placeholder="Nowy Email" />
+                    <span asp-validation-for="ChangeEmailData.NewEmail" class="text-danger"></span>
+                </div>
+                <div class="InputMail">
+                    <input asp-for="ChangeEmailData.ConfirmEmail" class="CssMail" placeholder="Potwierdź Email" />
+                    <span asp-validation-for="ChangeEmailData.ConfirmEmail" class="text-danger"></span>
+                </div>
+                <div class="CDUButton">
+                    <button type="submit">Zatwierdź</button>
+                </div>
+            </div>
+        </form>
+
+        <form method="post" asp-action="ChangePhoneNumber" id="changePhoneNumberForm">
+            <div class="CDUInputNumber">
+                <h1>Numer Telefonu</h1>
+                <div class="InputNumber">
+                    <input asp-for="ChangePhoneNumberData.NewPhoneNumber" class="CssNumber" placeholder="Nowy Numer Telefonu" />
+                    <span asp-validation-for="ChangePhoneNumberData.NewPhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="InputNumber">
+                    <input asp-for="ChangePhoneNumberData.ConfirmPhoneNumber" class="CssNumber" placeholder="Potwierdź Numer Telefonu" />
+                    <span asp-validation-for="ChangePhoneNumberData.ConfirmPhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="CDUButton">
+                    <button type="submit">Zatwierdź</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>

@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Panel Użytkownika";
+}
+
+<body>
+    <main>
+        <!-------------------------------------------------------------------------------------Menu pracownik-------------------------------------------------------------------------------------------------------------------------------------->
+
+        <div class="Employeecss">
+            <a>Zalogowano jako pracownik firmy detailingowej!</a>
+        </div>
+
+        <div class="Functionsemployees">
+            <h2>Co chcesz teraz zrobić?</h2>
+
+            <div class="FirstNav">
+                <div class="Services">
+                    <a asp-controller="Employee" asp-action="Services">Usługi</a>
+                </div>
+
+                <div class="Orders">
+                    <a asp-controller="Employee" asp-action="Order">Zamówienia</a>
+                </div>
+            </div>
+
+            <div class="SecondNav">
+                <div class="History">
+                    <a asp-controller="Employee" asp-action="History">Historia Klientów</a>
+                </div>
+
+                <div class="Security">
+                    <a asp-controller="Account" asp-action="ChangeDataUser">Zmiana Danych</a>
+                </div>
+            </div>
+        </div>
+        <!-------------------------------------------------------------------------------------Menu pracownik-------------------------------------------------------------------------------------------------------------------------------------->
+
+        <form method="post" asp-action="Logout">
+            <button type="submit" class="LogOutBttn">Wyloguj</button>
+        </form>
+    </main>
+</body>

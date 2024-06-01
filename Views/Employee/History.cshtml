@@ -1,0 +1,58 @@
+﻿@model ProjektLABDetailing.Models.ViewModels.HistoryViewModel
+
+@{
+    ViewData["Title"] = "Historia";
+}
+
+<body>
+    <div class="Tables">
+        <table border="1" class="TablesLeft">
+            <tr>
+                <td><b>Klient</b></td>
+                <td><b>Data Zlecenia</b></td>
+                <td><b>Samochód</b></td>
+                <td><b>Cena</b></td>
+                <td><b>Szczegóły</b></td>
+            </tr>
+            <tr>
+                <td colspan="5">Brak danych usług</td>
+            </tr>
+        </table>
+
+        <table border="1" class="TablesRight">
+            <tr>
+                <td><b>Nr. Zamówienia</b></td>
+                <td><b>Data zamówienia</b></td>
+                <td><b>Email</b></td>
+                <td><b>Imię i Nazwisko</b></td>
+                <td><b>Szczegóły</b></td>
+                <td><b>Cena</b></td>
+            </tr>
+            @if (Model.OrderProducts != null && Model.OrderProducts.Count > 0)
+            {
+                @foreach (var order in Model.OrderProducts)
+                {
+                    <tr>
+                        <td>@order.OrderId</td>
+                        <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                        <td>@order.Client?.User?.Email</td>
+                        <td>@order.Client?.User?.FirstName @order.Client?.User?.LastName</td>
+                        <td><a href="/OrderProductsDetails/@order.OrderId">Szczegóły zamówienia</a></td>
+                        <td>@Model.OrderTotals[order.OrderId].ToString("C")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">Brak zamówień do wyświetlenia</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="buttonsTable">
+        <button class="BttnTableEdit">Edytuj</button>
+        <button class="BttnTableDelete">Usuń</button>
+    </div>
+</body>

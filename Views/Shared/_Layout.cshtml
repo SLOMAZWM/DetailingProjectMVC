@@ -1,0 +1,38 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="shortcut icon" href="~/Pictures/shortcut.PNG">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <main>
+        <div>
+            <nav class="menu">
+                <a asp-controller="Home" asp-action="Index">Strona Główna</a>
+                <a asp-controller="Orders" asp-action="Index">Oferta</a>
+                <a asp-controller="Contact" asp-action="Index">Kontakt</a>
+                @if (HttpContextAccessor.HttpContext.Session.GetString("UserType") == null)
+                {
+                    <a asp-controller="Account" asp-action="LoginRegister">Panel Użytkownika</a>
+                }
+                @if (HttpContextAccessor.HttpContext.Session.GetString("UserType") == "Client")
+                {
+                    <a asp-controller="Client" asp-action="ClientUserPanel">Panel Klienta</a>
+                }
+                @if (HttpContextAccessor.HttpContext.Session.GetString("UserType") == "Employee")
+                {
+                    <a asp-controller="Employee" asp-action="EmployeeUserPanel">Panel Pracownika</a>
+                }
+                <a asp-controller="Cardshop" asp-action="Index"><img src="~/Pictures/bag.svg" class="CardShop"></a>
+            </nav>
+        </div>
+        @RenderBody()
+    </main>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
