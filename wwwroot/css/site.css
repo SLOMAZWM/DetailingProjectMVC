@@ -1247,28 +1247,84 @@ button.ButtonEditServicesStyle {
 
 
 .cart-summary {
-    display: none;
-    position: fixed;
-    top: 10%;
-    right: 2%;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    max-height: 400px;
-    overflow-y: auto;
+    background-color: #fff;
+    border: 2px solid #ff9372;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    transition: all 0.3s ease;
 }
-
-    .cart-summary.visible {
-        display: block;
-    }
 
     .cart-summary h3 {
         margin-top: 0;
+        color: #ff6f91;
+        font-family: 'Century Gothic', sans-serif;
+        text-align: center;
+        font-size: 1.5em;
     }
 
+    .cart-summary ul {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0;
+    }
+
+        .cart-summary ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ff9372;
+            color: #333;
+            font-family: 'Century Gothic', sans-serif;
+        }
+
+            .cart-summary ul li:last-child {
+                border-bottom: none;
+            }
+
     .cart-summary p {
-        margin: 0;
+        margin: 10px 0;
+        color: #333;
+        font-family: 'Century Gothic', sans-serif;
+        text-align: center;
+        font-size: 1.2em;
+    }
+
+.checkout-button {
+    background-color: #ff7f50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    margin: 10px auto 0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .checkout-button:hover {
+        background-color: #ff6347;
+    }
+
+button {
+    background-color: #ff7f50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #ff6347;
     }

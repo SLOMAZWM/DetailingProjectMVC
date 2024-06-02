@@ -32,9 +32,6 @@
             </nav>
         </div>
         @RenderBody()
-        <div id="cart-summary" class="cart-summary">
-            @Html.Partial("_CartSummary", new ProjektLABDetailing.Models.Cart(HttpContextAccessor))
-        </div>
     </main>
     <script src="~/js/site.js"></script>
     @RenderSection("Scripts", required: false)
