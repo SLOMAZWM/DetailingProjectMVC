@@ -36,5 +36,21 @@ namespace ProjektLABDetailing.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }
+        [HttpGet]
+        public IActionResult ChangeDataUser()
+        {
+            return RedirectToAction("ChangeDataUser", "Account" );
+        }
+        [HttpGet]
+        public IActionResult ServiceHistory()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult OrderHistory()
+        {
+            return View();
+        }
     }
+    
 }
