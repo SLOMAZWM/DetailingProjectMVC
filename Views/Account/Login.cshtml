@@ -1,0 +1,31 @@
+﻿@model ProjektLABDetailing.Models.User.ViewModels.LoginUserViewModel
+
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>Logowanie</title>
+</head>
+
+<div class="container">
+    <div class="Login">
+        <div class="LoginForm">
+            <h1 class="LoginSticker">Login</h1>
+            <form id="loginForm" method="post" asp-action="Login">
+                <input id="LoginEmail" class="EmailLog" asp-for="Email" type="text" placeholder="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+                <input id="LoginPassword" class="PasswordLog" asp-for="Password" type="password" placeholder="Hasło" />
+                <button class="LoginBttn" type="submit">Zaloguj</button>
+            </form>
+            <a asp-action="Register">Nie masz konta? Zarejestruj się</a>
+            <div class="text-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

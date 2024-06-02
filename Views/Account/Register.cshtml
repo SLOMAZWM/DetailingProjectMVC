@@ -1,0 +1,32 @@
+﻿@model ProjektLABDetailing.Models.User.ViewModels.RegisterUserViewModel
+
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>Rejestracja</title>
+</head>
+
+<div class="container">
+    <div class="Register">
+        <div class="RegisterForm">
+            <h1 class="RegisterSticker">Rejestracja</h1>
+            <form id="registerForm" method="post" asp-action="Register">
+                <input id="FirstName" class="FirstNameReg" asp-for="FirstName" type="text" placeholder="Imię" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <input id="LastName" class="LastNameReg" asp-for="LastName" type="text" placeholder="Nazwisko" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+                <input id="PhoneNumber" class="PhoneNumberReg" asp-for="PhoneNumber" type="text" placeholder="Telefon" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <input id="Email" class="EmailReg" asp-for="Email" type="text" placeholder="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+                <input id="Password" class="PasswordReg" asp-for="Password" type="password" placeholder="Hasło" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+                <button class="RegisterBttn" type="submit">Zarejestruj</button>
+            </form>
+            <a asp-action="Login">Masz już konto? Zaloguj się</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -23,7 +23,7 @@ namespace ProjektLABDetailing.Controllers
             var userType = HttpContext.Session.GetString("UserType");
             if (userType != "Client")
             {
-                return RedirectToAction("LoginRegister", "Account");
+                return RedirectToAction("Login", "Account");
             }
 
             return View();

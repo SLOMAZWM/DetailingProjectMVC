@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using ProjektLABDetailing.Models.User;
-using ProjektLABDetailing.Models.User.ViewModels;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProjektLABDetailing.Data;
+using ProjektLABDetailing.Models.User;
+using ProjektLABDetailing.Models.User.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace ProjektLABDetailing.Controllers
 {
@@ -29,41 +27,74 @@ namespace ProjektLABDetailing.Controllers
         }
 
         [HttpGet]
-        public IActionResult LoginRegister()
+        public IActionResult Login()
         {
-            if (HttpContext.Session.GetString("UserType") != null)
-            {
-                var userType = HttpContext.Session.GetString("UserType");
-                var redirectUrl = userType == "Client" ? "/Client/ClientUserPanel" : "/Employee/EmployeeUserPanel";
-                return Redirect(redirectUrl);
-            }
+            return View(new LoginUserViewModel());
+        }
 
-            var model = new LoginRegisterViewModel
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginUserViewModel model)
+        {
+            var errorList = ValidateLoginModel(model);
+            if (errorList.Count == 0)
             {
-                RegisterUser = new RegisterUserViewModel(),
-                LoginUser = new LoginUserViewModel()
-            };
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, isPersistent: false, lockoutOnFailure: false);
+
+                    if (result.Succeeded)
+                    {
+                        HttpContext.Session.SetString("UserId", user.Id.ToString());
+                        HttpContext.Session.SetString("UserType", user.Role == UserRole.Client ? "Client" : "Employee");
+
+                        string redirectPage = user.Role == UserRole.Client ? "ClientUserPanel" : "EmployeeUserPanel";
+                        return RedirectToAction(redirectPage, user.Role == UserRole.Client ? "Client" : "Employee");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Nieprawidłowy email lub hasło.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Nieprawidłowy email lub hasło.");
+                }
+            }
+            else
+            {
+                foreach (var error in errorList)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
+            }
 
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(LoginRegisterViewModel model)
+        [HttpGet]
+        public IActionResult Register()
         {
-            var errorList = ValidateRegisterModel(model.RegisterUser);
+            return View(new RegisterUserViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterUserViewModel model)
+        {
+            var errorList = ValidateRegisterModel(model);
             if (errorList.Count == 0)
             {
                 var user = new User
                 {
-                    UserName = model.RegisterUser.Email,
-                    Email = model.RegisterUser.Email,
-                    FirstName = model.RegisterUser.FirstName,
-                    LastName = model.RegisterUser.LastName,
-                    PhoneNumber = model.RegisterUser.PhoneNumber,
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber,
                     Role = UserRole.Client
                 };
 
-                var result = await _userManager.CreateAsync(user, model.RegisterUser.Password);
+                var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
@@ -98,49 +129,7 @@ namespace ProjektLABDetailing.Controllers
                 }
             }
 
-            model.LoginUser = new LoginUserViewModel();
-            return View("LoginRegister", model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginRegisterViewModel model)
-        {
-            var errorList = ValidateLoginModel(model.LoginUser);
-            if (errorList.Count == 0)
-            {
-                var user = await _userManager.FindByEmailAsync(model.LoginUser.Email);
-                if (user != null)
-                {
-                    var result = await _signInManager.PasswordSignInAsync(user, model.LoginUser.Password, isPersistent: false, lockoutOnFailure: false);
-
-                    if (result.Succeeded)
-                    {
-                        HttpContext.Session.SetString("UserId", user.Id.ToString());
-                        HttpContext.Session.SetString("UserType", user.Role == UserRole.Client ? "Client" : "Employee");
-
-                        string redirectPage = user.Role == UserRole.Client ? "ClientUserPanel" : "EmployeeUserPanel";
-                        return RedirectToAction(redirectPage, user.Role == UserRole.Client ? "Client" : "Employee");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Nieprawidłowy email lub hasło.");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Nieprawidłowy email lub hasło.");
-                }
-            }
-            else
-            {
-                foreach (var error in errorList)
-                {
-                    ModelState.AddModelError(string.Empty, error);
-                }
-            }
-
-            model.RegisterUser = new RegisterUserViewModel();
-            return View("LoginRegister", model);
+            return View(model);
         }
 
         [HttpGet]
@@ -155,8 +144,8 @@ namespace ProjektLABDetailing.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                _logger.LogWarning("User not found, redirecting to LoginRegister.");
-                return RedirectToAction("LoginRegister");
+                _logger.LogWarning("User not found, redirecting to Login.");
+                return RedirectToAction("Login");
             }
 
             var model = new ChangeDataUserViewModel
@@ -177,22 +166,38 @@ namespace ProjektLABDetailing.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return RedirectToAction("LoginRegister", "Account");
+                return RedirectToAction("Login", "Account");
             }
 
-            var result = await _userManager.ChangePasswordAsync(user, model.ChangePasswordData.CurrentPassword, model.ChangePasswordData.NewPassword);
-            if (result.Succeeded)
+            if (string.IsNullOrEmpty(model.ChangePasswordData.CurrentPassword))
             {
-                await _signInManager.RefreshSignInAsync(user);
-                TempData["SuccessMessage"] = "Hasło zostało pomyślnie zmienione.";
-                return RedirectToAction("ChangeDataUser");
+                ModelState.AddModelError(string.Empty, "Aktualne hasło jest wymagane.");
             }
 
-            foreach (var error in result.Errors)
+            var isCurrentPasswordValid = !string.IsNullOrEmpty(model.ChangePasswordData.CurrentPassword) &&
+                                         await _userManager.CheckPasswordAsync(user, model.ChangePasswordData.CurrentPassword);
+            if (!isCurrentPasswordValid)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                ModelState.AddModelError(string.Empty, "Aktualne hasło jest nieprawidłowe.");
             }
 
+            if (ModelState.IsValid)
+            {
+                var result = await _userManager.ChangePasswordAsync(user, model.ChangePasswordData.CurrentPassword, model.ChangePasswordData.NewPassword);
+                if (result.Succeeded)
+                {
+                    await _signInManager.RefreshSignInAsync(user);
+                    TempData["SuccessMessage"] = "Hasło zostało pomyślnie zmienione.";
+                    return RedirectToAction("ChangeDataUser");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            model.CurrentUser = await _userManager.GetUserAsync(User);
             return View("ChangeDataUser", model);
         }
 
@@ -202,22 +207,26 @@ namespace ProjektLABDetailing.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return RedirectToAction("LoginRegister", "Account");
+                return RedirectToAction("Login", "Account");
             }
 
-            var result = await _userManager.SetEmailAsync(user, model.ChangeEmailData.NewEmail);
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                await _signInManager.RefreshSignInAsync(user);
-                TempData["SuccessMessage"] = "Email został pomyślnie zmieniony.";
-                return RedirectToAction("ChangeDataUser");
+                var result = await _userManager.SetEmailAsync(user, model.ChangeEmailData.NewEmail);
+                if (result.Succeeded)
+                {
+                    await _signInManager.RefreshSignInAsync(user);
+                    TempData["SuccessMessage"] = "Email został pomyślnie zmieniony.";
+                    return RedirectToAction("ChangeDataUser");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
+            model.CurrentUser = await _userManager.GetUserAsync(User);
             return View("ChangeDataUser", model);
         }
 
@@ -227,22 +236,26 @@ namespace ProjektLABDetailing.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return RedirectToAction("LoginRegister", "Account");
+                return RedirectToAction("Login", "Account");
             }
 
-            var result = await _userManager.SetPhoneNumberAsync(user, model.ChangePhoneNumberData.NewPhoneNumber);
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                await _signInManager.RefreshSignInAsync(user);
-                TempData["SuccessMessage"] = "Numer telefonu został pomyślnie zmieniony.";
-                return RedirectToAction("ChangeDataUser");
+                var result = await _userManager.SetPhoneNumberAsync(user, model.ChangePhoneNumberData.NewPhoneNumber);
+                if (result.Succeeded)
+                {
+                    await _signInManager.RefreshSignInAsync(user);
+                    TempData["SuccessMessage"] = "Numer telefonu został pomyślnie zmieniony.";
+                    return RedirectToAction("ChangeDataUser");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
+            model.CurrentUser = await _userManager.GetUserAsync(User);
             return View("ChangeDataUser", model);
         }
 

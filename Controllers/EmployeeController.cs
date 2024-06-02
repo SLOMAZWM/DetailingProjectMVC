@@ -41,7 +41,7 @@ namespace ProjektLABDetailing.Controllers
         {
             HttpContext.Session.Clear();
             await _signInManager.SignOutAsync();
-            return RedirectToAction("LoginRegister", "Account");
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpGet]

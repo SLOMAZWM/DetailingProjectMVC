@@ -18,7 +18,7 @@
                 <a asp-controller="Contact" asp-action="Index">Kontakt</a>
                 @if (HttpContextAccessor.HttpContext.Session.GetString("UserType") == null)
                 {
-                    <a asp-controller="Account" asp-action="LoginRegister">Panel Użytkownika</a>
+                    <a asp-controller="Account" asp-action="Login">Panel Użytkownika</a>
                 }
                 @if (HttpContextAccessor.HttpContext.Session.GetString("UserType") == "Client")
                 {
