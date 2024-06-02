@@ -25,7 +25,6 @@ namespace ProjektLABDetailing.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,2)");
@@ -34,7 +33,6 @@ namespace ProjektLABDetailing.Data
                 .Property(s => s.Price)
                 .HasColumnType("decimal(18,2)");
 
-            
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Client)
                 .WithMany(c => c.Orders)
@@ -45,13 +43,19 @@ namespace ProjektLABDetailing.Data
                 .HasOne(o => o.Employee)
                 .WithMany(e => e.Orders)
                 .HasForeignKey(o => o.EmployeeId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Car)
                 .WithMany()
                 .HasForeignKey(o => o.CarId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Order>()
+                .HasDiscriminator<string>("Discriminator")
+                .HasValue<Order>("Order")
+                .HasValue<OrderService>("OrderService")
+                .HasValue<OrderProducts>("OrderProducts");
         }
     }
 }

@@ -19,31 +19,17 @@
         @foreach (var orderService in Model.OrderServices)
         {
             <tr>
-                <td>@orderService.ExecutionDate.ToString("yyyy-MM-dd")</td>
-                <td>@orderService.Client.User.FirstName @orderService.Client.User.LastName</td>
-                <td>@orderService.Car.Model</td>
-                <td>
-                    <ul>
-                        @foreach (var service in orderService.Services)
-                        {
-                            <li>@service.Name</li>
-                        }
-                    </ul>
-                </td>
+                <td>@(orderService.ExecutionDate != DateTime.MinValue ? orderService.ExecutionDate.ToString("yyyy-MM-dd") : "N/A")</td>
+                <td>@orderService.ClientName</td>
+                <td>@orderService.CarDetails</td>
+                <td>@orderService.ServiceName</td>
                 <td>
                     <form method="post" asp-action="UpdateStatus">
                         <input type="hidden" name="id" value="@orderService.OrderId" />
-                        <select class="Realizacja" id="RealizacjaID" name="status" onchange="this.form.submit()">
+                        <select class="Realizacja" id="RealizacjaID_@orderService.OrderId" name="status" onchange="this.form.submit()">
                             @foreach (var status in Model.StatusList)
                             {
-                                @if (orderService.Status == status)
-                                {
-                                    <option value="@status" selected>@status</option>
-                                }
-                                else
-                                {
-                                    <option value="@status">@status</option>
-                                }
+                                <option value="@status">@status</option>
                             }
                         </select>
                     </form>
@@ -66,6 +52,15 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const orderServices = @Html.Raw(Json.Serialize(Model.OrderServices));
+
+            orderServices.forEach(orderService => {
+                const selectElement = document.getElementById(`RealizacjaID_${orderService.OrderId}`);
+                if (selectElement) {
+                    selectElement.value = orderService.Status;
+                }
+            });
+
             const checkboxes = document.querySelectorAll('.order-checkbox');
             const editButton = document.getElementById('editServiceButton');
 
@@ -85,7 +80,7 @@
                 const selectedCheckbox = document.querySelector('.order-checkbox:checked');
                 if (selectedCheckbox) {
                     const orderId = selectedCheckbox.value;
-                    const url = `@Url.Action("EditService", "Employee")?selectedOrderId=${orderId}`;
+                    const url = '@Url.Action("EditService", "Employee")' + '?selectedOrderId=' + orderId;
                     window.location.href = url;
                 } else {
                     alert('Proszę zaznaczyć jedną usługę do edycji.');

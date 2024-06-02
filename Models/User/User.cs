@@ -14,6 +14,8 @@ namespace ProjektLABDetailing.Models.User
         public string LastName { get; set; } = string.Empty;
 
         public UserRole Role { get; set; }
+
+        public string FullName => $"{FirstName} {LastName}";
     }
 
     public enum UserRole

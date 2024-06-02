@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -43,7 +42,7 @@ namespace ProjektLABDetailing.Models.ViewModels
         public DateTime ExecutionDate { get; set; }
 
         [Required(ErrorMessage = "Wybór usługi jest wymagany")]
-        public string SelectedService { get; set; }
+        public int SelectedServiceId { get; set; }
 
         [Required(ErrorMessage = "Materiały są wymagane")]
         public string Materials { get; set; }

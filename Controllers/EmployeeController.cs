@@ -62,7 +62,7 @@ namespace ProjektLABDetailing.Controllers
                 .Include(os => os.Client)
                     .ThenInclude(c => c.User)
                 .Include(os => os.Car)
-                .Include(os => os.Services)
+                .Include(os => os.Service)
                 .ToListAsync();
 
             var orderTotals = orderProducts.ToDictionary(
@@ -88,16 +88,33 @@ namespace ProjektLABDetailing.Controllers
                 .Include(os => os.Client)
                     .ThenInclude(c => c.User)
                 .Include(os => os.Car)
-                .Include(os => os.Services)
+                .Include(os => os.Service)
                 .ToListAsync();
+
+            var orderServiceViewModels = orderServices.Select(os => new OrderServiceViewModel
+            {
+                OrderId = os.OrderId,
+                ClientName = os.Client?.User != null ? GetFullName(os.Client.User) : "Unknown",
+                CarDetails = os.Car != null ? $"{os.Car.Brand} {os.Car.Model}" : "Unknown",
+                ServiceName = os.Service?.Name ?? "Unknown",
+                Status = os.Status ?? "Unknown",
+                ExecutionDate = os.ExecutionDate ?? DateTime.MinValue,
+                Materials = os.Materials ?? "Brak",
+                ClientRemarks = os.ClientRemarks ?? "Brak"
+            }).ToList();
 
             var model = new ServicesViewModel
             {
-                OrderServices = orderServices,
+                OrderServices = orderServiceViewModels,
                 StatusList = new List<string> { "Oczekuje", "W trakcie", "Zrealizowane", "Zakończone" }
             };
 
             return View(model);
+        }
+
+        public string GetFullName(User user)
+        {
+            return $"{user.FirstName} {user.LastName}";
         }
 
         [HttpPost]
@@ -192,7 +209,8 @@ namespace ProjektLABDetailing.Controllers
                 Status = "Oczekuje",
                 Materials = viewModel.Materials,
                 ClientRemarks = viewModel.ClientRemarks,
-                EmployeeId = employee.EmployeeId
+                EmployeeId = employee.EmployeeId,
+                ServiceId = viewModel.SelectedServiceId
             };
 
             _context.OrderServices.Add(orderService);
@@ -202,7 +220,6 @@ namespace ProjektLABDetailing.Controllers
             return RedirectToAction(nameof(Services));
         }
 
-
         [HttpGet]
         public async Task<IActionResult> EditService(int selectedOrderId)
         {
@@ -210,7 +227,7 @@ namespace ProjektLABDetailing.Controllers
                 .Include(os => os.Client)
                     .ThenInclude(c => c.User)
                 .Include(os => os.Car)
-                .Include(os => os.Services)
+                .Include(os => os.Service)
                 .FirstOrDefaultAsync(os => os.OrderId == selectedOrderId);
 
             if (orderService == null)
@@ -231,8 +248,8 @@ namespace ProjektLABDetailing.Controllers
                 Color = orderService.Car.Color,
                 VIN = orderService.Car.VIN,
                 Mileage = orderService.Car.Mileage,
-                ExecutionDate = orderService.ExecutionDate,
-                SelectedService = orderService.Services.FirstOrDefault()?.Name,
+                ExecutionDate = orderService.ExecutionDate ?? DateTime.MinValue,
+                SelectedServiceId = orderService.ServiceId ?? 0,
                 Materials = orderService.Materials,
                 ClientRemarks = orderService.ClientRemarks,
                 ServicesList = GetServicesList()
@@ -244,14 +261,12 @@ namespace ProjektLABDetailing.Controllers
         [HttpPost]
         public async Task<IActionResult> EditService(EditServiceViewModel viewModel)
         {
-
             viewModel.ServicesList = GetServicesList();
 
             var orderService = await _context.OrderServices
                 .Include(os => os.Client)
                     .ThenInclude(c => c.User)
                 .Include(os => os.Car)
-                .Include(os => os.Services)
                 .FirstOrDefaultAsync(os => os.OrderId == viewModel.OrderId);
 
             if (orderService == null)
@@ -276,18 +291,12 @@ namespace ProjektLABDetailing.Controllers
             orderService.Car.VIN = viewModel.VIN;
             orderService.Car.Mileage = viewModel.Mileage;
 
-            orderService.Services.Clear();
-            var service = await _context.Services.FirstOrDefaultAsync(s => s.Name == viewModel.SelectedService);
-            if (service != null)
-            {
-                orderService.Services.Add(service);
-            }
+            orderService.ServiceId = viewModel.SelectedServiceId;
 
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Services));
         }
-
 
         [HttpPost]
         public async Task<IActionResult> DeleteService(int id)
@@ -306,16 +315,13 @@ namespace ProjektLABDetailing.Controllers
 
         private List<SelectListItem> GetServicesList()
         {
-            return new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Mycie Detailingowe", Text = "Mycie Detailingowe" },
-                new SelectListItem { Value = "Regeneracja Lakieru", Text = "Regeneracja Lakieru" },
-                new SelectListItem { Value = "Powłoka Ceramiczna", Text = "Powłoka Ceramiczna" },
-                new SelectListItem { Value = "Detailing Wnętrza", Text = "Detailing Wnętrza" },
-                new SelectListItem { Value = "Regeneracja Reflektorów", Text = "Regeneracja Reflektorów" },
-                new SelectListItem { Value = "Naklejanie Folii", Text = "Naklejanie Folii" },
-                new SelectListItem { Value = "Przyciemnianie Szyb", Text = "Przyciemnianie Szyb" }
-            };
+            return _context.Services
+                .Select(s => new SelectListItem
+                {
+                    Value = s.ServiceId.ToString(),
+                    Text = s.Name
+                })
+                .ToList();
         }
 
         [HttpGet]
