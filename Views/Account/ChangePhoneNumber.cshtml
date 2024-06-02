@@ -1,0 +1,34 @@
+﻿@model ProjektLABDetailing.Models.User.ViewModels.ChangePhoneNumberViewModel
+
+@{
+    ViewData["Title"] = "Zmiana Numeru Telefonu";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>Zmiana Numeru Telefonu</title>
+</head>
+<body>
+    <div class="container">
+        <form method="post" asp-action="ChangePhoneNumber" id="changePhoneNumberForm">
+            <div class="CDUInputNumber">
+                <h1>Zmiana Numeru Telefonu</h1>
+                <div class="InputNumber">
+                    <input asp-for="NewPhoneNumber" class="CssNumber" placeholder="Nowy Numer Telefonu" />
+                    <span asp-validation-for="NewPhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="InputNumber">
+                    <input asp-for="ConfirmPhoneNumber" class="CssNumber" placeholder="Potwierdź Numer Telefonu" />
+                    <span asp-validation-for="ConfirmPhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="CDUButton">
+                    <button type="submit">Zatwierdź</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

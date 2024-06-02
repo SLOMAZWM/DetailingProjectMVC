@@ -1,0 +1,30 @@
+﻿@model ProjektLABDetailing.Models.User.ViewModels.ChangeEmailViewModel
+
+@{
+    ViewData["Title"] = "Zmiana Emaila";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>Zmiana Emaila</title>
+</head>
+<body>
+    <div class="container">
+        <form method="post" asp-action="ChangeEmail">
+            <div class="CDUInputEmail">
+                <h1>Zmiana Emaila</h1>
+                <div class="InputMail">
+                    <input asp-for="NewEmail" class="CssMail" placeholder="Nowy Email" />
+                    <span asp-validation-for="NewEmail" class="text-danger"></span>
+                </div>
+                <div class="InputMail">
+                    <input asp-for="ConfirmEmail" class="CssMail" placeholder="Potwierdź Email" />
+                    <span asp-validation-for="ConfirmEmail" class="text-danger"></span>
+                </div>
+                <div class="CDUButton">
+                    <button type="submit">Zatwierdź</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
