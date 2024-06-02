@@ -1,4 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
+    // Back to top button
     var backToTopBtn = document.getElementById("backToTopBtn");
 
     if (backToTopBtn) {
@@ -24,9 +25,8 @@
             backToTop();
         };
     }
-});
 
-document.addEventListener('DOMContentLoaded', function () {
+    // Image gallery
     var images = [
         '/Pictures/Audi.png',
         '/Pictures/Subaru.png',
@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function fadeImages() {
             var nextIndex = (currentIndex + 1) % images.length;
-            var currentImage = carImages[currentIndex % 2];
-            var nextImage = carImages[(currentIndex + 2) % 1];
+            var currentImage = carImages[currentIndex % carImages.length];
+            var nextImage = carImages[nextIndex % carImages.length];
 
             nextImage.src = images[nextIndex];
             currentImage.classList.add('hidden');
@@ -59,19 +59,14 @@ document.addEventListener('DOMContentLoaded', function () {
             currentIndex = nextIndex;
         }
     }
-});
 
-// Obsługa koszyka
-document.addEventListener('DOMContentLoaded', function () {
+    // Cart handling
     var cartIcon = document.querySelector('.CartIcon');
-    var cartSummary = document.getElementById('cart-summary');
-
-    function toggleCartSummary() {
-        cartSummary.classList.toggle('visible');
-    }
 
     if (cartIcon) {
-        cartIcon.addEventListener('click', toggleCartSummary);
+        cartIcon.addEventListener('click', function () {
+            window.location.href = '/Cart/Summary';
+        });
     }
 
     var buttons = document.querySelectorAll('.AddToCartButton');
@@ -105,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('/Cart/Summary')
             .then(response => response.text())
             .then(html => {
+                var cartSummary = document.getElementById('cart-summary');
                 if (cartSummary) {
                     cartSummary.innerHTML = html;
                 }

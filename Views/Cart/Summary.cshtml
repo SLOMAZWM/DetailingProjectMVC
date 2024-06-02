@@ -1,0 +1,26 @@
+﻿@model ProjektLABDetailing.Models.Cart
+
+<div class="cart-summary">
+    <h3>Twój koszyk</h3>
+    <ul>
+        @foreach (var item in Model.Items)
+        {
+            <li>
+                @item.ProductName - @item.Quantity x @item.Price.ToString("c")
+                <form method="post" asp-action="UpdateQuantity" asp-controller="Cart" style="display:inline;">
+                    <input type="hidden" name="productId" value="@item.ProductId" />
+                    <input type="number" name="quantity" value="@item.Quantity" min="1" />
+                    <button type="submit">Aktualizuj</button>
+                </form>
+                <form method="post" asp-action="RemoveFromCart" asp-controller="Cart" style="display:inline;">
+                    <input type="hidden" name="productId" value="@item.ProductId" />
+                    <button type="submit">Usuń</button>
+                </form>
+            </li>
+        }
+    </ul>
+    <p><strong>Całkowita cena: </strong> @Model.TotalPrice.ToString("c")</p>
+    <form method="get" asp-action="Checkout" asp-controller="Cart">
+        <button type="submit" class="checkout-button">Przejdź do zamówienia</button>
+    </form>
+</div>

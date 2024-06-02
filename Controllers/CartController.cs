@@ -36,9 +36,29 @@ namespace ProjektLABDetailing.Controllers
             return Json(new { success = false });
         }
 
+        [HttpPost]
+        public IActionResult UpdateQuantity(int productId, int quantity)
+        {
+            _cart.UpdateQuantity(productId, quantity);
+            return RedirectToAction("Summary");
+        }
+
+        [HttpPost]
+        public IActionResult RemoveFromCart(int productId)
+        {
+            _cart.RemoveFromCart(productId);
+            return RedirectToAction("Summary");
+        }
+
         public IActionResult Summary()
         {
-            return PartialView("_CartSummary", _cart);
+            return View(_cart);
+        }
+
+        public IActionResult Checkout()
+        {
+            // Implement the checkout logic here
+            return View();
         }
     }
 }
