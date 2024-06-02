@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ProjektLABDetailing.Models.User;
+using System.Threading.Tasks;
 
 public static class ApplicationDbInitializer
 {

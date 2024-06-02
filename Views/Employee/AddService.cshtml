@@ -6,7 +6,7 @@
 
 <div class="TableServices">
     <h2>Dodaj Nową Usługę</h2>
-    <form id="addServiceForm" method="post" asp-action="AddService" onsubmit="return validateForm()">
+    <form id="addServiceForm" method="post" asp-action="AddService">
         <div class="ClientInfo">
             <h3>Informacje o kliencie</h3>
             <table border="1" class="TableInfo">
@@ -90,14 +90,14 @@
                         <span class="text-danger" asp-validation-for="ExecutionDate"></span>
                     </td>
                     <td>
-                        <select asp-for="SelectedService" class="Wybierzzlisty" id="SelectedService">
+                        <select asp-for="SelectedServiceId" class="Wybierzzlisty" id="SelectedServiceId">
                             <option value="">Wybierz</option>
                             @foreach (var service in Model.ServicesList)
                             {
                                 <option value="@service.Value">@service.Text</option>
                             }
                         </select>
-                        <span class="text-danger" asp-validation-for="SelectedService"></span>
+                        <span class="text-danger" asp-validation-for="SelectedServiceId"></span>
                     </td>
                     <td>
                         <input asp-for="Materials" type="text" id="Materials" />
@@ -129,10 +129,10 @@
     </div>
 }
 
-@if (ViewBag.SuccessMessage != null)
+@if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
-        <p>@ViewBag.SuccessMessage</p>
+        <p>@TempData["SuccessMessage"]</p>
     </div>
 }
 

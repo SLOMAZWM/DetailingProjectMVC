@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace ProjektLABDetailing.Controllers
 {
@@ -45,11 +46,14 @@ namespace ProjektLABDetailing.Controllers
 
                     if (result.Succeeded)
                     {
-                        HttpContext.Session.SetString("UserId", user.Id.ToString());
-                        HttpContext.Session.SetString("UserType", user.Role == UserRole.Client ? "Client" : "Employee");
+                        var roles = await _userManager.GetRolesAsync(user);
+                        var userRole = roles.Contains("Client") ? "Client" : "Employee";
+                        HttpContext.Session.SetString("UserId", user.Id);
+                        HttpContext.Session.SetString("UserType", userRole);
+                        HttpContext.Session.SetString("Email", user.Email); // Dodano przypisywanie emaila do sesji
 
-                        string redirectPage = user.Role == UserRole.Client ? "ClientUserPanel" : "EmployeeUserPanel";
-                        return RedirectToAction(redirectPage, user.Role == UserRole.Client ? "Client" : "Employee");
+                        string redirectPage = userRole == "Client" ? "ClientUserPanel" : "EmployeeUserPanel";
+                        return RedirectToAction(redirectPage, userRole == "Client" ? "Client" : "Employee");
                     }
                     else
                     {
@@ -90,8 +94,7 @@ namespace ProjektLABDetailing.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    PhoneNumber = model.PhoneNumber,
-                    Role = UserRole.Client
+                    PhoneNumber = model.PhoneNumber
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -110,8 +113,9 @@ namespace ProjektLABDetailing.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    HttpContext.Session.SetString("UserId", user.Id.ToString());
+                    HttpContext.Session.SetString("UserId", user.Id);
                     HttpContext.Session.SetString("UserType", "Client");
+                    HttpContext.Session.SetString("Email", user.Email); // Dodano przypisywanie emaila do sesji
 
                     return RedirectToAction("ClientUserPanel", "Client");
                 }

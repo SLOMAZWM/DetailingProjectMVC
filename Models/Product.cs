@@ -1,15 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjektLABDetailing.Models
 {
     public class Product
     {
         public int ProductId { get; set; }
-        public string Name { get; set; } = string.Empty;
+        [Required]
+        public string Name { get; set; }
+        [Required]
         public short Quantity { get; set; }
+        [Required]
         public decimal Price { get; set; }
-        public string ImgPath { get; set; } = string.Empty;
+        [Required]
+        public string ImgPath { get; set; }
 
-        public virtual ICollection<OrderProducts> OrderProducts { get; set; } = new List<OrderProducts>();
+        public virtual ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
     }
 }

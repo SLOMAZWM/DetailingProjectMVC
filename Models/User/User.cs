@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjektLABDetailing.Models.User
@@ -13,12 +14,7 @@ namespace ProjektLABDetailing.Models.User
         [StringLength(50, ErrorMessage = "Nazwisko musi mieć co najmniej 3 znaki i mniej niż 50 znaków.", MinimumLength = 3)]
         public string LastName { get; set; } = string.Empty;
 
-        public UserRole Role { get; set; }
-    }
-
-    public enum UserRole
-    {
-        Client,
-        Employee
+        public ICollection<Client> Clients { get; set; } = new List<Client>();
+        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
     }
 }

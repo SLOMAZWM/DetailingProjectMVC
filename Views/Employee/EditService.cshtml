@@ -91,14 +91,14 @@
                         <span class="text-danger" asp-validation-for="ExecutionDate"></span>
                     </td>
                     <td>
-                        <select asp-for="SelectedService" class="Wybierzzlisty" id="SelectedService">
+                        <select asp-for="SelectedServiceId" class="Wybierzzlisty" id="SelectedServiceId">
                             <option value="">Wybierz</option>
                             @foreach (var service in Model.ServicesList)
                             {
                                 <option value="@service.Value">@service.Text</option>
                             }
                         </select>
-                        <span class="text-danger" asp-validation-for="SelectedService"></span>
+                        <span class="text-danger" asp-validation-for="SelectedServiceId"></span>
                     </td>
                     <td>
                         <input asp-for="Materials" type="text" id="Materials" />
@@ -141,8 +141,8 @@
     <script src="~/js/ValidationAddService.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var selectedService = "@Model.SelectedService";
-            var selectElement = document.getElementById("SelectedService");
+            var selectedService = "@Model.SelectedServiceId";
+            var selectElement = document.getElementById("SelectedServiceId");
 
             if (selectedService) {
                 for (var i = 0; i < selectElement.options.length; i++) {

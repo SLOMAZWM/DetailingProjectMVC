@@ -5,7 +5,9 @@ namespace ProjektLABDetailing.Models.ViewModels
 {
     public class ServicesViewModel
     {
-        public IList<OrderService> OrderServices { get; set; }
-        public List<string> StatusList { get; set; } = new List<string> { "Oczekuje", "W trakcie", "Zrealizowane" };
+        public List<SelectListItem> ServicesList { get; set; }
+        public int SelectedServiceId { get; set; }
+        public List<OrderServiceViewModel> OrderServices { get; set; }
+        public List<string> StatusList { get; set; }
     }
 }

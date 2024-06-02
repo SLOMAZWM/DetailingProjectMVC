@@ -25,9 +25,9 @@
                             <td>@order.OrderId</td>
                             <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
                             <td>@order.Client?.User?.Email</td>
-                            <td>@order.Client?.User?.FirstName @order.Client?.User?.LastName</td>
+                            <td>@order.Client?.User?.FirstName  @order.Client?.User?.LastName</td>
                             <td><a href="/OrderProductsDetails/@order.OrderId">Szczegóły zamówienia</a></td>
-                            <td>@Model.OrderTotals[order.OrderId].ToString("C")</td>
+                            <td>@(Model.OrderTotals.TryGetValue(order.OrderId, out var total) ? total.ToString("C") : "N/A")</td>
                         </tr>
                     }
                 }
@@ -60,14 +60,14 @@
                     @foreach (var service in Model.OrderServices)
                     {
                         <tr>
-                            <td>@service.ExecutionDate.ToString("yyyy-MM-dd")</td>
-                            <td>@service.Client.User.FirstName @service.Client.User.LastName</td>
-                            <td>@service.Car.Model</td>
+                            <td>@(service.ExecutionDate.HasValue ? service.ExecutionDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+                            <td>@service.Client?.User?.FirstName @service.Client?.User?.LastName</td>
+                            <td>@service.Car?.Brand @service.Car?.Model</td>
                             <td>
                                 <ul>
                                     @foreach (var s in service.Services)
                                     {
-                                        <li>@s.Name</li>
+                                        @s.Name
                                     }
                                 </ul>
                             </td>

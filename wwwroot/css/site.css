@@ -50,8 +50,7 @@ body {
     padding-bottom: 1.5%;
     font-family: 'Century Gothic';
     box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-radius: 20px;
 }
 
     .menu a {
@@ -78,21 +77,6 @@ body {
 }
 
 /*========================================================================================================================Menu========================================================================================================================*/
-
-/*========================================================================================================================BackWebImage========================================================================================================================*/
-
-.BackWebImage {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-}
-
-.BackWebImage img {
-    max-width: 99.99%;
-    box-shadow: 0px 0px 50px 10px rgba(0,0,0,0.25);
-}
-
-/*========================================================================================================================BackWebImage========================================================================================================================*/
 
 
 /*========================================================================================================================Login=======================================================================================================================*/
@@ -529,10 +513,12 @@ td {
     margin-top: 4%;
     margin-bottom: 5%;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     text-align: center;
 }
 
-.Quick_Detailer {
+.ProductItem {
     background-image: radial-gradient(circle, #ffa16b, #ff9367, #ff8465, #ff7465, #ff6468);
     padding: 4%;
     border-radius: 10%;
@@ -542,75 +528,36 @@ td {
     color: black;
     box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
     text-decoration: none;
+    width: 25%;
+    box-sizing: border-box;
 }
 
-.APC_Interior {
-    background-image: radial-gradient(circle, #ffa16b, #ff9367, #ff8465, #ff7465, #ff6468);
-    padding: 4%;
-    border-radius: 10%;
-    margin: 2%;
-    transition: 0.5s;
-    border: 3px solid #FF4660;
-    color: black;
-    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
-    text-decoration: none;
+    .ProductItem:hover {
+        padding-left: 4.5%;
+        padding-right: 4.5%;
+        transition: 0.5s;
+        border-color: #fe935c;
+        box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.40);
+    }
+
+.ProductImage {
+    width: 80%;
+    height: auto;
+    margin-top: 10%;
 }
 
-.Glass_cleaner {
-    background-image: radial-gradient(circle, #ffa16b, #ff9367, #ff8465, #ff7465, #ff6468);
-    padding: 4%;
-    border-radius: 10%;
-    margin: 2%;
-    transition: 0.5s;
-    border: 3px solid #FF4660;
-    color: black;
-    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
-    text-decoration: none;
+@media (max-width: 768px) {
+    .ProductItem {
+        width: 45%;
+    }
 }
 
-.Wax {
-    background-image: radial-gradient(circle, #ffa16b, #ff9367, #ff8465, #ff7465, #ff6468);
-    padding: 4%;
-    border-radius: 10%;
-    margin: 2%;
-    transition: 0.5s;
-    border: 3px solid #FF4660;
-    color: black;
-    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
-    text-decoration: none;
+@media (max-width: 480px) {
+    .ProductItem {
+        width: 90%;
+    }
 }
 
-.Quick_Detailer:hover {
-    padding-left: 4.5%;
-    padding-right: 4.5%;
-    transition: 0.5s;
-    border-color: #fe935c;
-    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.40);
-}
-
-.APC_Interior:hover {
-    padding-left: 4.5%;
-    padding-right: 4.5%;
-    transition: 0.5s;
-    border-color: #fe935c;
-    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.40);
-}
-
-.Glass_cleaner:hover {
-    padding-left: 4.5%;
-    padding-right: 4.5%;
-    transition: 0.5s;
-    border-color: #fe935c;
-    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.40);
-}
-
-.Wax:hover {
-    padding-left: 4.5%;
-    padding-right: 4.5%;
-    transition: 0.5s;
-    border-color: #fe935c;
-    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.40);
-}
 
 /*========================================================================================================================Produkty=========================================================================================================================*/
 
@@ -1105,28 +1052,25 @@ h2 {
     margin-left: 42%;
 }
 
-.ButtonAddServicesStyle {
+.ButtonAddServicesStyle,
+.ButtonEditServicesStyle,
+button.ButtonAddServicesStyle,
+button.ButtonEditServicesStyle {
     border: 5px solid #ff9372;
     border-radius: 10px;
     padding: 0.5%;
     transition: 0.5s;
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    background-color: transparent;
+    font: inherit;
 }
 
-    .ButtonAddServicesStyle:hover {
-        border-color: #C45C5F;
-        transition: ease-in-out 0.5s;
-        box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
-    }
-
-.ButtonEditServicesStyle {
-    border: 5px solid #ff9372;
-    border-radius: 10px;
-    padding: 0.5%;
-    margin-left: 2%;
-    transition: 0.5s;
-}
-
-    .ButtonEditServicesStyle:hover {
+    .ButtonAddServicesStyle:hover,
+    .ButtonEditServicesStyle:hover,
+    button.ButtonAddServicesStyle:hover,
+    button.ButtonEditServicesStyle:hover {
         border-color: #C45C5F;
         transition: ease-in-out 0.5s;
         box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
@@ -1145,6 +1089,11 @@ h2 {
     padding-right: 1%;
     padding-bottom: 0.5%;
     transition: 0.5s;
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    background-color: transparent;
+    font: inherit;
 }
 
     .ButtonServices:hover {
@@ -1266,38 +1215,69 @@ h2 {
 }
 
 .LinePPF1 {
-    margin-top: 5%;
     background-color: white;
     padding-left: 0.1%;
     padding-right: 0.1%;
-    padding-top: 30%;
+    padding-top: 20%;
     border-radius: 20px;
     margin-left: 5%;
     margin-right: 5%;
 }
-
-.ppf2 {
-    margin-bottom: 5%;
-}
-
-.PPF img {
-    width: 90%;
-    margin-bottom: 10%;
-}
-
-.Individual {
-    background-image: url(/Pictures/PPFback.png);
-    background-repeat: no-repeat;
-    padding-top: 5%;
-    padding-bottom: 5%;
-    text-align: center;
-    margin-top: 5%;
-    letter-spacing: 1px;
-    font-size: 110%;
-
-}
-
-.Individual img {
-    width: 40%;
-}
 /*====================================================================================================================PPF=============================================================================================================================*/
+
+
+.AddToCartButton {
+    background-color: #ff7f50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .AddToCartButton:hover {
+        background-color: #ff6347;
+    }
+
+
+.cart-summary {
+    position: fixed;
+    top: 10%;
+    right: 2%;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+}
+
+    .cart-summary.visible {
+        display: block;
+    }
+
+    .cart-summary h3 {
+        margin-top: 0;
+    }
+
+    .cart-summary p {
+        margin: 0;
+    }
+
+.CartIcon {
+    cursor: pointer;
+}
+
+.CartIconImage {
+    width: 30px;
+    height: 30px;
+}

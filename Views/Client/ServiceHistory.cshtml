@@ -1,24 +1,48 @@
-﻿@*
-    
-*@
+﻿@model IEnumerable<ProjektLABDetailing.Models.OrderService>
+
 @{
+    ViewData["Title"] = "Twoja Historia Usług";
 }
 
-<body>
-        <div class="TablesClient">
-            <table border="1" class="TableServicesHistory">
-                <caption>
-                <b>Twoja Historia Usług</b>
-                </caption>
-                <tr>
-                    <td><b>Data Zlecenia</b></td>
-                    <td><b>Samochód</b></td>
-                    <td><b>Cena</b></td>
-                    <td><b>Szczegóły</b></td>
-                </tr>
+<div class="TablesClient">
+    <table border="1" class="TableServicesHistory">
+        <caption>
+            <b>Twoja Historia Usług</b>
+        </caption>
+        <thead>
+            <tr>
+                <th>Data Zlecenia</th>
+                <th>Samochód</th>
+                <th>Cena</th>
+                <th>Usługa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var service in Model)
+                {
+                    <tr>
+                        <td>@(service.ExecutionDate.HasValue ? service.ExecutionDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+                        <td>@service.Car?.Brand @service.Car?.Model</td>
+                        <td>@service.Services.Sum(s => s.Price).ToString("C")</td>
+                        <td>
+                            <ul>
+                                @foreach (var s in service.Services)
+                                {
+                                    @s.Name
+                                }
+                            </ul>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
                 <tr>
                     <td colspan="4">Brak danych usług</td>
                 </tr>
-            </table>
-        </div>
-</body>
+            }
+        </tbody>
+    </table>
+</div>

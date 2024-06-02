@@ -1,18 +1,14 @@
-﻿<head>
+﻿@model IEnumerable<ProjektLABDetailing.Models.Product>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strona Główna</title>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-
-    <div class="BackWebImage">
-        <div class="BackWebImage1">
-            <img src="~/Pictures/BackWeb.png" />
-            <h1>Markam</h1>
-            <h3>- Profesjonalny detailing, <br />który przywraca Twojemu autu blask i elegancję na nowo!</h3>
-        </div>
-    </div>
-
-
     <div class="LineAboveGallery"></div>
 
     <div class="Gallery">
@@ -21,7 +17,6 @@
         <img id="carImage3" src="~/Pictures/nissan.png" alt="Nissan" class="hidden">
     </div>
 
-
     <div class="AboutUs">
         <p>
             Niezwykła jakość, personalizowana opieka, innowacyjne podejście.<br /> Twój samochód zasługuje na perfekcję. Profesjonalizm od pierwszego <br />kontaktu do odbioru.
@@ -29,121 +24,64 @@
         </p>
     </div>
 
-
     <div class="LineAboveProducts"></div>
 
     <h1 class="OurProducts">Nasze produkty</h1>
 
     <div class="Produkty">
-
-        <div class="Quick_Detailer">
-            <a href="/Orders">
-                <h1> Quick Detailer </h1>
-                <img src="~/Pictures/Quick.png" alt="Quick Detailer" class="QckJpg" />
-            </a>
-        </div>
-
-        <div class="APC_Interior">
-            <a href="/Orders">
-                <h1> All Purpose Cleaner </h1>
-                <img src="~/Pictures/APC.png" alt="All Purpose Cleaner" class="ApcJpg" />
-            </a>
-        </div>
-
-        <div class="Glass_cleaner">
-            <a href="/Orders">
-                <h1> Glass Cleaner </h1>
-                <img src="~/Pictures/Glass.png" alt="Glass Cleaner" class="GlassJpg" />
-            </a>
-        </div>
-
-        <div class="Wax">
-            <a href="/Orders">
-                <h1> Wosk Ochronny </h1>
-                <img src="~/Pictures/Wax.png" alt="Wax" class="WaxJpg" />
-            </a>
-        </div>
+        @foreach (var product in Model)
+        {
+            <div class="ProductItem">
+                <h1>@product.Name</h1>
+                <img src="~/@product.ImgPath" alt="@product.Name" class="ProductImage" />
+                <p>Cena: @product.Price.ToString("C")</p>
+                <button class="AddToCartButton" data-product-id="@product.ProductId">Dodaj do koszyka</button>
+            </div>
+        }
     </div>
 
     <div class="Line2"></div>
-    
+
     <div class="PPF">
-
         <div class="ppf1">
-            <img src="~/Pictures/Full.png" alt="PPF Full"/>
-            <p>
-                <b>Pakiet Full </b> to całościowe zabezpieczenie samochodu folią ochronną PPF. Gwarantuje
-                całkowitą ochronę, nie tylko przed uszkodzeniami doznanymi w trakcie jazdy, lecz także
-                przed mechanicznymi urazami, oraz otarciami parkingowymi. Aplikując folię ochronną
-                na cały pojazd, nie musimy się martwić o uszkodzenia powstające podczas eksploatacji.
-                Przy odpowiedniej pielęgnacji, samochód będzie cały czas wyglądał jak nowy.
-                <br /> <br /> Cena: 15000 zł
-        </div>  
-
-            <div class="LinePPF1"></div>
-            
-        <div class="ppf1">
-            <img src="~/Pictures/Half.png" alt="PPF Half" />
-            <p>
-                <br />
-                <br />
-                <b> Pakiet Full front </b> to całkowite zabezpieczenie przedniej części auta folią 
-                ochronną PPF. Obejmuje on oklejenie: całej maski, przednich błotników, przednich lamp, 
-                lusterek oraz przedniego zderzaka. Maska auta przez swoją dużą powierzchnię jest bardzo 
-                często traktowana reprezentacyjnie. Jej idealny stan jest kluczowy, aby auto wyglądało 
-                jak nowe i utrzymywało swoją wartość.<br /> <br />Cena: 5500 zł
-            </p>
+            <img src="~/Pictures/Full.png" alt="PPF Full" />
+            <p></p>
         </div>
 
-            <div class="LinePPF1"></div>
+        <div class="LinePPF1"></div>
+
+        <div class="ppf1">
+            <img src="~/Pictures/Half.png" alt="PPF Half" />
+            <p></p>
+        </div>
+
+        <div class="LinePPF1"></div>
 
         <div class="ppf1">
             <img src="~/Pictures/Front.png" alt="PPF Front" />
-            <p>
-                <br />
-                <br />
-                <br />
-                Pakiet Basic podstawowy pakiet ochronny folią ochronną PPF. Obejmuje on zabezpieczenie 
-                folią ochronną przedniego zderzaka, reflektorów i lusterek – czyli miejsc, które są najbardziej 
-                narażone na uszkodzenia mechaniczne. Pakiet Basic to podstawowa ochrona lakieru. Protekcję w 
-                większym zakresie gwarantuje wybór pakietów Full lub Front.
-                <br /> <br />Cena: 2500 zł
+            <p></p>
         </div>
     </div>
-    <div class="Individual1">
-        <div class="Individual">
-            <h1>Skonfiguruj indywidualne zabezpieczenie folią PPF</h1>
-                <img src="~/Pictures/individual.png" alt="Individual" />
-            <p>
-                Pakiet Individual pozwala na skonfigurowanie dowolnego zabezpieczenia auta foliami ochronnymi PPF.<br /> W celu ustalenia szczegółów wyceny aplikacji folii ochronnej PPF zapraszam do skontaktowania się z<u> <b> <a href="Contact">Nami.</a></b></u><br />
-
-                Cena ustalana indywidualnie
-            </p>
-        </div>
-    </div>
-
 
     <div class="Contact">
-
         <h1>Gdzie nas znaleźć?</h1>
-
         <div class="ContactContent">
             <div class="ContactData">
                 <a>Telefon: 123 123 123</a><br />
                 <a>Adres: Prószkowska 76,<br /> 45-758 Opole</a> <br />
                 <a>NIP: 123 123 123</a>
             </div>
-
             <div class="Map">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20230.46862020202!2d17.904003463028054!3d50.667814577628!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471053bb1bcdafab%3A0xf2ef41915344d5dd!2sPolitechnika%20Opolska!5e0!3m2!1spl!2spl!4v1715792874181!5m2!1spl!2spl" class="Map" width="900" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
-
         </div>
-
     </div>
     <a href="https://Youtube.com/MarKamDetailing"><img src="~/Pictures/youtube.svg" class="Youtube"></a>
     <a href="https://Facebook.com/MarKamDetailing"><img src="~/Pictures/facebook.svg" class="Facebook"></a>
     <a href="https://Instagram.com/MarKamDetailing"><img src="~/Pictures/instagram.svg" class="Instagram"></a>
     <img src="~/Pictures/shortcut.PNG" class="WaterMark">
     <button class="backToTopBtn" id="backToTopBtn">Wróć do góry</button>
+
+    <script src="~/js/site.js"></script>
 </body>
+</html>
