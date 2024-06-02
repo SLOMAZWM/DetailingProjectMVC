@@ -5,8 +5,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProjektLABDetailing.Models.ViewModels
 {
-    public class AddServiceViewModel
+    public class AddEditServiceViewModel
     {
+        public int OrderId { get; set; }
+
         [Required(ErrorMessage = "Imię jest wymagane")]
         public string FirstName { get; set; }
 
@@ -52,5 +54,7 @@ namespace ProjektLABDetailing.Models.ViewModels
         public string ClientRemarks { get; set; }
 
         public List<SelectListItem> ServicesList { get; set; }
+
+        public bool IsEditMode { get; set; }
     }
 }

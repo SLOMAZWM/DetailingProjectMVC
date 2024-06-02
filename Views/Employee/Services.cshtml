@@ -12,44 +12,85 @@
             <td><b>Realizacja</b></td>
             <td><b>Materiały</b></td>
             <td><b>Uwagi dla klienta</b></td>
+            <td><b>Wybierz</b></td>
         </tr>
     </thead>
     <tbody>
         @foreach (var orderService in Model.OrderServices)
         {
-                <tr>
-                    <td>@orderService.ExecutionDate.ToString("yyyy-MM-dd")</td>
-                    <td>@orderService.Client.User.FirstName @orderService.Client.User.LastName</td>
-                    <td>@orderService.Car.Model</td>
-                    <td>
-                        <ul>
+            <tr>
+                <td>@orderService.ExecutionDate.ToString("yyyy-MM-dd")</td>
+                <td>@orderService.Client.User.FirstName @orderService.Client.User.LastName</td>
+                <td>@orderService.Car.Model</td>
+                <td>
+                    <ul>
                         @foreach (var service in orderService.Services)
                         {
-                                    <li>@service.Name</li>
+                            <li>@service.Name</li>
                         }
-                        </ul>
-                    </td>
-                    <td>
-                        <form method="post" asp-action="UpdateStatus">
-                            <input type="hidden" name="id" value="@orderService.OrderId" />
-                            <select class="Realizacja" id="RealizacjaID" name="status" onchange="this.form.submit()">
+                    </ul>
+                </td>
+                <td>
+                    <form method="post" asp-action="UpdateStatus">
+                        <input type="hidden" name="id" value="@orderService.OrderId" />
+                        <select class="Realizacja" id="RealizacjaID" name="status" onchange="this.form.submit()">
                             @foreach (var status in Model.StatusList)
                             {
                                 @if (orderService.Status == status)
                                 {
-                                                <option value="@status" selected>@status</option>
+                                    <option value="@status" selected>@status</option>
                                 }
                                 else
                                 {
-                                                <option value="@status">@status</option>
+                                    <option value="@status">@status</option>
                                 }
                             }
-                            </select>
-                        </form>
-                    </td>
-                    <td>@orderService.Materials</td>
-                    <td>@orderService.ClientRemarks</td>
-                </tr>
+                        </select>
+                    </form>
+                </td>
+                <td>@orderService.Materials</td>
+                <td>@orderService.ClientRemarks</td>
+                <td>
+                    <input type="checkbox" name="selectedOrderId" value="@orderService.OrderId" class="order-checkbox" />
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+
+<div class="buttonsServicesalign">
+    <a asp-controller="Employee" asp-action="AddEditService" class="ButtonAddServicesStyle">Dodaj Usługę</a>
+    <button type="button" class="ButtonEditServicesStyle" id="editServiceButton">Edytuj Usługę</button>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.order-checkbox');
+            const editButton = document.getElementById('editServiceButton');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        checkboxes.forEach(cb => {
+                            if (cb !== this) {
+                                cb.checked = false;
+                            }
+                        });
+                    }
+                });
+            });
+
+            editButton.addEventListener('click', function () {
+                const selectedCheckbox = document.querySelector('.order-checkbox:checked');
+                if (selectedCheckbox) {
+                    const orderId = selectedCheckbox.value;
+                    const url = `@Url.Action("AddEditService", "Employee")?selectedOrderId=${orderId}`;
+                    window.location.href = url;
+                } else {
+                    alert('Proszę zaznaczyć jedną usługę do edycji.');
+                }
+            });
+        });
+    </script>
+}

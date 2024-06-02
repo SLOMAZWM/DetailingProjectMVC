@@ -1,12 +1,13 @@
-﻿@model ProjektLABDetailing.Models.ViewModels.AddServiceViewModel
+﻿@model ProjektLABDetailing.Models.ViewModels.AddEditServiceViewModel
 
 @{
-    ViewData["Title"] = "Dodaj Nową Usługę";
+    ViewData["Title"] = Model.IsEditMode ? "Edytuj Usługę" : "Dodaj Nową Usługę";
 }
 
 <div class="TableServices">
-    <h2>Dodaj Nową Usługę</h2>
-    <form id="addServiceForm" method="post" asp-action="AddService" onsubmit="return validateForm()">
+    <h2>@(Model.IsEditMode ? "Edytuj Usługę" : "Dodaj Nową Usługę")</h2>
+    <form id="addEditServiceForm" method="post" asp-action="AddEditService" onsubmit="return validateForm()">
+        <input type="hidden" asp-for="OrderId" />
         <div class="ClientInfo">
             <h3>Informacje o kliencie</h3>
             <table border="1" class="TableInfo">
@@ -112,9 +113,17 @@
         </div>
 
         <div class="ButtonServicesAl">
-            <a href="/Employee/Services" class="ButtonServices">Dodaj</a>
+            <button type="submit" class="ButtonServices">
+                @if (Model.IsEditMode)
+                {
+                    @:Zapisz
+                }
+                else
+                {
+                    @:Dodaj
+                }
+            </button>
         </div>
-
     </form>
 </div>
 
@@ -139,4 +148,19 @@
 
 @section Scripts {
     <script src="~/js/ValidationAddService.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var selectedService = "@Model.SelectedService";
+            var selectElement = document.getElementById("SelectedService");
+
+            if (selectedService) {
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    if (selectElement.options[i].value === selectedService) {
+                        selectElement.options[i].selected = true;
+                        break;
+                    }
+                }
+            }
+        });
+    </script>
 }
