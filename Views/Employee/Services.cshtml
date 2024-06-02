@@ -1,67 +1,55 @@
 ﻿@model ProjektLABDetailing.Models.ViewModels.ServicesViewModel
 
-@{
-    ViewData["Title"] = "Zarządzanie Usługami";
-}
+<h2>Obecne Zamówienia Usług</h2>
 
-<body>
-    <div class="TableServices">
-        <h2>Obecne Zamówienia Usług</h2>
-        <table border="1" class="TableInfo">
-            <thead>
+<table border="1" class="TableInfo">
+    <thead>
+        <tr>
+            <td><b>Data</b></td>
+            <td><b>Klient</b></td>
+            <td><b>Samochód</b></td>
+            <td><b>Usługa</b></td>
+            <td><b>Realizacja</b></td>
+            <td><b>Materiały</b></td>
+            <td><b>Uwagi dla klienta</b></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orderService in Model.OrderServices)
+        {
                 <tr>
-                    <td><b>Data</b></td>
-                    <td><b>Klient</b></td>
-                    <td><b>Samochód</b></td>
-                    <td><b>Usługa</b></td>
-                    <td><b>Realizacja</b></td>
-                    <td><b>Materiały</b></td>
-                    <td><b>Uwagi dla klienta</b></td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var orderService in Model.OrderServices)
-                {
-                    <tr>
-                        <td>@orderService.ExecutionDate.ToString("yyyy-MM-dd")</td>
-                        <td>@orderService.Client.User.FirstName @orderService.Client.User.LastName</td>
-                        <td>@orderService.Car.Model</td>
-                        <td>
-                            <ul>
-                                @foreach (var service in orderService.Services)
-                                {
+                    <td>@orderService.ExecutionDate.ToString("yyyy-MM-dd")</td>
+                    <td>@orderService.Client.User.FirstName @orderService.Client.User.LastName</td>
+                    <td>@orderService.Car.Model</td>
+                    <td>
+                        <ul>
+                        @foreach (var service in orderService.Services)
+                        {
                                     <li>@service.Name</li>
+                        }
+                        </ul>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="UpdateStatus">
+                            <input type="hidden" name="id" value="@orderService.OrderId" />
+                            <select class="Realizacja" id="RealizacjaID" name="status" onchange="this.form.submit()">
+                            @foreach (var status in Model.StatusList)
+                            {
+                                @if (orderService.Status == status)
+                                {
+                                                <option value="@status" selected>@status</option>
                                 }
-                            </ul>
-                        </td>
-                        <td>
-                            <form method="post" asp-action="UpdateStatus">
-                                <input type="hidden" name="id" value="@orderService.OrderId" />
-                                <select class="Realizacja" id="RealizacjaID" name="status" onchange="this.form.submit()">
-                                    @foreach (var status in Model.StatusList)
-                                    {
-                                        @if (orderService.Status == status)
-                                        {
-                                            <option value="@status" selected>@status</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@status">@status</option>
-                                        }
-                                    }
-                                </select>
-                            </form>
-                        </td>
-                        <td>@orderService.Materials</td>
-                        <td>@orderService.ClientRemarks</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <div class="buttonsServicesalign">
-        <a href="/Employee/Addservice" class="ButtonAddServicesStyle">Dodaj Usługę</a>
-        <a href="/Employee/Addservice" class="ButtonEditServicesStyle">Edytuj Usługę</a>
-    </div>
-</body>
+                                else
+                                {
+                                                <option value="@status">@status</option>
+                                }
+                            }
+                            </select>
+                        </form>
+                    </td>
+                    <td>@orderService.Materials</td>
+                    <td>@orderService.ClientRemarks</td>
+                </tr>
+        }
+    </tbody>
+</table>

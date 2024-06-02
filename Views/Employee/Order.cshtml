@@ -17,49 +17,40 @@
     <tbody>
         @foreach (var order in Model.OrderProducts)
         {
-            <tr>
-                <td>@order.OrderId</td>
-                <td>
-                    <form method="post" asp-action="UpdateOrderProductStatus">
-                        <input type="hidden" name="id" value="@order.OrderId" />
-                        <select class="Realizacja" id="StatusID" name="status" onchange="this.form.submit()">
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>
+                        <form method="post" asp-action="UpdateOrderProductStatus">
+                            <input type="hidden" name="id" value="@order.OrderId" />
+                            <select class="Realizacja" id="StatusID" name="status" onchange="this.form.submit()">
                             @foreach (var status in Model.StatusList)
                             {
                                 @if (order.Status == status)
                                 {
-                                    <option value="@status" selected>@status</option>
+                                                <option value="@status" selected>@status</option>
                                 }
                                 else
                                 {
-                                    <option value="@status">@status</option>
+                                                <option value="@status">@status</option>
                                 }
                             }
-                        </select>
-                    </form>
-                </td>
-                <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
-                <td>@order.Client.User.Email</td>
-                <td>@order.Client.User.FirstName @order.Client.User.LastName</td>
-                <td>
-                    <a href="/Employee/OrderDetails/@order.OrderId">Szczegóły</a>
-                    <ul>
+                            </select>
+                        </form>
+                    </td>
+                    <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
+                    <td>@order.Client.User.Email</td>
+                    <td>@order.Client.User.FirstName @order.Client.User.LastName</td>
+                    <td>
+                        <a href="/Employee/OrderDetails/@order.OrderId">Szczegóły</a>
+                        <ul>
                         @foreach (var product in order.Products)
                         {
-                            <li>@product.Name - @product.Quantity x @product.Price.ToString("C")</li>
+                                    <li>@product.Name - @product.Quantity x @product.Price.ToString("C")</li>
                         }
-                    </ul>
-                </td>
-                <td>@Model.OrderTotals[order.OrderId].ToString("C")</td>
-            </tr>
+                        </ul>
+                    </td>
+                    <td>@Model.OrderTotals[order.OrderId].ToString("C")</td>
+                </tr>
         }
     </tbody>
 </table>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('.Realizacja').change(function () {
-            $(this).closest('form').submit();
-        });
-    });
-</script>
