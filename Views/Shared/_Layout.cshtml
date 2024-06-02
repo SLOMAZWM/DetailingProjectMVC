@@ -28,12 +28,18 @@
                 {
                     <a asp-controller="Employee" asp-action="EmployeeUserPanel">Panel Pracownika</a>
                 }
-                <a href="javascript:void(0);" class="CardShop"><img src="~/Pictures/bag.svg" class="CardShop"></a>
+                <a href="javascript:void(0);" class="CartIcon"><img src="~/Pictures/bag.svg" class="CartIconImage"></a>
             </nav>
         </div>
         @RenderBody()
         <div id="cart-summary" class="cart-summary">
-            @Html.Partial("_CartSummary", new ProjektLABDetailing.Models.Cart(HttpContextAccessor))
+            <div class="cart-summary-content">
+                <h3>Twój koszyk</h3>
+                <ul id="cart-items">
+                    <!-- Koszyk będzie aktualizowany dynamicznie -->
+                </ul>
+                <button id="close-cart">Zamknij koszyk</button>
+            </div>
         </div>
     </main>
     <script src="~/js/site.js"></script>

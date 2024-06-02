@@ -1258,11 +1258,11 @@ button.ButtonEditServicesStyle {
     width: 300px;
     max-height: 400px;
     overflow-y: auto;
-    display: none; 
+    display: none;
 }
 
     .cart-summary.visible {
-        display: block; 
+        display: block;
     }
 
     .cart-summary h3 {
@@ -1273,6 +1273,11 @@ button.ButtonEditServicesStyle {
         margin: 0;
     }
 
-.CardShop {
+.CartIcon {
     cursor: pointer;
+}
+
+.CartIconImage {
+    width: 30px;
+    height: 30px;
 }
