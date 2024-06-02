@@ -116,170 +116,178 @@ namespace ProjektLABDetailing.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddEditService(int? selectedOrderId)
+        public IActionResult AddService()
         {
-            if (selectedOrderId.HasValue)
+            var model = new AddServiceViewModel
             {
-                var orderService = await _context.OrderServices
-                    .Include(os => os.Client)
-                        .ThenInclude(c => c.User)
-                    .Include(os => os.Car)
-                    .Include(os => os.Services)
-                    .FirstOrDefaultAsync(os => os.OrderId == selectedOrderId.Value);
+                ServicesList = GetServicesList()
+            };
 
-                if (orderService == null)
-                {
-                    return NotFound();
-                }
-
-                var model = new AddEditServiceViewModel
-                {
-                    OrderId = orderService.OrderId,
-                    FirstName = orderService.Client.User.FirstName,
-                    LastName = orderService.Client.User.LastName,
-                    Email = orderService.Client.User.Email,
-                    PhoneNumber = orderService.Client.User.PhoneNumber,
-                    Brand = orderService.Car.Brand,
-                    Model = orderService.Car.Model,
-                    Year = orderService.Car.Year,
-                    Color = orderService.Car.Color,
-                    VIN = orderService.Car.VIN,
-                    Mileage = orderService.Car.Mileage,
-                    ExecutionDate = orderService.ExecutionDate,
-                    SelectedService = orderService.Services.FirstOrDefault()?.Name,
-                    Materials = orderService.Materials,
-                    ClientRemarks = orderService.ClientRemarks,
-                    ServicesList = GetServicesList(),
-                    IsEditMode = true
-                };
-
-                return View("AddEditService", model);
-            }
-            else
-            {
-                var model = new AddEditServiceViewModel
-                {
-                    ServicesList = GetServicesList(),
-                    IsEditMode = false
-                };
-
-                return View("AddEditService", model);
-            }
+            return View("AddService", model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEditService(AddEditServiceViewModel viewModel)
+        public async Task<IActionResult> AddService(AddServiceViewModel viewModel)
         {
             viewModel.ServicesList = GetServicesList();
 
-            if (viewModel.IsEditMode)
+            var user = new User
             {
-                var orderService = await _context.OrderServices
-                    .Include(os => os.Client)
-                        .ThenInclude(c => c.User)
-                    .Include(os => os.Car)
-                    .Include(os => os.Services)
-                    .FirstOrDefaultAsync(os => os.OrderId == viewModel.OrderId);
-                if (orderService == null)
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                Email = viewModel.Email,
+                PhoneNumber = viewModel.PhoneNumber,
+                UserName = viewModel.Email,
+                Role = UserRole.Client
+            };
+
+            var result = await _signInManager.UserManager.CreateAsync(user, "DefaultPassword@123");
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
                 {
-                    return NotFound();
+                    ModelState.AddModelError("", error.Description);
                 }
-
-                orderService.ExecutionDate = viewModel.ExecutionDate;
-                orderService.Status = "Oczekuje";
-                orderService.Materials = viewModel.Materials;
-                orderService.ClientRemarks = viewModel.ClientRemarks;
-
-                orderService.Client.User.FirstName = viewModel.FirstName;
-                orderService.Client.User.LastName = viewModel.LastName;
-                orderService.Client.User.Email = viewModel.Email;
-                orderService.Client.User.PhoneNumber = viewModel.PhoneNumber;
-
-                orderService.Car.Brand = viewModel.Brand;
-                orderService.Car.Model = viewModel.Model;
-                orderService.Car.Year = viewModel.Year;
-                orderService.Car.Color = viewModel.Color;
-                orderService.Car.VIN = viewModel.VIN;
-                orderService.Car.Mileage = viewModel.Mileage;
-
-                orderService.Services.Clear();
-                var service = await _context.Services.FirstOrDefaultAsync(s => s.Name == viewModel.SelectedService);
-                if (service != null)
-                {
-                    orderService.Services.Add(service);
-                }
-
-                await _context.SaveChangesAsync();
-
-                ViewBag.SuccessMessage = "Usługa została zaktualizowana pomyślnie.";
+                viewModel.ServicesList = GetServicesList();
                 return View(viewModel);
             }
-            else
+
+            var client = new Client
             {
-                var user = new User
-                {
-                    FirstName = viewModel.FirstName,
-                    LastName = viewModel.LastName,
-                    Email = viewModel.Email,
-                    PhoneNumber = viewModel.PhoneNumber
-                };
+                UserId = user.Id,
+                User = user
+            };
 
-                var result = await _signInManager.UserManager.CreateAsync(user, "DefaultPassword@123");
-                if (!result.Succeeded)
-                {
-                    ModelState.AddModelError("", "Nie udało się utworzyć użytkownika.");
-                    return View(viewModel);
-                }
+            _context.Clients.Add(client);
+            await _context.SaveChangesAsync();
 
-                var client = new Client
-                {
-                    User = user
-                };
+            var car = new Car
+            {
+                ClientId = client.ClientId,
+                Brand = viewModel.Brand,
+                Model = viewModel.Model,
+                Year = viewModel.Year,
+                Color = viewModel.Color,
+                VIN = viewModel.VIN,
+                Mileage = viewModel.Mileage
+            };
 
-                _context.Clients.Add(client);
-                await _context.SaveChangesAsync();
+            _context.Cars.Add(car);
+            await _context.SaveChangesAsync();
 
-                var car = new Car
-                {
-                    ClientId = client.ClientId,
-                    Brand = viewModel.Brand,
-                    Model = viewModel.Model,
-                    Year = viewModel.Year,
-                    Color = viewModel.Color,
-                    VIN = viewModel.VIN,
-                    Mileage = viewModel.Mileage
-                };
+            var userId = _signInManager.UserManager.GetUserId(User);
+            var employee = await _context.Employees.SingleOrDefaultAsync(e => e.UserId == userId);
 
-                _context.Cars.Add(car);
-                await _context.SaveChangesAsync();
-
-                var userId = _signInManager.UserManager.GetUserId(User);
-                var employee = await _context.Employees.SingleOrDefaultAsync(e => e.UserId == userId);
-
-                if (employee == null)
-                {
-                    ModelState.AddModelError("", "Bieżący użytkownik nie jest powiązany z pracownikiem.");
-                    return View(viewModel);
-                }
-
-                var orderService = new OrderService
-                {
-                    Client = client,
-                    Car = car,
-                    ExecutionDate = viewModel.ExecutionDate,
-                    Status = "Oczekuje",
-                    Materials = viewModel.Materials,
-                    ClientRemarks = viewModel.ClientRemarks,
-                    EmployeeId = employee.EmployeeId
-                };
-
-                _context.OrderServices.Add(orderService);
-                await _context.SaveChangesAsync();
-
-                ViewBag.SuccessMessage = "Usługa została dodana pomyślnie.";
+            if (employee == null)
+            {
+                ModelState.AddModelError("", "Bieżący użytkownik nie jest powiązany z pracownikiem.");
                 return View(viewModel);
             }
+
+            var orderService = new OrderService
+            {
+                Client = client,
+                Car = car,
+                ExecutionDate = viewModel.ExecutionDate,
+                Status = "Oczekuje",
+                Materials = viewModel.Materials,
+                ClientRemarks = viewModel.ClientRemarks,
+                EmployeeId = employee.EmployeeId
+            };
+
+            _context.OrderServices.Add(orderService);
+            await _context.SaveChangesAsync();
+
+            ViewBag.SuccessMessage = "Usługa została dodana pomyślnie.";
+            return RedirectToAction(nameof(Services));
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> EditService(int selectedOrderId)
+        {
+            var orderService = await _context.OrderServices
+                .Include(os => os.Client)
+                    .ThenInclude(c => c.User)
+                .Include(os => os.Car)
+                .Include(os => os.Services)
+                .FirstOrDefaultAsync(os => os.OrderId == selectedOrderId);
+
+            if (orderService == null)
+            {
+                return NotFound();
+            }
+
+            var model = new EditServiceViewModel
+            {
+                OrderId = orderService.OrderId,
+                FirstName = orderService.Client.User.FirstName,
+                LastName = orderService.Client.User.LastName,
+                Email = orderService.Client.User.Email,
+                PhoneNumber = orderService.Client.User.PhoneNumber,
+                Brand = orderService.Car.Brand,
+                Model = orderService.Car.Model,
+                Year = orderService.Car.Year,
+                Color = orderService.Car.Color,
+                VIN = orderService.Car.VIN,
+                Mileage = orderService.Car.Mileage,
+                ExecutionDate = orderService.ExecutionDate,
+                SelectedService = orderService.Services.FirstOrDefault()?.Name,
+                Materials = orderService.Materials,
+                ClientRemarks = orderService.ClientRemarks,
+                ServicesList = GetServicesList()
+            };
+
+            return View("EditService", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditService(EditServiceViewModel viewModel)
+        {
+
+            viewModel.ServicesList = GetServicesList();
+
+            var orderService = await _context.OrderServices
+                .Include(os => os.Client)
+                    .ThenInclude(c => c.User)
+                .Include(os => os.Car)
+                .Include(os => os.Services)
+                .FirstOrDefaultAsync(os => os.OrderId == viewModel.OrderId);
+
+            if (orderService == null)
+            {
+                return NotFound();
+            }
+
+            orderService.ExecutionDate = viewModel.ExecutionDate;
+            orderService.Status = "Oczekuje";
+            orderService.Materials = viewModel.Materials;
+            orderService.ClientRemarks = viewModel.ClientRemarks;
+
+            orderService.Client.User.FirstName = viewModel.FirstName;
+            orderService.Client.User.LastName = viewModel.LastName;
+            orderService.Client.User.Email = viewModel.Email;
+            orderService.Client.User.PhoneNumber = viewModel.PhoneNumber;
+
+            orderService.Car.Brand = viewModel.Brand;
+            orderService.Car.Model = viewModel.Model;
+            orderService.Car.Year = viewModel.Year;
+            orderService.Car.Color = viewModel.Color;
+            orderService.Car.VIN = viewModel.VIN;
+            orderService.Car.Mileage = viewModel.Mileage;
+
+            orderService.Services.Clear();
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Name == viewModel.SelectedService);
+            if (service != null)
+            {
+                orderService.Services.Add(service);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Services));
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> DeleteService(int id)
