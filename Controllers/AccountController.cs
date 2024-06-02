@@ -150,18 +150,21 @@ namespace ProjektLABDetailing.Controllers
 
             var model = new ChangeDataUserViewModel
             {
-                CurrentUser = user,
-                ChangePasswordData = new ChangePasswordViewModel(),
-                ChangeEmailData = new ChangeEmailViewModel(),
-                ChangePhoneNumberData = new ChangePhoneNumberViewModel()
+                CurrentUser = user
             };
 
             _logger.LogInformation("ChangeDataUser page loaded successfully.");
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View(new ChangePasswordViewModel());
+        }
+
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangeDataUserViewModel model)
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -169,21 +172,21 @@ namespace ProjektLABDetailing.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            if (string.IsNullOrEmpty(model.ChangePasswordData.CurrentPassword))
+            if (string.IsNullOrEmpty(model.CurrentPassword))
             {
-                ModelState.AddModelError(string.Empty, "Aktualne hasło jest wymagane.");
+                ModelState.AddModelError("CurrentPassword", "Aktualne hasło jest wymagane.");
             }
 
-            var isCurrentPasswordValid = !string.IsNullOrEmpty(model.ChangePasswordData.CurrentPassword) &&
-                                         await _userManager.CheckPasswordAsync(user, model.ChangePasswordData.CurrentPassword);
+            var isCurrentPasswordValid = !string.IsNullOrEmpty(model.CurrentPassword) &&
+                                         await _userManager.CheckPasswordAsync(user, model.CurrentPassword);
             if (!isCurrentPasswordValid)
             {
-                ModelState.AddModelError(string.Empty, "Aktualne hasło jest nieprawidłowe.");
+                ModelState.AddModelError("CurrentPassword", "Aktualne hasło jest nieprawidłowe.");
             }
 
-            if (ModelState.IsValid)
+            if (isCurrentPasswordValid && ModelState.IsValid)
             {
-                var result = await _userManager.ChangePasswordAsync(user, model.ChangePasswordData.CurrentPassword, model.ChangePasswordData.NewPassword);
+                var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
                     await _signInManager.RefreshSignInAsync(user);
@@ -197,12 +200,17 @@ namespace ProjektLABDetailing.Controllers
                 }
             }
 
-            model.CurrentUser = await _userManager.GetUserAsync(User);
-            return View("ChangeDataUser", model);
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ChangeEmail()
+        {
+            return View(new ChangeEmailViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeEmail(ChangeDataUserViewModel model)
+        public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -212,7 +220,7 @@ namespace ProjektLABDetailing.Controllers
 
             if (ModelState.IsValid)
             {
-                var result = await _userManager.SetEmailAsync(user, model.ChangeEmailData.NewEmail);
+                var result = await _userManager.SetEmailAsync(user, model.NewEmail);
                 if (result.Succeeded)
                 {
                     await _signInManager.RefreshSignInAsync(user);
@@ -226,12 +234,17 @@ namespace ProjektLABDetailing.Controllers
                 }
             }
 
-            model.CurrentUser = await _userManager.GetUserAsync(User);
-            return View("ChangeDataUser", model);
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ChangePhoneNumber()
+        {
+            return View(new ChangePhoneNumberViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePhoneNumber(ChangeDataUserViewModel model)
+        public async Task<IActionResult> ChangePhoneNumber(ChangePhoneNumberViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -241,7 +254,7 @@ namespace ProjektLABDetailing.Controllers
 
             if (ModelState.IsValid)
             {
-                var result = await _userManager.SetPhoneNumberAsync(user, model.ChangePhoneNumberData.NewPhoneNumber);
+                var result = await _userManager.SetPhoneNumberAsync(user, model.NewPhoneNumber);
                 if (result.Succeeded)
                 {
                     await _signInManager.RefreshSignInAsync(user);
@@ -255,8 +268,7 @@ namespace ProjektLABDetailing.Controllers
                 }
             }
 
-            model.CurrentUser = await _userManager.GetUserAsync(User);
-            return View("ChangeDataUser", model);
+            return View(model);
         }
 
         private List<string> ValidateRegisterModel(RegisterUserViewModel model)
