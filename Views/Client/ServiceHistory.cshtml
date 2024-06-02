@@ -14,7 +14,7 @@
                 <th>Data Zlecenia</th>
                 <th>Samochód</th>
                 <th>Cena</th>
-                <th>Szczegóły</th>
+                <th>Usługa</th>
             </tr>
         </thead>
         <tbody>
@@ -24,13 +24,13 @@
                 {
                     <tr>
                         <td>@(service.ExecutionDate.HasValue ? service.ExecutionDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
-                        <td>@service.Car?.Brand ?? "N/A" @service.Car?.Model ?? "N/A"</td>
+                        <td>@service.Car?.Brand @service.Car?.Model</td>
                         <td>@service.Services.Sum(s => s.Price).ToString("C")</td>
                         <td>
                             <ul>
                                 @foreach (var s in service.Services)
                                 {
-                                    <li>@s.Name</li>
+                                    @s.Name
                                 }
                             </ul>
                         </td>
