@@ -8,15 +8,23 @@
 
 <body>
     <main>
-        <div style="text-align: center;">
+        <div class="ClientWords">
             <h1>Zalogowałeś się jako Klient!</h1>
         </div>
 
-        <div class="client">
-            <a href="OrderHistory">Twoje zamówienia</a>
-            <a href="ServiceHistory">Twoje usługi</a>
-            <a href="ChangeDataUser">Zmiana danych</a>
-        </div>
+            <div class="client">
+                <div class="ClientOptions1">
+                    <a href="OrderHistory">Twoje zamówienia</a>
+                </div>
+
+                <div class="ClientOptions2">
+                    <a href="ServiceHistory">Twoje usługi</a>
+                </div>
+
+                <div class="ClientOptions3">
+                    <a href="ChangeDataUser">Zmiana danych</a>
+                </div>
+            </div>
 
         <form method="post" asp-action="Logout">
             <button type="submit" class="LogOutBttn">Wyloguj</button>
