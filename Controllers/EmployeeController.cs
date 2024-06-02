@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
-using ProjektLABDetailing.Models.User;
 using Microsoft.EntityFrameworkCore;
 using ProjektLABDetailing.Data;
 using ProjektLABDetailing.Models;
 using ProjektLABDetailing.Models.ViewModels;
+using ProjektLABDetailing.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace ProjektLABDetailing.Controllers
 {
@@ -48,12 +50,10 @@ namespace ProjektLABDetailing.Controllers
         [HttpGet]
         public async Task<IActionResult> History()
         {
-            var orderProducts = await _context.Orders
-                .OfType<OrderProducts>()
+            var orderProducts = await _context.OrderProducts
                 .Where(op => op.Status == "Zakończone")
                 .Include(o => o.Client)
                     .ThenInclude(c => c.User)
-                .Include(o => o.Car)
                 .Include(o => o.Products)
                 .ToListAsync();
 
@@ -62,7 +62,7 @@ namespace ProjektLABDetailing.Controllers
                 .Include(os => os.Client)
                     .ThenInclude(c => c.User)
                 .Include(os => os.Car)
-                .Include(os => os.Service)
+                .Include(os => os.Services)
                 .ToListAsync();
 
             var orderTotals = orderProducts.ToDictionary(
@@ -88,7 +88,7 @@ namespace ProjektLABDetailing.Controllers
                 .Include(os => os.Client)
                     .ThenInclude(c => c.User)
                 .Include(os => os.Car)
-                .Include(os => os.Service)
+                .Include(os => os.Services)
                 .ToListAsync();
 
             var orderServiceViewModels = orderServices.Select(os => new OrderServiceViewModel
@@ -96,7 +96,7 @@ namespace ProjektLABDetailing.Controllers
                 OrderId = os.OrderId,
                 ClientName = os.Client?.User != null ? GetFullName(os.Client.User) : "Unknown",
                 CarDetails = os.Car != null ? $"{os.Car.Brand} {os.Car.Model}" : "Unknown",
-                ServiceName = os.Service?.Name ?? "Unknown",
+                ServiceName = os.Services.FirstOrDefault()?.Name ?? "Unknown",
                 Status = os.Status ?? "Unknown",
                 ExecutionDate = os.ExecutionDate ?? DateTime.MinValue,
                 Materials = os.Materials ?? "Brak",
@@ -154,8 +154,7 @@ namespace ProjektLABDetailing.Controllers
                 LastName = viewModel.LastName,
                 Email = viewModel.Email,
                 PhoneNumber = viewModel.PhoneNumber,
-                UserName = viewModel.Email,
-                Role = UserRole.Client
+                UserName = viewModel.Email
             };
 
             var result = await _signInManager.UserManager.CreateAsync(user, "DefaultPassword@123");
@@ -203,14 +202,14 @@ namespace ProjektLABDetailing.Controllers
 
             var orderService = new OrderService
             {
-                Client = client,
-                Car = car,
+                ClientId = client.ClientId,
+                CarId = car.CarId,
                 ExecutionDate = viewModel.ExecutionDate,
                 Status = "Oczekuje",
                 Materials = viewModel.Materials,
                 ClientRemarks = viewModel.ClientRemarks,
                 EmployeeId = employee.EmployeeId,
-                ServiceId = viewModel.SelectedServiceId
+                Services = new List<Service> { _context.Services.Find(viewModel.SelectedServiceId) }
             };
 
             _context.OrderServices.Add(orderService);
@@ -227,7 +226,7 @@ namespace ProjektLABDetailing.Controllers
                 .Include(os => os.Client)
                     .ThenInclude(c => c.User)
                 .Include(os => os.Car)
-                .Include(os => os.Service)
+                .Include(os => os.Services)
                 .FirstOrDefaultAsync(os => os.OrderId == selectedOrderId);
 
             if (orderService == null)
@@ -249,7 +248,7 @@ namespace ProjektLABDetailing.Controllers
                 VIN = orderService.Car.VIN,
                 Mileage = orderService.Car.Mileage,
                 ExecutionDate = orderService.ExecutionDate ?? DateTime.MinValue,
-                SelectedServiceId = orderService.ServiceId ?? 0,
+                SelectedServiceId = orderService.Services.FirstOrDefault()?.ServiceId ?? 0,
                 Materials = orderService.Materials,
                 ClientRemarks = orderService.ClientRemarks,
                 ServicesList = GetServicesList()
@@ -267,6 +266,7 @@ namespace ProjektLABDetailing.Controllers
                 .Include(os => os.Client)
                     .ThenInclude(c => c.User)
                 .Include(os => os.Car)
+                .Include(os => os.Services)
                 .FirstOrDefaultAsync(os => os.OrderId == viewModel.OrderId);
 
             if (orderService == null)
@@ -291,7 +291,7 @@ namespace ProjektLABDetailing.Controllers
             orderService.Car.VIN = viewModel.VIN;
             orderService.Car.Mileage = viewModel.Mileage;
 
-            orderService.ServiceId = viewModel.SelectedServiceId;
+            orderService.Services = new List<Service> { _context.Services.Find(viewModel.SelectedServiceId) };
 
             await _context.SaveChangesAsync();
 
@@ -327,8 +327,7 @@ namespace ProjektLABDetailing.Controllers
         [HttpGet]
         public async Task<IActionResult> Order()
         {
-            var orderProducts = await _context.Orders
-                .OfType<OrderProducts>()
+            var orderProducts = await _context.OrderProducts
                 .Where(op => op.Status != "Zakończone")
                 .Include(o => o.Client)
                     .ThenInclude(c => c.User)
@@ -353,7 +352,7 @@ namespace ProjektLABDetailing.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateOrderProductStatus(int id, string status)
         {
-            var orderProduct = await _context.Orders.OfType<OrderProducts>().FirstOrDefaultAsync(o => o.OrderId == id);
+            var orderProduct = await _context.OrderProducts.FirstOrDefaultAsync(o => o.OrderId == id);
             if (orderProduct == null)
             {
                 return NotFound();

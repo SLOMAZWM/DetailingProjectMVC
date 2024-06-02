@@ -26,12 +26,15 @@
                 <td>
                     <form method="post" asp-action="UpdateStatus">
                         <input type="hidden" name="id" value="@orderService.OrderId" />
-                        <select class="Realizacja" id="RealizacjaID_@orderService.OrderId" name="status" onchange="this.form.submit()">
+                        <div>
                             @foreach (var status in Model.StatusList)
                             {
-                                <option value="@status">@status</option>
+                                <label>
+                                    <input type="radio" name="status" value="@status" @(orderService.Status == status ? "checked" : "") onclick="this.form.submit()" />
+                                    @status
+                                </label>
                             }
-                        </select>
+                        </div>
                     </form>
                 </td>
                 <td>@orderService.Materials</td>
@@ -52,15 +55,6 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const orderServices = @Html.Raw(Json.Serialize(Model.OrderServices));
-
-            orderServices.forEach(orderService => {
-                const selectElement = document.getElementById(`RealizacjaID_${orderService.OrderId}`);
-                if (selectElement) {
-                    selectElement.value = orderService.Status;
-                }
-            });
-
             const checkboxes = document.querySelectorAll('.order-checkbox');
             const editButton = document.getElementById('editServiceButton');
 

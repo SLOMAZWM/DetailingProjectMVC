@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ProjektLABDetailing.Models;
 using ProjektLABDetailing.Models.User;
@@ -12,18 +13,42 @@ namespace ProjektLABDetailing.Data
         {
         }
 
-        public DbSet<Car> Cars { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderService> OrderServices { get; set; }
-        public DbSet<OrderProducts> OrderProducts { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Service> Services { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<OrderService> OrderServices { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Service> Services { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Client>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Clients)
+                .HasForeignKey(c => c.UserId);
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.User)
+                .WithMany(u => u.Employees)
+                .HasForeignKey(e => e.UserId);
+
+            modelBuilder.Entity<OrderService>()
+                .HasMany(os => os.Services)
+                .WithMany(s => s.OrderServices)
+                .UsingEntity(j => j.ToTable("OrderServiceServices"));
+
+            modelBuilder.Entity<OrderProduct>()
+                .HasMany(op => op.Products)
+                .WithMany(p => p.OrderProducts)
+                .UsingEntity(j => j.ToTable("OrderProductProducts"));
+
+            // Specyfikacja typu kolumny dla właściwości decimal
+            modelBuilder.Entity<Order>()
+                .Property(o => o.TotalPrice)
+                .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
@@ -34,28 +59,10 @@ namespace ProjektLABDetailing.Data
                 .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Order>()
-                .HasOne(o => o.Client)
-                .WithMany(c => c.Orders)
-                .HasForeignKey(o => o.ClientId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Order>()
                 .HasOne(o => o.Employee)
                 .WithMany(e => e.Orders)
                 .HasForeignKey(o => o.EmployeeId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.Car)
-                .WithMany()
-                .HasForeignKey(o => o.CarId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<Order>()
-                .HasDiscriminator<string>("Discriminator")
-                .HasValue<Order>("Order")
-                .HasValue<OrderService>("OrderService")
-                .HasValue<OrderProducts>("OrderProducts");
         }
     }
 }

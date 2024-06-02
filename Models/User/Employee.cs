@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjektLABDetailing.Models.User
 {
@@ -7,7 +8,9 @@ namespace ProjektLABDetailing.Models.User
         public int EmployeeId { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
-        public string Position { get; set; } = string.Empty;
+
+        [Required]
+        public string Position { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     }
