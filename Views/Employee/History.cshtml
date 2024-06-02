@@ -1,54 +1,88 @@
 ﻿@model ProjektLABDetailing.Models.ViewModels.HistoryViewModel
 
-@{
-    ViewData["Title"] = "Historia";
-}
+<h2>Historia Zamówień</h2>
 
-<body>
-    <div class="Tables">
-        <table border="1" class="TablesLeft">
-            <tr>
-                <td><b>Klient</b></td>
-                <td><b>Data Zlecenia</b></td>
-                <td><b>Samochód</b></td>
-                <td><b>Cena</b></td>
-                <td><b>Szczegóły</b></td>
-            </tr>
-            <tr>
-                <td colspan="5">Brak danych usług</td>
-            </tr>
-        </table>
-
+<div class="Tables">
+    <div class="TableSection">
+        <h3>Historia Zamówień Produktów</h3>
         <table border="1" class="TablesRight">
-            <tr>
-                <td><b>Nr. Zamówienia</b></td>
-                <td><b>Data zamówienia</b></td>
-                <td><b>Email</b></td>
-                <td><b>Imię i Nazwisko</b></td>
-                <td><b>Szczegóły</b></td>
-                <td><b>Cena</b></td>
-            </tr>
-            @if (Model.OrderProducts != null && Model.OrderProducts.Count > 0)
-            {
-                @foreach (var order in Model.OrderProducts)
+            <thead>
+                <tr>
+                    <th>Nr. Zamówienia</th>
+                    <th>Data zamówienia</th>
+                    <th>Email</th>
+                    <th>Imię i Nazwisko</th>
+                    <th>Szczegóły</th>
+                    <th>Cena</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.OrderProducts != null && Model.OrderProducts.Count > 0)
+                {
+                    @foreach (var order in Model.OrderProducts)
+                    {
+                        <tr>
+                            <td>@order.OrderId</td>
+                            <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                            <td>@order.Client?.User?.Email</td>
+                            <td>@order.Client?.User?.FirstName @order.Client?.User?.LastName</td>
+                            <td><a href="/OrderProductsDetails/@order.OrderId">Szczegóły zamówienia</a></td>
+                            <td>@Model.OrderTotals[order.OrderId].ToString("C")</td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@order.OrderId</td>
-                        <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
-                        <td>@order.Client?.User?.Email</td>
-                        <td>@order.Client?.User?.FirstName @order.Client?.User?.LastName</td>
-                        <td><a href="/OrderProductsDetails/@order.OrderId">Szczegóły zamówienia</a></td>
-                        <td>@Model.OrderTotals[order.OrderId].ToString("C")</td>
+                        <td colspan="6">Brak zamówień do wyświetlenia</td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6">Brak zamówień do wyświetlenia</td>
-                </tr>
-            }
+            </tbody>
         </table>
     </div>
 
-</body>
+    <div class="TableSection">
+        <h3>Historia Usług</h3>
+        <table border="1" class="TablesLeft">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Klient</th>
+                    <th>Samochód</th>
+                    <th>Usługa</th>
+                    <th>Materiały</th>
+                    <th>Uwagi dla klienta</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.OrderServices != null && Model.OrderServices.Count > 0)
+                {
+                    @foreach (var service in Model.OrderServices)
+                    {
+                        <tr>
+                            <td>@service.ExecutionDate.ToString("yyyy-MM-dd")</td>
+                            <td>@service.Client.User.FirstName @service.Client.User.LastName</td>
+                            <td>@service.Car.Model</td>
+                            <td>
+                                <ul>
+                                    @foreach (var s in service.Services)
+                                    {
+                                        <li>@s.Name</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>@service.Materials</td>
+                            <td>@service.ClientRemarks</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">Brak usług do wyświetlenia</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

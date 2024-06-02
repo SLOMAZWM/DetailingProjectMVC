@@ -49,10 +49,19 @@ namespace ProjektLABDetailing.Controllers
         {
             var orderProducts = await _context.Orders
                 .OfType<OrderProducts>()
+                .Where(op => op.Status == "Zakończone")
                 .Include(o => o.Client)
                     .ThenInclude(c => c.User)
                 .Include(o => o.Car)
                 .Include(o => o.Products)
+                .ToListAsync();
+
+            var orderServices = await _context.OrderServices
+                .Where(os => os.Status == "Zakończone")
+                .Include(os => os.Client)
+                    .ThenInclude(c => c.User)
+                .Include(os => os.Car)
+                .Include(os => os.Services)
                 .ToListAsync();
 
             var orderTotals = orderProducts.ToDictionary(
@@ -63,16 +72,20 @@ namespace ProjektLABDetailing.Controllers
             var model = new HistoryViewModel
             {
                 OrderProducts = orderProducts,
+                OrderServices = orderServices,
                 OrderTotals = orderTotals
             };
 
             return View(model);
         }
 
+
+
         [HttpGet]
         public async Task<IActionResult> Services()
         {
             var orderServices = await _context.OrderServices
+                .Where(os => os.Status != "Zakończone")
                 .Include(os => os.Client)
                     .ThenInclude(c => c.User)
                 .Include(os => os.Car)
@@ -82,11 +95,12 @@ namespace ProjektLABDetailing.Controllers
             var model = new ServicesViewModel
             {
                 OrderServices = orderServices,
-                StatusList = new List<string> { "Oczekuje", "W trakcie", "Zrealizowane" }
+                StatusList = new List<string> { "Oczekuje", "W trakcie", "Zrealizowane", "Zakończone" }
             };
 
             return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(int id, string status)
@@ -207,6 +221,7 @@ namespace ProjektLABDetailing.Controllers
         {
             var orderProducts = await _context.Orders
                 .OfType<OrderProducts>()
+                .Where(op => op.Status != "Zakończone")
                 .Include(o => o.Client)
                     .ThenInclude(c => c.User)
                 .Include(o => o.Products)
@@ -226,6 +241,7 @@ namespace ProjektLABDetailing.Controllers
 
             return View(model);
         }
+
 
 
         [HttpPost]
