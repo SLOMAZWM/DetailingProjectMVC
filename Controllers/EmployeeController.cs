@@ -201,6 +201,10 @@ namespace ProjektLABDetailing.Controllers
         new SelectListItem { Value = "Przyciemnianie Szyb", Text = "Przyciemnianie Szyb" }
     };
         }
-
+        [HttpGet]
+        public IActionResult Order()
+        {
+            return View();
+        }
     }
 }
