@@ -44,18 +44,6 @@ namespace ProjektLABDetailing.Models
             SaveCart(cart);
         }
 
-        public void RemoveFromCart(int productId)
-        {
-            var cart = GetCartItems();
-            var item = cart.FirstOrDefault(c => c.ProductId == productId);
-
-            if (item != null)
-            {
-                cart.Remove(item);
-                SaveCart(cart);
-            }
-        }
-
         private void SaveCart(List<CartItem> cart)
         {
             var session = _httpContextAccessor.HttpContext.Session;

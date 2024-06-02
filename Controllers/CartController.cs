@@ -2,7 +2,6 @@
 using ProjektLABDetailing.Models;
 using ProjektLABDetailing.Data;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace ProjektLABDetailing.Controllers
 {
@@ -15,11 +14,6 @@ namespace ProjektLABDetailing.Controllers
         {
             _context = context;
             _cart = cart;
-        }
-
-        public IActionResult Index()
-        {
-            return View(_cart);
         }
 
         [HttpPost]
