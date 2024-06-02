@@ -35,7 +35,10 @@
                 <h1>@product.Name</h1>
                 <img src="~/@product.ImgPath" alt="@product.Name" class="ProductImage" />
                 <p>Cena: @product.Price.ToString("C")</p>
-                <button class="AddToCartButton" data-product-id="@product.ProductId">Dodaj do koszyka</button>
+                <form class="add-to-cart-form">
+                    @Html.AntiForgeryToken()
+                    <button type="button" class="AddToCartButton" data-product-id="@product.ProductId">Dodaj do koszyka</button>
+                </form>
             </div>
         }
     </div>

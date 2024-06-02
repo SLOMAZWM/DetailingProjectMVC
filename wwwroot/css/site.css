@@ -1247,6 +1247,7 @@ button.ButtonEditServicesStyle {
 
 
 .cart-summary {
+    display: none;
     position: fixed;
     top: 10%;
     right: 2%;
@@ -1258,7 +1259,6 @@ button.ButtonEditServicesStyle {
     width: 300px;
     max-height: 400px;
     overflow-y: auto;
-    display: none;
 }
 
     .cart-summary.visible {
@@ -1272,12 +1272,3 @@ button.ButtonEditServicesStyle {
     .cart-summary p {
         margin: 0;
     }
-
-.CartIcon {
-    cursor: pointer;
-}
-
-.CartIconImage {
-    width: 30px;
-    height: 30px;
-}

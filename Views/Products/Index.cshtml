@@ -19,12 +19,14 @@
                 <img src="~/@product.ImgPath" alt="@product.Name" class="ProductImage" />
                 <p>Cena: @product.Price.ToString("C")</p>
                 <p>Dostępność: @product.Quantity</p>
-                <button class="AddToCartButton" data-product-id="@product.ProductId">Dodaj do koszyka</button>
+                <form class="add-to-cart-form">
+                    @Html.AntiForgeryToken()
+                    <button type="button" class="AddToCartButton" data-product-id="@product.ProductId">Dodaj do koszyka</button>
+                </form>
             </div>
         }
     </div>
 
     <script src="~/js/site.js"></script>
-    <script src="~/js/cart.js"></script>
 </body>
 </html>
