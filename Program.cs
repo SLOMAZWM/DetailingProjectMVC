@@ -41,13 +41,15 @@ builder.Services.AddScoped<Cart>();
 
 var app = builder.Build();
 
-// Seed roles during startup
+// Seed database with starts rows
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var userManager = services.GetRequiredService<UserManager<User>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var dbContext = services.GetRequiredService<ApplicationDbContext>();
     await ApplicationDbInitializer.SeedRolesAsync(userManager, roleManager);
+    ApplicationDbInitializer.SeedServices(dbContext);
 }
 
 // Configure the HTTP request pipeline.
