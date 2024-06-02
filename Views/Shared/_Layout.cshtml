@@ -14,7 +14,7 @@
         <div>
             <nav class="menu">
                 <a asp-controller="Home" asp-action="Index">Strona Główna</a>
-                <a asp-controller="Orders" asp-action="Index">Oferta</a>
+                <a asp-controller="Products" asp-action="Index">Oferta</a>
                 <a asp-controller="Contact" asp-action="Index">Kontakt</a>
                 @if (HttpContextAccessor.HttpContext.Session.GetString("UserType") == null)
                 {

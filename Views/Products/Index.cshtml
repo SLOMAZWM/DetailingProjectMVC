@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ProjektLABDetailing.Models.Product>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkty</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <h1 class="OurProducts">Wszystkie produkty</h1>
+
+    <div class="Produkty">
+        @foreach (var product in Model)
+        {
+            <div class="ProductItem">
+                <h1>@product.Name</h1>
+                <img src="~/@product.ImgPath" alt="@product.Name" class="ProductImage" />
+                <p>Cena: @product.Price.ToString("C")</p>
+                <p>Dostępność: @product.Quantity</p>
+            </div>
+        }
+    </div>
+</body>
+</html>
