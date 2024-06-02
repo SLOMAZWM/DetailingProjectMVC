@@ -50,7 +50,7 @@ namespace ProjektLABDetailing.Controllers
                         var userRole = roles.Contains("Client") ? "Client" : "Employee";
                         HttpContext.Session.SetString("UserId", user.Id);
                         HttpContext.Session.SetString("UserType", userRole);
-                        HttpContext.Session.SetString("Email", user.Email); // Dodano przypisywanie emaila do sesji
+                        HttpContext.Session.SetString("Email", user.Email);
 
                         string redirectPage = userRole == "Client" ? "ClientUserPanel" : "EmployeeUserPanel";
                         return RedirectToAction(redirectPage, userRole == "Client" ? "Client" : "Employee");
@@ -115,7 +115,7 @@ namespace ProjektLABDetailing.Controllers
 
                     HttpContext.Session.SetString("UserId", user.Id);
                     HttpContext.Session.SetString("UserType", "Client");
-                    HttpContext.Session.SetString("Email", user.Email); // Dodano przypisywanie emaila do sesji
+                    HttpContext.Session.SetString("Email", user.Email);
 
                     return RedirectToAction("ClientUserPanel", "Client");
                 }

@@ -9,19 +9,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Configure the database context with SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Configure Identity
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+// Configure application cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/LoginRegister";
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
+// Add session management
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -29,11 +33,15 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Add HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
+
+// Add Cart service as scoped
 builder.Services.AddScoped<Cart>();
 
 var app = builder.Build();
 
+// Seed roles during startup
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -42,6 +50,7 @@ using (var scope = app.Services.CreateScope())
     await ApplicationDbInitializer.SeedRolesAsync(userManager, roleManager);
 }
 
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
