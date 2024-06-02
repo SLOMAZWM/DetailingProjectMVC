@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using ProjektLABDetailing.Models.User;
 using Microsoft.AspNetCore.Authorization;
+using ProjektLABDetailing.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjektLABDetailing.Controllers
 {
@@ -11,10 +13,12 @@ namespace ProjektLABDetailing.Controllers
     public class ClientController : Controller
     {
         private readonly SignInManager<User> _signInManager;
+        private readonly ApplicationDbContext _context;
 
-        public ClientController(SignInManager<User> signInManager)
+        public ClientController(SignInManager<User> signInManager, ApplicationDbContext context)
         {
             _signInManager = signInManager;
+            _context = context;
         }
 
         [HttpGet]
@@ -41,11 +45,32 @@ namespace ProjektLABDetailing.Controllers
         {
             return RedirectToAction("ChangeDataUser", "Account" );
         }
+
         [HttpGet]
-        public IActionResult ServiceHistory()
+        public async Task<IActionResult> ServiceHistory()
         {
-            return View();
+            var email = HttpContext.Session.GetString("Email");
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var services = await _context.OrderServices
+                .Include(os => os.Car)
+                .Include(os => os.Services)
+                .Where(os => os.Client.UserId == user.Id)
+                .ToListAsync();
+
+            return View(services);
         }
+
+
         [HttpGet]
         public IActionResult OrderHistory()
         {

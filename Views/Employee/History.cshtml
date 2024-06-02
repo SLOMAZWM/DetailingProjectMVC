@@ -24,8 +24,8 @@
                         <tr>
                             <td>@order.OrderId</td>
                             <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
-                            <td>@order.Client?.User?.Email ?? "N/A"</td>
-                            <td>@order.Client?.User?.FirstName ?? "N/A" @order.Client?.User?.LastName ?? "N/A"</td>
+                            <td>@order.Client?.User?.Email</td>
+                            <td>@order.Client?.User?.FirstName  @order.Client?.User?.LastName</td>
                             <td><a href="/OrderProductsDetails/@order.OrderId">Szczegóły zamówienia</a></td>
                             <td>@(Model.OrderTotals.TryGetValue(order.OrderId, out var total) ? total.ToString("C") : "N/A")</td>
                         </tr>
@@ -60,19 +60,19 @@
                     @foreach (var service in Model.OrderServices)
                     {
                         <tr>
-                            <td>@service.ExecutionDate != DateTime.MinValue ? service.ExecutionDate : "N/A" </td>
-                            <td>@service.Client?.User?.FirstName ?? "N/A" @service.Client?.User?.LastName ?? "N/A"</td>
-                            <td>@service.Car?.Model ?? "N/A"</td>
+                            <td>@(service.ExecutionDate.HasValue ? service.ExecutionDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+                            <td>@service.Client?.User?.FirstName @service.Client?.User?.LastName</td>
+                            <td>@service.Car?.Brand @service.Car?.Model</td>
                             <td>
                                 <ul>
                                     @foreach (var s in service.Services)
                                     {
-                                        <li>@s.Name</li>
+                                        @s.Name
                                     }
                                 </ul>
                             </td>
-                            <td>@service.Materials ?? "Brak"</td>
-                            <td>@service.ClientRemarks ?? "Brak"</td>
+                            <td>@service.Materials</td>
+                            <td>@service.ClientRemarks</td>
                         </tr>
                     }
                 }

@@ -6,7 +6,7 @@
 
 <div class="TableServices">
     <h2>Dodaj Nową Usługę</h2>
-    <form id="addServiceForm" method="post" asp-action="AddService" onsubmit="return validateForm()">
+    <form id="addServiceForm" method="post" asp-action="AddService">
         <div class="ClientInfo">
             <h3>Informacje o kliencie</h3>
             <table border="1" class="TableInfo">
@@ -129,10 +129,10 @@
     </div>
 }
 
-@if (ViewBag.SuccessMessage != null)
+@if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
-        <p>@ViewBag.SuccessMessage</p>
+        <p>@TempData["SuccessMessage"]</p>
     </div>
 }
 

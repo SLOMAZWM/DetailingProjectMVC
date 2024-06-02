@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace ProjektLABDetailing.Controllers
 {
@@ -80,6 +82,7 @@ namespace ProjektLABDetailing.Controllers
             return View(model);
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Services()
         {
@@ -120,17 +123,31 @@ namespace ProjektLABDetailing.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(int id, string status)
         {
-            var orderService = await _context.OrderServices.FindAsync(id);
-            if (orderService == null)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                return NotFound();
+                try
+                {
+                    var orderService = await _context.OrderServices.FindAsync(id);
+                    if (orderService == null)
+                    {
+                        return NotFound();
+                    }
+
+                    orderService.Status = status;
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return RedirectToAction(nameof(Services));
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    ModelState.AddModelError("", "Wystąpił błąd podczas aktualizacji statusu.");
+                    return RedirectToAction(nameof(Services));
+                }
             }
-
-            orderService.Status = status;
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Services));
         }
+
 
         [HttpGet]
         public IActionResult AddService()
@@ -140,7 +157,7 @@ namespace ProjektLABDetailing.Controllers
                 ServicesList = GetServicesList()
             };
 
-            return View("AddService", model);
+            return View(model);
         }
 
         [HttpPost]
@@ -148,75 +165,93 @@ namespace ProjektLABDetailing.Controllers
         {
             viewModel.ServicesList = GetServicesList();
 
-            var user = new User
+            var errors = ValidateAddServiceViewModel(viewModel);
+            if (errors.Count > 0)
             {
-                FirstName = viewModel.FirstName,
-                LastName = viewModel.LastName,
-                Email = viewModel.Email,
-                PhoneNumber = viewModel.PhoneNumber,
-                UserName = viewModel.Email
-            };
+                ViewBag.Errors = errors;
+                return View(viewModel);
+            }
 
-            var result = await _signInManager.UserManager.CreateAsync(user, "DefaultPassword@123");
-            if (!result.Succeeded)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                foreach (var error in result.Errors)
+                try
                 {
-                    ModelState.AddModelError("", error.Description);
+                    User user = await _context.Users.SingleOrDefaultAsync(u => u.Email == viewModel.Email);
+                    if (user == null)
+                    {
+                        user = new User
+                        {
+                            FirstName = viewModel.FirstName,
+                            LastName = viewModel.LastName,
+                            Email = viewModel.Email,
+                            PhoneNumber = viewModel.PhoneNumber,
+                            UserName = viewModel.Email
+                        };
+
+                        var result = await _signInManager.UserManager.CreateAsync(user, "DefaultPassword@123");
+                        if (!result.Succeeded)
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
+                            return View(viewModel);
+                        }
+                    }
+
+                    Client client = await _context.Clients.SingleOrDefaultAsync(c => c.UserId == user.Id);
+                    if (client == null)
+                    {
+                        client = new Client
+                        {
+                            UserId = user.Id,
+                            User = user
+                        };
+
+                        _context.Clients.Add(client);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    var car = new Car
+                    {
+                        ClientId = client.ClientId,
+                        Brand = viewModel.Brand,
+                        Model = viewModel.Model,
+                        Year = viewModel.Year,
+                        Color = viewModel.Color,
+                        VIN = viewModel.VIN,
+                        Mileage = viewModel.Mileage
+                    };
+
+                    _context.Cars.Add(car);
+                    await _context.SaveChangesAsync();
+
+                    var orderService = new OrderService
+                    {
+                        ClientId = client.ClientId,
+                        CarId = car.CarId,
+                        ExecutionDate = viewModel.ExecutionDate,
+                        Status = "Oczekuje",
+                        Materials = viewModel.Materials,
+                        ClientRemarks = viewModel.ClientRemarks,
+                        Services = new List<Service> { _context.Services.Find(viewModel.SelectedServiceId) }
+                    };
+
+                    _context.OrderServices.Add(orderService);
+                    await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    TempData["SuccessMessage"] = "Usługa została dodana pomyślnie.";
+                    return RedirectToAction(nameof(Services));
                 }
-                viewModel.ServicesList = GetServicesList();
-                return View(viewModel);
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    ModelState.AddModelError("", "Wystąpił błąd podczas dodawania usługi.");
+                    return View(viewModel);
+                }
             }
-
-            var client = new Client
-            {
-                UserId = user.Id,
-                User = user
-            };
-
-            _context.Clients.Add(client);
-            await _context.SaveChangesAsync();
-
-            var car = new Car
-            {
-                ClientId = client.ClientId,
-                Brand = viewModel.Brand,
-                Model = viewModel.Model,
-                Year = viewModel.Year,
-                Color = viewModel.Color,
-                VIN = viewModel.VIN,
-                Mileage = viewModel.Mileage
-            };
-
-            _context.Cars.Add(car);
-            await _context.SaveChangesAsync();
-
-            var userId = _signInManager.UserManager.GetUserId(User);
-            var employee = await _context.Employees.SingleOrDefaultAsync(e => e.UserId == userId);
-
-            if (employee == null)
-            {
-                ModelState.AddModelError("", "Bieżący użytkownik nie jest powiązany z pracownikiem.");
-                return View(viewModel);
-            }
-
-            var orderService = new OrderService
-            {
-                ClientId = client.ClientId,
-                CarId = car.CarId,
-                ExecutionDate = viewModel.ExecutionDate,
-                Status = "Oczekuje",
-                Materials = viewModel.Materials,
-                ClientRemarks = viewModel.ClientRemarks,
-                EmployeeId = employee.EmployeeId,
-                Services = new List<Service> { _context.Services.Find(viewModel.SelectedServiceId) }
-            };
-
-            _context.OrderServices.Add(orderService);
-            await _context.SaveChangesAsync();
-
-            ViewBag.SuccessMessage = "Usługa została dodana pomyślnie.";
-            return RedirectToAction(nameof(Services));
         }
 
         [HttpGet]
@@ -254,7 +289,7 @@ namespace ProjektLABDetailing.Controllers
                 ServicesList = GetServicesList()
             };
 
-            return View("EditService", model);
+            return View(model);
         }
 
         [HttpPost]
@@ -262,56 +297,91 @@ namespace ProjektLABDetailing.Controllers
         {
             viewModel.ServicesList = GetServicesList();
 
-            var orderService = await _context.OrderServices
-                .Include(os => os.Client)
-                    .ThenInclude(c => c.User)
-                .Include(os => os.Car)
-                .Include(os => os.Services)
-                .FirstOrDefaultAsync(os => os.OrderId == viewModel.OrderId);
-
-            if (orderService == null)
+            var errors = ValidateEditServiceViewModel(viewModel);
+            if (errors.Count > 0)
             {
-                return NotFound();
+                ViewBag.Errors = errors;
+                return View(viewModel);
             }
 
-            orderService.ExecutionDate = viewModel.ExecutionDate;
-            orderService.Status = "Oczekuje";
-            orderService.Materials = viewModel.Materials;
-            orderService.ClientRemarks = viewModel.ClientRemarks;
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var orderService = await _context.OrderServices
+                        .Include(os => os.Client)
+                            .ThenInclude(c => c.User)
+                        .Include(os => os.Car)
+                        .Include(os => os.Services)
+                        .FirstOrDefaultAsync(os => os.OrderId == viewModel.OrderId);
 
-            orderService.Client.User.FirstName = viewModel.FirstName;
-            orderService.Client.User.LastName = viewModel.LastName;
-            orderService.Client.User.Email = viewModel.Email;
-            orderService.Client.User.PhoneNumber = viewModel.PhoneNumber;
+                    if (orderService == null)
+                    {
+                        return NotFound();
+                    }
 
-            orderService.Car.Brand = viewModel.Brand;
-            orderService.Car.Model = viewModel.Model;
-            orderService.Car.Year = viewModel.Year;
-            orderService.Car.Color = viewModel.Color;
-            orderService.Car.VIN = viewModel.VIN;
-            orderService.Car.Mileage = viewModel.Mileage;
+                    orderService.ExecutionDate = viewModel.ExecutionDate;
+                    orderService.Status = "Oczekuje";
+                    orderService.Materials = viewModel.Materials;
+                    orderService.ClientRemarks = viewModel.ClientRemarks;
 
-            orderService.Services = new List<Service> { _context.Services.Find(viewModel.SelectedServiceId) };
+                    orderService.Client.User.FirstName = viewModel.FirstName;
+                    orderService.Client.User.LastName = viewModel.LastName;
+                    orderService.Client.User.Email = viewModel.Email;
+                    orderService.Client.User.PhoneNumber = viewModel.PhoneNumber;
 
-            await _context.SaveChangesAsync();
+                    orderService.Car.Brand = viewModel.Brand;
+                    orderService.Car.Model = viewModel.Model;
+                    orderService.Car.Year = viewModel.Year;
+                    orderService.Car.Color = viewModel.Color;
+                    orderService.Car.VIN = viewModel.VIN;
+                    orderService.Car.Mileage = viewModel.Mileage;
 
-            return RedirectToAction(nameof(Services));
+                    orderService.Services = new List<Service> { _context.Services.Find(viewModel.SelectedServiceId) };
+
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    TempData["SuccessMessage"] = "Usługa została zaktualizowana pomyślnie.";
+                    return RedirectToAction(nameof(Services));
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    ModelState.AddModelError("", "Wystąpił błąd podczas edycji usługi.");
+                    return View(viewModel);
+                }
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteService(int id)
         {
-            var orderService = await _context.OrderServices.FindAsync(id);
-            if (orderService == null)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                return NotFound();
+                try
+                {
+                    var orderService = await _context.OrderServices.FindAsync(id);
+                    if (orderService == null)
+                    {
+                        return NotFound();
+                    }
+
+                    _context.OrderServices.Remove(orderService);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return RedirectToAction(nameof(Services));
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    ModelState.AddModelError("", "Wystąpił błąd podczas usuwania usługi.");
+                    return RedirectToAction(nameof(Services));
+                }
             }
-
-            _context.OrderServices.Remove(orderService);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Services));
         }
+
 
         private List<SelectListItem> GetServicesList()
         {
@@ -352,16 +422,128 @@ namespace ProjektLABDetailing.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateOrderProductStatus(int id, string status)
         {
-            var orderProduct = await _context.OrderProducts.FirstOrDefaultAsync(o => o.OrderId == id);
-            if (orderProduct == null)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                return NotFound();
+                try
+                {
+                    var orderProduct = await _context.OrderProducts.FirstOrDefaultAsync(o => o.OrderId == id);
+                    if (orderProduct == null)
+                    {
+                        return NotFound();
+                    }
+
+                    orderProduct.Status = status;
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return RedirectToAction(nameof(Order));
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    ModelState.AddModelError("", "Wystąpił błąd podczas aktualizacji statusu zamówienia produktu.");
+                    return RedirectToAction(nameof(Order));
+                }
             }
+        }
 
-            orderProduct.Status = status;
-            await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Order));
+        private List<string> ValidateAddServiceViewModel(AddServiceViewModel model)
+        {
+            var errors = new List<string>();
+
+            if (string.IsNullOrEmpty(model.FirstName))
+                errors.Add("Imię jest wymagane.");
+
+            if (string.IsNullOrEmpty(model.LastName))
+                errors.Add("Nazwisko jest wymagane.");
+
+            if (string.IsNullOrEmpty(model.Email) || !new EmailAddressAttribute().IsValid(model.Email))
+                errors.Add("Nieprawidłowy format email.");
+
+            if (string.IsNullOrEmpty(model.PhoneNumber) || !Regex.IsMatch(model.PhoneNumber, @"^\+\d{1,3}\s?\d{1,3}\s?\d{3}\s?\d{3}\s?\d{3}$"))
+                errors.Add("Numer telefonu musi być w formacie +00 000 000 000.");
+
+            if (string.IsNullOrEmpty(model.Brand))
+                errors.Add("Marka jest wymagana.");
+
+            if (string.IsNullOrEmpty(model.Model))
+                errors.Add("Model jest wymagany.");
+
+            if (model.Year <= 0)
+                errors.Add("Rok jest wymagany.");
+
+            if (string.IsNullOrEmpty(model.Color))
+                errors.Add("Kolor jest wymagany.");
+
+            if (string.IsNullOrEmpty(model.VIN))
+                errors.Add("VIN jest wymagany.");
+
+            if (model.Mileage <= 0)
+                errors.Add("Przebieg jest wymagany.");
+
+            if (model.ExecutionDate == DateTime.MinValue)
+                errors.Add("Data realizacji jest wymagana.");
+
+            if (model.SelectedServiceId <= 0)
+                errors.Add("Wybór usługi jest wymagany.");
+
+            if (string.IsNullOrEmpty(model.Materials))
+                errors.Add("Materiały są wymagane.");
+
+            if (string.IsNullOrEmpty(model.ClientRemarks))
+                errors.Add("Uwagi dla klienta są wymagane.");
+
+            return errors;
+        }
+
+        private List<string> ValidateEditServiceViewModel(EditServiceViewModel model)
+        {
+            var errors = new List<string>();
+
+            if (string.IsNullOrEmpty(model.FirstName))
+                errors.Add("Imię jest wymagane.");
+
+            if (string.IsNullOrEmpty(model.LastName))
+                errors.Add("Nazwisko jest wymagane.");
+
+            if (string.IsNullOrEmpty(model.Email) || !new EmailAddressAttribute().IsValid(model.Email))
+                errors.Add("Nieprawidłowy format email.");
+
+            if (string.IsNullOrEmpty(model.PhoneNumber) || !Regex.IsMatch(model.PhoneNumber, @"^\+\d{1,3}\s?\d{1,3}\s?\d{3}\s?\d{3}\s?\d{3}$"))
+                errors.Add("Numer telefonu musi być w formacie +00 000 000 000.");
+
+            if (string.IsNullOrEmpty(model.Brand))
+                errors.Add("Marka jest wymagana.");
+
+            if (string.IsNullOrEmpty(model.Model))
+                errors.Add("Model jest wymagany.");
+
+            if (model.Year <= 0)
+                errors.Add("Rok jest wymagany.");
+
+            if (string.IsNullOrEmpty(model.Color))
+                errors.Add("Kolor jest wymagany.");
+
+            if (string.IsNullOrEmpty(model.VIN))
+                errors.Add("VIN jest wymagany.");
+
+            if (model.Mileage <= 0)
+                errors.Add("Przebieg jest wymagany.");
+
+            if (model.ExecutionDate == DateTime.MinValue)
+                errors.Add("Data realizacji jest wymagana.");
+
+            if (model.SelectedServiceId <= 0)
+                errors.Add("Wybór usługi jest wymagany.");
+
+            if (string.IsNullOrEmpty(model.Materials))
+                errors.Add("Materiały są wymagane.");
+
+            if (string.IsNullOrEmpty(model.ClientRemarks))
+                errors.Add("Uwagi dla klienta są wymagane.");
+
+            return errors;
         }
     }
 }
