@@ -1208,11 +1208,41 @@ button.ButtonEditServicesStyle {
 
 
 .PPF {
-    margin-top: 10%;
+    margin-top: 5%;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    text-align: left;
 }
+
+.ppf1 {
+    margin-left: 5%;
+    margin-right: 7%;
+}
+
+    .ppf1 img {
+        width: 75%
+    }
+
+.ppf2 {
+    margin-left: 5%;
+    margin-right: 7%;
+}
+
+.ppf2 img {
+    width: 100%
+}
+
+.ppf3 {
+    margin-left: 5%;
+    margin-right: 7%;
+}
+
+.ppf3 img {
+    width: 110%;
+}
+
+
 
 .LinePPF1 {
     background-color: white;
@@ -1220,8 +1250,10 @@ button.ButtonEditServicesStyle {
     padding-right: 0.1%;
     padding-top: 20%;
     border-radius: 20px;
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5%;
 }
 /*====================================================================================================================PPF=============================================================================================================================*/
 
