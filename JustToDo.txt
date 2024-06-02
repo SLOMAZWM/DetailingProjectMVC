@@ -1,4 +1,9 @@
-﻿Dodać walidacje do zmiany danych JS i strona serwera
-Dodać mozliwosc zmiany danych dla klienta
+﻿Marcin:
 
-Zrealizowane zamowienia beda usuwane z uslug i dodawane do historii (dodac wyszukiwarke do wyszukiwania zamowien)
+-Zrobienie walidacji dla zmiany danych (rozstrzal na view -> zmiana hasla, zmiana email, zmiana telefonu)
+-Zrealizowane zamowienia beda usuwane z uslug i dodawane do historii (dodac wyszukiwarke do wyszukiwania zamowien)
+
+Kamil:
+
+-Panel dla Klienta
+-Strona glowna
