@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /ProjektLabDetailingBaza.mdf
 /ProjektLabDetailingBaza_log.ldf
+/appsettings.json
