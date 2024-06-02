@@ -32,11 +32,10 @@
         @foreach (var product in Model)
         {
             <div class="ProductItem">
-                <a href="/Orders">
-                    <h1>@product.Name</h1>
-                    <img src="~/@product.ImgPath" alt="@product.Name" class="ProductImage" />
-                    <p>Cena: @product.Price.ToString("C")</p>
-                </a>
+                <h1>@product.Name</h1>
+                <img src="~/@product.ImgPath" alt="@product.Name" class="ProductImage" />
+                <p>Cena: @product.Price.ToString("C")</p>
+                <button class="AddToCartButton" data-product-id="@product.ProductId">Dodaj do koszyka</button>
             </div>
         }
     </div>
@@ -82,5 +81,7 @@
     <a href="https://Instagram.com/MarKamDetailing"><img src="~/Pictures/instagram.svg" class="Instagram"></a>
     <img src="~/Pictures/shortcut.PNG" class="WaterMark">
     <button class="backToTopBtn" id="backToTopBtn">Wróć do góry</button>
+
+    <script src="~/js/site.js"></script>
 </body>
 </html>

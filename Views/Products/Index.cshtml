@@ -19,8 +19,11 @@
                 <img src="~/@product.ImgPath" alt="@product.Name" class="ProductImage" />
                 <p>Cena: @product.Price.ToString("C")</p>
                 <p>Dostępność: @product.Quantity</p>
+                <button class="AddToCartButton" data-product-id="@product.ProductId">Dodaj do koszyka</button>
             </div>
         }
     </div>
+
+    <script src="~/js/site.js"></script>
 </body>
 </html>

@@ -1224,3 +1224,55 @@ button.ButtonEditServicesStyle {
     margin-right: 5%;
 }
 /*====================================================================================================================PPF=============================================================================================================================*/
+
+
+.AddToCartButton {
+    background-color: #ff7f50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .AddToCartButton:hover {
+        background-color: #ff6347;
+    }
+
+
+.cart-summary {
+    position: fixed;
+    top: 10%;
+    right: 2%;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none; 
+}
+
+    .cart-summary.visible {
+        display: block; 
+    }
+
+    .cart-summary h3 {
+        margin-top: 0;
+    }
+
+    .cart-summary p {
+        margin: 0;
+    }
+
+.CardShop {
+    cursor: pointer;
+}

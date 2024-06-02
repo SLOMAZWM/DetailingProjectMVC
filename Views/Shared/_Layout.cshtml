@@ -28,11 +28,16 @@
                 {
                     <a asp-controller="Employee" asp-action="EmployeeUserPanel">Panel Pracownika</a>
                 }
-                <a asp-controller="Cardshop" asp-action="Index"><img src="~/Pictures/bag.svg" class="CardShop"></a>
+                <a href="javascript:void(0);" class="CardShop"><img src="~/Pictures/bag.svg" class="CardShop"></a>
             </nav>
         </div>
         @RenderBody()
+        <div id="cart-summary" class="cart-summary">
+            @Html.Partial("_CartSummary", new ProjektLABDetailing.Models.Cart(HttpContextAccessor))
+        </div>
     </main>
+    <script src="~/js/site.js"></script>
+    <script src="~/js/cart.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

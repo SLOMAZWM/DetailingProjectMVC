@@ -1,0 +1,38 @@
+﻿@model ProjektLABDetailing.Models.Cart
+
+@{
+    ViewData["Title"] = "Koszyk";
+}
+
+<h2>Koszyk</h2>
+
+@if (!Model.Items.Any())
+{
+    <p>Twój koszyk jest pusty</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Nazwa produktu</th>
+                <th>Ilość</th>
+                <th>Cena</th>
+                <th>Razem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("c")</td>
+                    <td>@(item.Price * item.Quantity).ToString("c")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p><strong>Całkowita cena: </strong> @Model.TotalPrice.ToString("c")</p>
+}

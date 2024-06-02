@@ -1,0 +1,12 @@
+﻿@model ProjektLABDetailing.Models.Cart
+
+<div>
+    <h3>Twój koszyk</h3>
+    <ul>
+        @foreach (var item in Model.Items)
+        {
+            <li>@item.ProductName - @item.Quantity x @item.Price.ToString("c")</li>
+        }
+    </ul>
+    <p><strong>Całkowita cena: </strong> @Model.TotalPrice.ToString("c")</p>
+</div>
