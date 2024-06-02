@@ -1,12 +1,12 @@
-﻿@model ProjektLABDetailing.Models.ViewModels.AddServiceViewModel
+﻿@model ProjektLABDetailing.Models.ViewModels.AddEditServiceViewModel
 
 @{
-    ViewData["Title"] = "Edytuj Usługę";
+    ViewData["Title"] = Model.IsEditMode ? "Edytuj Usługę" : "Dodaj Nową Usługę";
 }
 
 <div class="TableServices">
-    <h2>Edytuj Usługę</h2>
-    <form id="addServiceForm" method="post" asp-action="EditService" onsubmit="return validateForm()">
+    <h2>@(Model.IsEditMode ? "Edytuj Usługę" : "Dodaj Nową Usługę")</h2>
+    <form id="addEditServiceForm" method="post" asp-action="AddEditService" onsubmit="return validateForm()">
         <input type="hidden" asp-for="OrderId" />
         <div class="ClientInfo">
             <h3>Informacje o kliencie</h3>
@@ -95,7 +95,7 @@
                             <option value="">Wybierz</option>
                             @foreach (var service in Model.ServicesList)
                             {
-                                <option value="@service.Value" @(service.Value == Model.SelectedService ? "selected" : "")>@service.Text</option>
+                                <option value="@service.Value">@service.Text</option>
                             }
                         </select>
                         <span class="text-danger" id="SelectedServiceError"></span>
@@ -113,7 +113,16 @@
         </div>
 
         <div class="ButtonServicesAl">
-            <a href="/Employee/Services" class="ButtonServices">Zapisz</a>
+            <button type="submit" class="ButtonServices">
+                @if (Model.IsEditMode)
+                {
+                    @:Zapisz
+                }
+                else
+                {
+                    @:Dodaj
+                }
+            </button>
         </div>
     </form>
 </div>
@@ -139,4 +148,19 @@
 
 @section Scripts {
     <script src="~/js/ValidationAddService.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var selectedService = "@Model.SelectedService";
+            var selectElement = document.getElementById("SelectedService");
+
+            if (selectedService) {
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    if (selectElement.options[i].value === selectedService) {
+                        selectElement.options[i].selected = true;
+                        break;
+                    }
+                }
+            }
+        });
+    </script>
 }
