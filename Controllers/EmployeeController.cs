@@ -201,10 +201,47 @@ namespace ProjektLABDetailing.Controllers
         new SelectListItem { Value = "Przyciemnianie Szyb", Text = "Przyciemnianie Szyb" }
     };
         }
+
         [HttpGet]
-        public IActionResult Order()
+        public async Task<IActionResult> Order()
         {
-            return View();
+            var orderProducts = await _context.Orders
+                .OfType<OrderProducts>()
+                .Include(o => o.Client)
+                    .ThenInclude(c => c.User)
+                .Include(o => o.Products)
+                .ToListAsync();
+
+            var orderTotals = orderProducts.ToDictionary(
+                order => order.OrderId,
+                order => order.Products.Sum(p => p.Price)
+            );
+
+            var model = new OrderProductsViewModel
+            {
+                OrderProducts = orderProducts,
+                OrderTotals = orderTotals,
+                StatusList = new List<string> { "Nowe", "W realizacji", "Wysłane", "Zakończone" }
+            };
+
+            return View(model);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrderProductStatus(int id, string status)
+        {
+            var orderProduct = await _context.Orders.OfType<OrderProducts>().FirstOrDefaultAsync(o => o.OrderId == id);
+            if (orderProduct == null)
+            {
+                return NotFound();
+            }
+
+            orderProduct.Status = status;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Order));
+        }
+
     }
 }

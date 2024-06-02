@@ -1,6 +1,5 @@
 ﻿Marcin:
 
--Zrobienie walidacji dla zmiany danych (rozstrzal na view -> zmiana hasla, zmiana email, zmiana telefonu)
 -Zrealizowane zamowienia beda usuwane z uslug i dodawane do historii (dodac wyszukiwarke do wyszukiwania zamowien)
 -Dodanie logiki kontrolera do dodawania uslugi
 -Edytowanie uslugi zrobienie checkboxa i podstrony z uzupelnionym (plus walidacja do maksy 1 zaznaczonego checkboxa)
@@ -10,5 +9,7 @@
 
 Kamil:
 
+-Historia od pracownika (dodac wyszukiwarke dla wyszukiwania uslug i zamowien, po wpisaniu)
 -Panel dla Klienta
 -Strona glowna
+-FIlmiki dla galerii

@@ -1,27 +1,65 @@
-﻿
+﻿@model ProjektLABDetailing.Models.ViewModels.OrderProductsViewModel
 
-<body>
-    <table border="1" class="TableOrderView">
+<h2>Zamówienia Produktów</h2>
+
+<table border="1" class="TableOrderView">
+    <thead>
         <tr>
-            <td><b>Nr. Zamówienia</b></td>
-            <td><b>Status</b></td>
-            <td><b>Data zamówienia</b></td>
-            <td><b>Email</b></td>
-            <td><b>Imię i Nazwisko</b></td>
-            <td><b>Szczegóły</b></td>
-            <td><b>Cena</b></td>
+            <th>Nr. Zamówienia</th>
+            <th>Status</th>
+            <th>Data zamówienia</th>
+            <th>Email</th>
+            <th>Imię i Nazwisko</th>
+            <th>Szczegóły</th>
+            <th>Cena</th>
         </tr>
-        <tr>
-            <td>Baza</td>
-            <td>Baza</td>
-            <td>Baza</td>
-            <td>Baza</td>
-            <td>Baza</td>
-            <td>Baza</td>
-            <td>Baza</td>
-        </tr>
-    </table>
-    <div class="UpdateViewButton">
-        <button class="UpdateView">Aktualizuj Widok</button>
-    </div>
-</body>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.OrderProducts)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>
+                    <form method="post" asp-action="UpdateOrderProductStatus">
+                        <input type="hidden" name="id" value="@order.OrderId" />
+                        <select class="Realizacja" id="StatusID" name="status" onchange="this.form.submit()">
+                            @foreach (var status in Model.StatusList)
+                            {
+                                @if (order.Status == status)
+                                {
+                                    <option value="@status" selected>@status</option>
+                                }
+                                else
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            }
+                        </select>
+                    </form>
+                </td>
+                <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
+                <td>@order.Client.User.Email</td>
+                <td>@order.Client.User.FirstName @order.Client.User.LastName</td>
+                <td>
+                    <a href="/Employee/OrderDetails/@order.OrderId">Szczegóły</a>
+                    <ul>
+                        @foreach (var product in order.Products)
+                        {
+                            <li>@product.Name - @product.Quantity x @product.Price.ToString("C")</li>
+                        }
+                    </ul>
+                </td>
+                <td>@Model.OrderTotals[order.OrderId].ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.Realizacja').change(function () {
+            $(this).closest('form').submit();
+        });
+    });
+</script>
