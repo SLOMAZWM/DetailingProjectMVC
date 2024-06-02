@@ -45,7 +45,6 @@ namespace ProjektLABDetailing.Data
                 .WithMany(p => p.OrderProducts)
                 .UsingEntity(j => j.ToTable("OrderProductProducts"));
 
-            // Specyfikacja typu kolumny dla właściwości decimal
             modelBuilder.Entity<Order>()
                 .Property(o => o.TotalPrice)
                 .HasColumnType("decimal(18,2)");
