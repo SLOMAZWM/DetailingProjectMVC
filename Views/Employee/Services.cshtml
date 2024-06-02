@@ -59,7 +59,7 @@
 </table>
 
 <div class="buttonsServicesalign">
-    <a asp-controller="Employee" asp-action="AddEditService" class="ButtonAddServicesStyle">Dodaj Usługę</a>
+    <a asp-controller="Employee" asp-action="AddService" class="ButtonAddServicesStyle">Dodaj Usługę</a>
     <button type="button" class="ButtonEditServicesStyle" id="editServiceButton">Edytuj Usługę</button>
 </div>
 
@@ -85,7 +85,7 @@
                 const selectedCheckbox = document.querySelector('.order-checkbox:checked');
                 if (selectedCheckbox) {
                     const orderId = selectedCheckbox.value;
-                    const url = `@Url.Action("AddEditService", "Employee")?selectedOrderId=${orderId}`;
+                    const url = `@Url.Action("EditService", "Employee")?selectedOrderId=${orderId}`;
                     window.location.href = url;
                 } else {
                     alert('Proszę zaznaczyć jedną usługę do edycji.');

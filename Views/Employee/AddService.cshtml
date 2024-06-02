@@ -1,13 +1,12 @@
-﻿@model ProjektLABDetailing.Models.ViewModels.AddEditServiceViewModel
+﻿@model ProjektLABDetailing.Models.ViewModels.AddServiceViewModel
 
 @{
-    ViewData["Title"] = Model.IsEditMode ? "Edytuj Usługę" : "Dodaj Nową Usługę";
+    ViewData["Title"] = "Dodaj Nową Usługę";
 }
 
 <div class="TableServices">
-    <h2>@(Model.IsEditMode ? "Edytuj Usługę" : "Dodaj Nową Usługę")</h2>
-    <form id="addEditServiceForm" method="post" asp-action="AddEditService" onsubmit="return validateForm()">
-        <input type="hidden" asp-for="OrderId" />
+    <h2>Dodaj Nową Usługę</h2>
+    <form id="addServiceForm" method="post" asp-action="AddService" onsubmit="return validateForm()">
         <div class="ClientInfo">
             <h3>Informacje o kliencie</h3>
             <table border="1" class="TableInfo">
@@ -20,19 +19,19 @@
                 <tr>
                     <td>
                         <input asp-for="FirstName" type="text" id="FirstName" />
-                        <span class="text-danger" id="FirstNameError"></span>
+                        <span class="text-danger" asp-validation-for="FirstName"></span>
                     </td>
                     <td>
                         <input asp-for="LastName" type="text" id="LastName" />
-                        <span class="text-danger" id="LastNameError"></span>
+                        <span class="text-danger" asp-validation-for="LastName"></span>
                     </td>
                     <td>
                         <input asp-for="Email" type="text" id="Email" />
-                        <span class="text-danger" id="EmailError"></span>
+                        <span class="text-danger" asp-validation-for="Email"></span>
                     </td>
                     <td>
                         <input asp-for="PhoneNumber" type="text" id="PhoneNumber" />
-                        <span class="text-danger" id="PhoneNumberError"></span>
+                        <span class="text-danger" asp-validation-for="PhoneNumber"></span>
                     </td>
                 </tr>
             </table>
@@ -51,27 +50,27 @@
                 <tr>
                     <td>
                         <input asp-for="Brand" type="text" id="Brand" />
-                        <span class="text-danger" id="BrandError"></span>
+                        <span class="text-danger" asp-validation-for="Brand"></span>
                     </td>
                     <td>
                         <input asp-for="Model" type="text" id="Model" />
-                        <span class="text-danger" id="ModelError"></span>
+                        <span class="text-danger" asp-validation-for="Model"></span>
                     </td>
                     <td>
                         <input asp-for="Year" type="number" id="Year" />
-                        <span class="text-danger" id="YearError"></span>
+                        <span class="text-danger" asp-validation-for="Year"></span>
                     </td>
                     <td>
                         <input asp-for="Color" type="text" id="Color" />
-                        <span class="text-danger" id="ColorError"></span>
+                        <span class="text-danger" asp-validation-for="Color"></span>
                     </td>
                     <td>
                         <input asp-for="VIN" type="text" id="VIN" />
-                        <span class="text-danger" id="VINError"></span>
+                        <span class="text-danger" asp-validation-for="VIN"></span>
                     </td>
                     <td>
                         <input asp-for="Mileage" type="number" id="Mileage" />
-                        <span class="text-danger" id="MileageError"></span>
+                        <span class="text-danger" asp-validation-for="Mileage"></span>
                     </td>
                 </tr>
             </table>
@@ -88,7 +87,7 @@
                 <tr>
                     <td>
                         <input asp-for="ExecutionDate" type="date" id="ExecutionDate" />
-                        <span class="text-danger" id="ExecutionDateError"></span>
+                        <span class="text-danger" asp-validation-for="ExecutionDate"></span>
                     </td>
                     <td>
                         <select asp-for="SelectedService" class="Wybierzzlisty" id="SelectedService">
@@ -98,31 +97,22 @@
                                 <option value="@service.Value">@service.Text</option>
                             }
                         </select>
-                        <span class="text-danger" id="SelectedServiceError"></span>
+                        <span class="text-danger" asp-validation-for="SelectedService"></span>
                     </td>
                     <td>
                         <input asp-for="Materials" type="text" id="Materials" />
-                        <span class="text-danger" id="MaterialsError"></span>
+                        <span class="text-danger" asp-validation-for="Materials"></span>
                     </td>
                     <td>
                         <input asp-for="ClientRemarks" type="text" id="ClientRemarks" />
-                        <span class="text-danger" id="ClientRemarksError"></span>
+                        <span class="text-danger" asp-validation-for="ClientRemarks"></span>
                     </td>
                 </tr>
             </table>
         </div>
 
         <div class="ButtonServicesAl">
-            <button type="submit" class="ButtonServices">
-                @if (Model.IsEditMode)
-                {
-                    @:Zapisz
-                }
-                else
-                {
-                    @:Dodaj
-                }
-            </button>
+            <button type="submit" class="ButtonServices">Dodaj</button>
         </div>
     </form>
 </div>
@@ -148,19 +138,4 @@
 
 @section Scripts {
     <script src="~/js/ValidationAddService.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var selectedService = "@Model.SelectedService";
-            var selectElement = document.getElementById("SelectedService");
-
-            if (selectedService) {
-                for (var i = 0; i < selectElement.options.length; i++) {
-                    if (selectElement.options[i].value === selectedService) {
-                        selectElement.options[i].selected = true;
-                        break;
-                    }
-                }
-            }
-        });
-    </script>
 }
