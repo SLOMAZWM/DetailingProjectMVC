@@ -55,6 +55,14 @@ namespace ProjektLABDetailing.Models
         [Required(ErrorMessage = "Wybór sposobu dostawy jest wymagany.")]
         public string DeliveryMethod { get; set; }
 
+        [Required(ErrorMessage = "Adres e-mail jest wymagany.")]
+        [EmailAddress(ErrorMessage = "Nieprawidłowy format adresu e-mail.")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Numer telefonu jest wymagany.")]
+        [Phone(ErrorMessage = "Nieprawidłowy format numeru telefonu.")]
+        public string PhoneNumber { get; set; }
+
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
         public List<CartItem> CartItems { get; set; } = new List<CartItem>();

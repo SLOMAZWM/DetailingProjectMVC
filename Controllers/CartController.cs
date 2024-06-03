@@ -67,6 +67,7 @@ namespace ProjektLABDetailing.Controllers
         {
             var order = new OrderProduct
             {
+                TotalPrice = _cart.TotalPrice,
                 CartItems = _cart.Items.ToList()
             };
             if (User.Identity.IsAuthenticated)
@@ -76,10 +77,13 @@ namespace ProjektLABDetailing.Controllers
                 {
                     order.FirstName = user.FirstName;
                     order.LastName = user.LastName;
+                    order.Email = user.Email;
+                    order.PhoneNumber = user.PhoneNumber;
                 }
             }
             return View(order);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Checkout(OrderProduct order)
