@@ -795,12 +795,9 @@ td {
 
 /*=======================================================================================================================Changing Data=====================================================================================================================*/
 .CDUInputPasswords {
-    position: relative;
-    text-align: center;
     background-image: radial-gradient(circle, #6b6b6b, #696969, #676767, #666666, #646464, #616161, #5f5f5f, #5c5c5c, #585858, #545454, #505050, #4c4c4c);
-    width: 80%;
-    margin-top: 5%;
-    margin-left: 150%;
+    width: auto;
+    margin-top: 50%;
     border-radius: 5%;
     border: 5px solid #fe935c;
     transition: 0.7s;
@@ -894,6 +891,7 @@ td {
     transition: ease-in-out 0.5s;
     font-size: 110%;
     cursor: pointer;
+    text-align: center;
 }
 
     .CDUButton button:hover {
@@ -1444,3 +1442,40 @@ button {
     }
 
 /*==================================================================================================================Yt Link===========================================================================================================================*/
+
+/*==================================================================================================================Contact===========================================================================================================================*/
+
+.Contact1 {
+    margin-top: 2%;
+    text-align: center;
+    align-items: center;
+    color: white;
+}
+
+.Contact2 {
+    width: 20%;
+    text-align: center;
+    border: 1px solid black;
+    background: none ;
+    color: white;
+}
+
+.Contact3 {
+    width: 20%;
+    height: 200px;
+    border: 1px solid black;
+    background: none;
+    color: white;
+}
+
+.Question {
+    color: #ff6347;
+}
+
+.Wybierzzlisty {
+    width: 20%;
+    background: none;
+    border: 1px solid black;
+    text-align: center;
+}
+/*==================================================================================================================Contact===========================================================================================================================*/

@@ -1,34 +1,45 @@
 ﻿@{
-    ViewData["Title"] = "Contact";
+    ViewData["Title"] = "Kontakt";
 }
 
-<h1>Dane:</h1>
-Imię:
-<input type="text" name="imie">
-<br>
-Nazwisko:
-<input type="text" name="nazwisko">
-<br>
-Marka samochodu:
-<input type="text" name="marka">
-<br>
-Model:
-<input type="text" name="model">
-<br>
+<div class="Contact1">
+    <p class="Question">MASZ JAKIEŚ PYTANIE?</p>
+        <h1>NAPISZ DO NAS!</h1>
+            <p>Imię i nazwisko</p>
+                <input type="text" class="Contact2" name="ImieNazwisko" placeholder="Imię i nazwisko" />
 
-Wybierz usługę z listy:
+            <p>Email</p>
+                <input type="text" class="Contact2" name="Email" placeholder="Email" />
 
-<select class="Wybierzzlisty" id="Wybierzzlisty" name="usluga">
-    <optgroup label="Wybierz">
-        <option value="Mycie Detailingowe">Mycie Detailingowe</option>
-        <option value="Regeneracja Lakieru">Regeneracja Lakieru</option>
-        <option value="Powłoka Ceramiczna">Powłoka Ceramiczna</option>
-        <option value="Detailing Wnętrza">Detailing Wnętrza</option>
-        <option value="Regeneracja Reflektorów">Regeneracja Reflektorów</option>
-        <option value="Naklejanie Folii">Naklejanie Folii</option>
-        <option value="Zabezpieczenie Folią">Zabezpieczenie Folią PPF(Full)</option>
-        <option value="Zabezpieczenie Folią">Zabezpieczenie Folią PPF(Full Front)</option>
-        <option value="Zabezpieczenie Folią">Zabezpieczenie Folią PPF(Front)</option>
-        <option value="Przyciemnianie Szyb">Przyciemnianie Szyb</option>
-    </optgroup>
-</select>
+            <p>Numer Telefonu</p>
+                <input type="text" class="Contact2" name="NumerTelefonu" placeholder="Numer Telefonu"/>
+
+    <p>Wybierz usługę z listy:</p>
+        <select class="Wybierzzlisty" id="Wybierzzlisty" name="usluga">
+            <optgroup label="Wybierz">
+                <option value="Mycie Detailingowe">Mycie Detailingowe</option>
+                <option value="Regeneracja Lakieru">Regeneracja Lakieru</option>
+                <option value="Powłoka Ceramiczna">Powłoka Ceramiczna</option>
+                <option value="Detailing Wnętrza">Detailing Wnętrza</option>
+                <option value="Regeneracja Reflektorów">Regeneracja Reflektorów</option>
+                <option value="Naklejanie Folii">Naklejanie Folii</option>
+                <option value="Zabezpieczenie Folią">Zabezpieczenie Folią PPF(Full)</option>
+                <option value="Zabezpieczenie Folią">Zabezpieczenie Folią PPF(Full Front)</option>
+                <option value="Zabezpieczenie Folią">Zabezpieczenie Folią PPF(Front)</option>
+                <option value="Przyciemnianie Szyb">Przyciemnianie Szyb</option>
+                </optgroup>
+        </select>
+
+
+            <p>Treść Wiadomości</p>
+                <input type="text" class="Contact3" name="Wiadomość" placeholder="Treść Wiadomości" />
+            <p>Wyrażam zgodę na przetwarzanie moich danych osobowych w celach marketingowych,<br />
+                poprzez przesyłanie informacji handlowych za pomocą poczty elektronicznej, <br />
+                na podany adres e-mail.
+                <input type="checkbox" />
+            </p>
+
+    <a href="mailto:markam.detailing@interia.com?subject=Pytanie%20-%20Us%C5%82ugi%20Detailingowe&body=Imi%C4%99%3A%0D%0ANazwisko%3A%0D%0AEmail%3A%0D%0ANumer%20Telefonu%3A%0D%0ATre%C5%9B%C4%87%3A" class="ButtonSendMessage">Wyślij</a>
+</div>
+
+
