@@ -20,6 +20,7 @@ namespace ProjektLABDetailing.Data
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<CartItem> CartItems { get; set; } // Dodaj DbSet dla CartItem
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,6 +56,10 @@ namespace ProjektLABDetailing.Data
 
             modelBuilder.Entity<Service>()
                 .Property(s => s.Price)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<CartItem>()
+                .Property(ci => ci.Price)
                 .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Order>()
