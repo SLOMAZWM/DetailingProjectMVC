@@ -1,0 +1,74 @@
+﻿@model ProjektLABDetailing.Models.ViewModels.OrderDetailsViewModel
+
+@{
+    ViewData["Title"] = "Szczegóły Zamówienia";
+}
+
+<style>
+    .order-details-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+        max-width: 600px;
+    }
+    .order-details-container h2, .order-details-container h3 {
+        text-align: center;
+    }
+    .order-details-container p, .order-details-container table {
+        width: 100%;
+    }
+    .order-details-container table {
+        margin-top: 10px;
+    }
+</style>
+
+<div class="order-details-container">
+    <h2>Szczegóły Zamówienia</h2>
+
+    <div>
+        <h3>Informacje o kliencie</h3>
+        <p><strong>Imię i nazwisko:</strong> @Model.ClientName</p>
+        <p><strong>Email:</strong> @Model.ClientEmail</p>
+        <p><strong>Numer telefonu:</strong> @Model.ClientPhoneNumber</p>
+    </div>
+
+    <div>
+        <h3>Adres dostawy</h3>
+        <p><strong>Adres:</strong> @Model.Address</p>
+        <p><strong>Miasto:</strong> @Model.City</p>
+        <p><strong>Kod pocztowy:</strong> @Model.PostalCode</p>
+    </div>
+
+    <div>
+        <h3>Informacje o zamówieniu</h3>
+        <p><strong>Metoda płatności:</strong> @Model.PaymentMethod</p>
+        <p><strong>Metoda dostawy:</strong> @Model.DeliveryMethod</p>
+        <p><strong>Data zamówienia:</strong> @Model.OrderDate.ToString("dd-MM-yyyy")</p>
+        <p><strong>Całkowita cena:</strong> @Model.TotalPrice.ToString("c")</p>
+        <p><strong>Status:</strong> @Model.Status</p>
+    </div>
+
+    <div>
+        <h3>Produkty</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Ilość</th>
+                    <th>Cena</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>@product.Quantity</td>
+                        <td>@product.Price.ToString("c")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

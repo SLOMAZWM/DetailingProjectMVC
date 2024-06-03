@@ -1,4 +1,4 @@
-﻿@model ProjektLABDetailing.Models.OrderProduct
+﻿@model ProjektLABDetailing.Models.ViewModels.OrderDetailsViewModel
 
 @{
     ViewData["Title"] = "Potwierdzenie zamówienia";
@@ -8,23 +8,41 @@
 
 <p>Dziękujemy za złożenie zamówienia! Twoje zamówienie zostało złożone i jest w trakcie realizacji.</p>
 
-<h3>Szczegóły zamówienia</h3>
-<p><strong>Numer zamówienia:</strong> @Model.OrderId</p>
-<p><strong>Data zamówienia:</strong> @Model.OrderDate.ToString("g")</p>
-<p><strong>Imię:</strong> @Model.FirstName</p>
-<p><strong>Nazwisko:</strong> @Model.LastName</p>
-<p><strong>Adres:</strong> @Model.Address</p>
-<p><strong>Miasto:</strong> @Model.City</p>
-<p><strong>Kod pocztowy:</strong> @Model.PostalCode</p>
-<p><strong>Sposób płatności:</strong> @Model.PaymentMethod</p>
-<p><strong>Sposób dostawy:</strong> @Model.DeliveryMethod</p>
+<div>
+    <h3>Szczegóły zamówienia</h3>
+    <p><strong>Numer zamówienia:</strong> @Model.OrderId</p>
+    <p><strong>Data zamówienia:</strong> @Model.OrderDate.ToString("dd-MM-yyyy")</p>
+    <p><strong>Imię:</strong> @Model.ClientName</p>
+    <p><strong>Email:</strong> @Model.ClientEmail</p>
+    <p><strong>Numer telefonu:</strong> @Model.ClientPhoneNumber</p>
+    <p><strong>Adres:</strong> @Model.Address</p>
+    <p><strong>Miasto:</strong> @Model.City</p>
+    <p><strong>Kod pocztowy:</strong> @Model.PostalCode</p>
+    <p><strong>Sposób płatności:</strong> @Model.PaymentMethod</p>
+    <p><strong>Sposób dostawy:</strong> @Model.DeliveryMethod</p>
+</div>
 
-<h3>Produkty</h3>
-<ul>
-    @foreach (var product in Model.Products)
-    {
-        <li>@product.Name - @product.Quantity x @product.Price.ToString("c")</li>
-    }
-</ul>
+<div>
+    <h3>Produkty</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Ilość</th>
+                <th>Cena</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Quantity</td>
+                    <td>@product.Price.ToString("c")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <p><strong>Całkowita cena:</strong> @Model.TotalPrice.ToString("c")</p>

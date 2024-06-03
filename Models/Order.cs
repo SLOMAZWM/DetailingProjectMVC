@@ -1,7 +1,7 @@
 ﻿using ProjektLABDetailing.Models.User;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjektLABDetailing.Models
 {
@@ -30,7 +30,6 @@ namespace ProjektLABDetailing.Models
         public virtual Car Car { get; set; }
     }
 
-
     public class OrderProduct : Order
     {
         [Required(ErrorMessage = "Imię jest wymagane.")]
@@ -38,6 +37,12 @@ namespace ProjektLABDetailing.Models
 
         [Required(ErrorMessage = "Nazwisko jest wymagane.")]
         public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Adres e-mail jest wymagany.")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Numer telefonu jest wymagany.")]
+        public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Adres jest wymagany.")]
         public string Address { get; set; }
@@ -55,18 +60,9 @@ namespace ProjektLABDetailing.Models
         [Required(ErrorMessage = "Wybór sposobu dostawy jest wymagany.")]
         public string DeliveryMethod { get; set; }
 
-        [Required(ErrorMessage = "Adres e-mail jest wymagany.")]
-        [EmailAddress(ErrorMessage = "Nieprawidłowy format adresu e-mail.")]
-        public string Email { get; set; }
-
-        [Required(ErrorMessage = "Numer telefonu jest wymagany.")]
-        [Phone(ErrorMessage = "Nieprawidłowy format numeru telefonu.")]
-        public string PhoneNumber { get; set; }
-
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
+        [NotMapped]
         public List<CartItem> CartItems { get; set; } = new List<CartItem>();
     }
-
-
 }

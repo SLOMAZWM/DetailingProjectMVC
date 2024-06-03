@@ -545,5 +545,45 @@ namespace ProjektLABDetailing.Controllers
 
             return errors;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            var order = await _context.OrderProducts
+                .Include(o => o.Client)
+                    .ThenInclude(c => c.User)
+                .Include(o => o.Products)
+                .FirstOrDefaultAsync(o => o.OrderId == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            var orderDetailsViewModel = new OrderDetailsViewModel
+            {
+                OrderId = order.OrderId,
+                ClientName = $"{order.Client.User.FirstName} {order.Client.User.LastName}",
+                ClientEmail = order.Client.User.Email,
+                ClientPhoneNumber = order.Client.User.PhoneNumber,
+                Address = order.Address,
+                City = order.City,
+                PostalCode = order.PostalCode,
+                PaymentMethod = order.PaymentMethod,
+                DeliveryMethod = order.DeliveryMethod,
+                OrderDate = order.OrderDate,
+                TotalPrice = order.TotalPrice,
+                Status = order.Status,
+                Products = order.Products.Select(p => new OrderProductDetail
+                {
+                    ProductId = p.ProductId,
+                    Name = p.Name,
+                    Quantity = p.Quantity,
+                    Price = p.Price
+                }).ToList()
+            };
+
+            return View(orderDetailsViewModel);
+        }
     }
 }

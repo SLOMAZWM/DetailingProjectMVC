@@ -20,7 +20,7 @@ namespace ProjektLABDetailing.Data
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Service> Services { get; set; }
-        public DbSet<CartItem> CartItems { get; set; } // Dodaj DbSet dla CartItem
+        public DbSet<CartItem> CartItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,7 +44,25 @@ namespace ProjektLABDetailing.Data
             modelBuilder.Entity<OrderProduct>()
                 .HasMany(op => op.Products)
                 .WithMany(p => p.OrderProducts)
-                .UsingEntity(j => j.ToTable("OrderProductProducts"));
+                .UsingEntity<Dictionary<string, object>>(
+                    "OrderProductProducts",
+                    j => j
+                        .HasOne<Product>()
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .HasConstraintName("FK_OrderProductProducts_Products_ProductId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne<OrderProduct>()
+                        .WithMany()
+                        .HasForeignKey("OrderProductId")
+                        .HasConstraintName("FK_OrderProductProducts_Order_OrderProductId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j =>
+                    {
+                        j.HasKey("OrderProductId", "ProductId");
+                        j.ToTable("OrderProductProducts");
+                    });
 
             modelBuilder.Entity<Order>()
                 .Property(o => o.TotalPrice)

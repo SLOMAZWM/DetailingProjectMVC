@@ -105,7 +105,7 @@ public static class ApplicationDbInitializer
                 var products = new List<Product>
                 {
                     new Product { ProductId = 2, Name = "Quick Detailer", Quantity = 10, Price = 79.99m, ImgPath = "Pictures/Quick.png" },
-                    new Product { ProductId = 3, Name = "All Purpose Cleaner", Quantity = 10, Price = 99.99m, ImgPath = "Pictures/APC.png" },
+                    new Product { ProductId = 3, Name = "APC", Quantity = 10, Price = 99.99m, ImgPath = "Pictures/APC.png" },
                     new Product { ProductId = 4, Name = "Glass Cleaner", Quantity = 10, Price = 59.99m, ImgPath = "Pictures/Glass.png" },
                     new Product { ProductId = 5, Name = "Wosk Ochronny", Quantity = 10, Price = 49.99m, ImgPath = "Pictures/Wax.png" },
                     new Product { ProductId = 6, Name = "Rekawice Aplikatora Black - niepylące", Quantity = 10, Price = 9.99m, ImgPath = "Pictures/RekawiceAplikatoraBlack.png" },

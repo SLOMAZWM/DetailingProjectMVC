@@ -155,17 +155,17 @@ namespace ProjektLABDetailing.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OrderProductProduct", b =>
+            modelBuilder.Entity("OrderProductProducts", b =>
                 {
-                    b.Property<int>("OrderProductsOrderId")
+                    b.Property<int>("OrderProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductsProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderProductsOrderId", "ProductsProductId");
+                    b.HasKey("OrderProductId", "ProductId");
 
-                    b.HasIndex("ProductsProductId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderProductProducts", (string)null);
                 });
@@ -233,9 +233,6 @@ namespace ProjektLABDetailing.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
 
-                    b.Property<int?>("OrderProductOrderId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -250,8 +247,6 @@ namespace ProjektLABDetailing.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CartItemId");
-
-                    b.HasIndex("OrderProductOrderId");
 
                     b.ToTable("CartItems");
                 });
@@ -356,6 +351,22 @@ namespace ProjektLABDetailing.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -583,19 +594,21 @@ namespace ProjektLABDetailing.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderProductProduct", b =>
+            modelBuilder.Entity("OrderProductProducts", b =>
                 {
                     b.HasOne("ProjektLABDetailing.Models.OrderProduct", null)
                         .WithMany()
-                        .HasForeignKey("OrderProductsOrderId")
+                        .HasForeignKey("OrderProductId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderProductProducts_Order_OrderProductId");
 
                     b.HasOne("ProjektLABDetailing.Models.Product", null)
                         .WithMany()
-                        .HasForeignKey("ProductsProductId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderProductProducts_Products_ProductId");
                 });
 
             modelBuilder.Entity("OrderServiceService", b =>
@@ -622,13 +635,6 @@ namespace ProjektLABDetailing.Migrations
                         .IsRequired();
 
                     b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("ProjektLABDetailing.Models.CartItem", b =>
-                {
-                    b.HasOne("ProjektLABDetailing.Models.OrderProduct", null)
-                        .WithMany("CartItems")
-                        .HasForeignKey("OrderProductOrderId");
                 });
 
             modelBuilder.Entity("ProjektLABDetailing.Models.Order", b =>
@@ -697,11 +703,6 @@ namespace ProjektLABDetailing.Migrations
                     b.Navigation("Clients");
 
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("ProjektLABDetailing.Models.OrderProduct", b =>
-                {
-                    b.Navigation("CartItems");
                 });
 #pragma warning restore 612, 618
         }

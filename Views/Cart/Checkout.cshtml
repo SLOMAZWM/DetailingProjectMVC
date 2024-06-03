@@ -67,13 +67,30 @@
         <input asp-for="TotalPrice" class="form-control" readonly />
     </div>
 
-    @foreach (var item in Model.CartItems)
-    {
-        <input type="hidden" name="CartItems[@item.ProductId].ProductId" value="@item.ProductId" />
-        <input type="hidden" name="CartItems[@item.ProductId].ProductName" value="@item.ProductName" />
-        <input type="hidden" name="CartItems[@item.ProductId].Quantity" value="@item.Quantity" />
-        <input type="hidden" name="CartItems[@item.ProductId].Price" value="@item.Price" />
-    }
+    <h3>Produkty</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Ilość</th>
+                <th>Cena</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("c")</td>
+                </tr>
+                <input type="hidden" name="CartItems[@item.ProductId].ProductId" value="@item.ProductId" />
+                <input type="hidden" name="CartItems[@item.ProductId].ProductName" value="@item.ProductName" />
+                <input type="hidden" name="CartItems[@item.ProductId].Quantity" value="@item.Quantity" />
+                <input type="hidden" name="CartItems[@item.ProductId].Price" value="@item.Price" />
+            }
+        </tbody>
+    </table>
 
     <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
 </form>

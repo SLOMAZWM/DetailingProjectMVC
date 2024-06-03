@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjektLABDetailing.Data;
 using ProjektLABDetailing.Models;
 using ProjektLABDetailing.Models.User;
+using ProjektLABDetailing.Models.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -84,45 +85,71 @@ namespace ProjektLABDetailing.Controllers
             return View(order);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Checkout(OrderProduct order)
         {
-            if (ModelState.IsValid)
+            if (User.Identity.IsAuthenticated)
             {
-                if (User.Identity.IsAuthenticated)
+                var user = await _userManager.GetUserAsync(User);
+                var client = await _context.Clients.FirstOrDefaultAsync(c => c.UserId == user.Id);
+                if (client == null)
                 {
-                    var user = await _userManager.GetUserAsync(User);
-                    order.ClientId = int.TryParse(user.Id, out int userId) ? userId : 0;
-                }
-                else
-                {
-                    order.ClientId = GenerateGuestClientId();
-                }
-
-                order.OrderDate = DateTime.Now;
-                order.Status = "Pending";
-                order.TotalPrice = _cart.TotalPrice;
-
-                foreach (var item in order.CartItems)
-                {
-                    order.Products.Add(new Product
+                    client = new Client
                     {
-                        ProductId = item.ProductId,
-                        Name = item.ProductName,
-                        Quantity = (short)item.Quantity,
-                        Price = item.Price
-                    });
+                        UserId = user.Id,
+                        User = user,
+                        Email = user.Email,  // Ensure email is set
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        PhoneNumber = user.PhoneNumber
+                    };
+                    _context.Clients.Add(client);
+                    await _context.SaveChangesAsync();
                 }
-
-                _context.OrderProducts.Add(order);
+                order.ClientId = client.ClientId;
+            }
+            else
+            {
+                var client = new Client
+                {
+                    User = new User
+                    {
+                        FirstName = order.FirstName,
+                        LastName = order.LastName,
+                        Email = order.Email,
+                        PhoneNumber = order.PhoneNumber,
+                        UserName = order.Email,
+                        NormalizedUserName = order.Email.ToUpper(),
+                        NormalizedEmail = order.Email.ToUpper()
+                    },
+                    Email = order.Email,  // Ensure email is set
+                    FirstName = order.FirstName,
+                    LastName = order.LastName,
+                    PhoneNumber = order.PhoneNumber
+                };
+                _context.Clients.Add(client);
                 await _context.SaveChangesAsync();
-                _cart.Clear();
-
-                return RedirectToAction("OrderConfirmation", new { id = order.OrderId });
+                order.ClientId = client.ClientId;
             }
 
-            return View(order);
+            order.OrderDate = DateTime.Now;
+            order.Status = "Pending";
+            order.TotalPrice = _cart.TotalPrice;
+
+            foreach (var item in order.CartItems)
+            {
+                var product = await _context.Products.FindAsync(item.ProductId);
+                if (product != null)
+                {
+                    order.Products.Add(product);
+                }
+            }
+
+            _context.OrderProducts.Add(order);
+            await _context.SaveChangesAsync();
+            _cart.Clear();
+
+            return RedirectToAction("OrderConfirmation", new { id = order.OrderId });
         }
 
         public async Task<IActionResult> OrderConfirmation(int id)
@@ -130,18 +157,37 @@ namespace ProjektLABDetailing.Controllers
             var order = await _context.OrderProducts
                 .Include(o => o.Products)
                 .FirstOrDefaultAsync(o => o.OrderId == id);
-            return View(order);
-        }
 
-        private int GenerateGuestClientId()
-        {
-            int newId;
-            do
+            if (order == null)
             {
-                newId = new Random().Next(-999999, -1);
-            } while (_context.OrderProducts.Any(o => o.ClientId == newId));
+                return NotFound();
+            }
 
-            return newId;
+            var orderDetailsViewModel = new OrderDetailsViewModel
+            {
+                OrderId = order.OrderId,
+                ClientName = $"{order.FirstName} {order.LastName}",
+                ClientEmail = order.Email,
+                ClientPhoneNumber = order.PhoneNumber,
+                Address = order.Address,
+                City = order.City,
+                PostalCode = order.PostalCode,
+                PaymentMethod = order.PaymentMethod,
+                DeliveryMethod = order.DeliveryMethod,
+                OrderDate = order.OrderDate,
+                TotalPrice = order.TotalPrice,
+                Status = order.Status,
+                Products = order.Products.Select(p => new OrderProductDetail
+                {
+                    ProductId = p.ProductId,
+                    Name = p.Name,
+                    Quantity = p.Quantity,
+                    Price = p.Price
+                }).ToList()
+            };
+
+            return View(orderDetailsViewModel);
         }
+
     }
 }
