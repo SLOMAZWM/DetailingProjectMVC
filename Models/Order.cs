@@ -28,6 +28,7 @@ namespace ProjektLABDetailing.Models
         public virtual ICollection<Service> Services { get; set; } = new List<Service>();
         public int? CarId { get; set; }
         public virtual Car Car { get; set; }
+        public string Condition { get; set; }
     }
 
     public class OrderProduct : Order

@@ -21,5 +21,7 @@ namespace ProjektLABDetailing.Models
         public string VIN { get; set; }
         [Required]
         public int Mileage { get; set; }
+        [Required]
+        public string Condition { get; set; }
     }
 }

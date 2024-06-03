@@ -53,6 +53,22 @@ public static class ApplicationDbInitializer
             LockoutEnabled = true,
             AccessFailedCount = 0
         };
+        var user3 = new User
+        {
+            Id = "43abbeaf-ad9b-4af9-ad70-21e247d541bf",
+            FirstName = "Kacper",
+            LastName = "Fajny",
+            UserName = "fajnykacper@gmail.com",
+            NormalizedUserName = "FAJNYKACPER@GMAIL.COM",
+            Email = "fajnykolega@gmail.com",
+            NormalizedEmail = "FAJNYKACPER@GMAIL.COM",
+            EmailConfirmed = false,
+            PhoneNumber = "+48 570 213 111",
+            PhoneNumberConfirmed = false,
+            TwoFactorEnabled = false,
+            LockoutEnabled = true,
+            AccessFailedCount = 0
+        };
 
         if (userManager.Users.All(u => u.Id != user1.Id))
         {
@@ -64,6 +80,12 @@ public static class ApplicationDbInitializer
         {
             await userManager.CreateAsync(user2, "Testy321!PL");
             await userManager.AddToRoleAsync(user2, "Employee");
+        }
+
+        if (userManager.Users.All(u => u.Id != user1.Id))
+        {
+            await userManager.CreateAsync(user1, "Testy321!PL");
+            await userManager.AddToRoleAsync(user1, "Client");
         }
     }
 

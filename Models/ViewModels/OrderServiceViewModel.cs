@@ -12,5 +12,6 @@ namespace ProjektLABDetailing.Models.ViewModels
         public DateTime ExecutionDate { get; set; }
         public string Materials { get; set; }
         public string ClientRemarks { get; set; }
+        public string Condition { get; set; }
     }
 }

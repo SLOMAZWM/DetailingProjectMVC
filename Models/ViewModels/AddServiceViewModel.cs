@@ -39,6 +39,9 @@ namespace ProjektLABDetailing.Models.ViewModels
         [Required(ErrorMessage = "Przebieg jest wymagany")]
         public int Mileage { get; set; }
 
+        [Required(ErrorMessage = "Stan jest wymagany")]
+        public string Condition { get; set; }
+
         [Required(ErrorMessage = "Data realizacji jest wymagana")]
         public DateTime ExecutionDate { get; set; }
 

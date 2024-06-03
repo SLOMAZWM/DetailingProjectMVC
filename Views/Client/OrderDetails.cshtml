@@ -1,0 +1,46 @@
+﻿@model ProjektLABDetailing.Models.ViewModels.OrderDetailsViewModel
+
+@{
+    ViewData["Title"] = "Szczegóły zamówienia";
+}
+
+<h2>Szczegóły zamówienia</h2>
+
+<div>
+    <h3>Informacje o zamówieniu</h3>
+    <p><strong>Numer zamówienia:</strong> @Model.OrderId</p>
+    <p><strong>Data zamówienia:</strong> @Model.OrderDate.ToString("dd-MM-yyyy")</p>
+    <p><strong>Imię i nazwisko:</strong> @Model.ClientName</p>
+    <p><strong>Email:</strong> @Model.ClientEmail</p>
+    <p><strong>Numer telefonu:</strong> @Model.ClientPhoneNumber</p>
+    <p><strong>Adres:</strong> @Model.Address</p>
+    <p><strong>Miasto:</strong> @Model.City</p>
+    <p><strong>Kod pocztowy:</strong> @Model.PostalCode</p>
+    <p><strong>Metoda płatności:</strong> @Model.PaymentMethod</p>
+    <p><strong>Metoda dostawy:</strong> @Model.DeliveryMethod</p>
+</div>
+
+<div>
+    <h3>Produkty</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Ilość</th>
+                <th>Cena</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Quantity</td>
+                    <td>@product.Price.ToString("c")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<p><strong>Całkowita cena:</strong> @Model.TotalPrice.ToString("c")</p>

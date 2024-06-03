@@ -204,6 +204,10 @@ namespace ProjektLABDetailing.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Condition")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Mileage")
                         .HasColumnType("int");
 
@@ -528,6 +532,10 @@ namespace ProjektLABDetailing.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ClientRemarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Condition")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -103,6 +103,7 @@ namespace ProjektLABDetailing.Controllers
                 Status = os.Status ?? "Unknown",
                 ExecutionDate = os.ExecutionDate ?? DateTime.MinValue,
                 Materials = os.Materials ?? "Brak",
+                Condition = os.Condition ?? "Brak",
                 ClientRemarks = os.ClientRemarks ?? "Brak"
             }).ToList();
 
@@ -205,6 +206,10 @@ namespace ProjektLABDetailing.Controllers
                         client = new Client
                         {
                             UserId = user.Id,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Email = user.Email,
+                            PhoneNumber = user.PhoneNumber,
                             User = user
                         };
 
@@ -220,7 +225,8 @@ namespace ProjektLABDetailing.Controllers
                         Year = viewModel.Year,
                         Color = viewModel.Color,
                         VIN = viewModel.VIN,
-                        Mileage = viewModel.Mileage
+                        Mileage = viewModel.Mileage,
+                        Condition = viewModel.Condition
                     };
 
                     _context.Cars.Add(car);
@@ -233,6 +239,7 @@ namespace ProjektLABDetailing.Controllers
                         ExecutionDate = viewModel.ExecutionDate,
                         Status = "Oczekuje",
                         Materials = viewModel.Materials,
+                        Condition = viewModel.Condition,
                         ClientRemarks = viewModel.ClientRemarks,
                         Services = new List<Service> { _context.Services.Find(viewModel.SelectedServiceId) }
                     };
@@ -282,6 +289,7 @@ namespace ProjektLABDetailing.Controllers
                 Color = orderService.Car.Color,
                 VIN = orderService.Car.VIN,
                 Mileage = orderService.Car.Mileage,
+                Condition = orderService.Car.Condition,
                 ExecutionDate = orderService.ExecutionDate ?? DateTime.MinValue,
                 SelectedServiceId = orderService.Services.FirstOrDefault()?.ServiceId ?? 0,
                 Materials = orderService.Materials,
@@ -323,6 +331,7 @@ namespace ProjektLABDetailing.Controllers
                     orderService.ExecutionDate = viewModel.ExecutionDate;
                     orderService.Status = "Oczekuje";
                     orderService.Materials = viewModel.Materials;
+                    orderService.Condition = viewModel.Condition;
                     orderService.ClientRemarks = viewModel.ClientRemarks;
 
                     orderService.Client.User.FirstName = viewModel.FirstName;

@@ -105,7 +105,11 @@ namespace ProjektLABDetailing.Controllers
 
                     var client = new Client
                     {
-                        UserId = user.Id
+                        UserId = user.Id,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        PhoneNumber = user.PhoneNumber
                     };
 
                     _context.Clients.Add(client);

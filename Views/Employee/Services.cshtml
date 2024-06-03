@@ -15,6 +15,7 @@
             <td><b>Usługa</b></td>
             <td><b>Realizacja</b></td>
             <td><b>Materiały</b></td>
+            <td><b>Kondycja</b></td>
             <td><b>Uwagi dla klienta</b></td>
             <td><b>Wybierz</b></td>
         </tr>
@@ -42,6 +43,7 @@
                     </form>
                 </td>
                 <td>@orderService.Materials</td>
+                <td>@orderService.Condition</td>
                 <td>@orderService.ClientRemarks</td>
                 <td>
                     <input type="checkbox" name="selectedOrderId" value="@orderService.OrderId" class="order-checkbox" />

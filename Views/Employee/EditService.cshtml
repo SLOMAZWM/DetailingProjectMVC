@@ -47,6 +47,7 @@
                     <td><b>Kolor</b></td>
                     <td><b>VIN</b></td>
                     <td><b>Przebieg</b></td>
+                    <td><b>Kondycja</b></td>
                 </tr>
                 <tr>
                     <td>
@@ -73,6 +74,9 @@
                         <input asp-for="Mileage" type="number" id="Mileage" />
                         <span class="text-danger" asp-validation-for="Mileage"></span>
                     </td>
+                    <td><input asp-for="Condition" type="Text" id="Condition"/>
+                    <span class="text-danger" asp-validation-for="Condition"></span>
+                        </td>
                 </tr>
             </table>
         </div>

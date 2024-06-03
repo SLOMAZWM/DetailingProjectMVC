@@ -1,28 +1,49 @@
-﻿@*
-    
-*@
+﻿@model IEnumerable<ProjektLABDetailing.Models.OrderProduct>
+
 @{
     ViewData["Title"] = "Klient - Historia zamówień";
 }
 
-<body>
-        <div class="TablesClient">
-            <table border="1" class="TableOrderHistory">
-            <caption>
-                <b>Twoja Historia Zamówień</b>
-            </caption>
+<div class="TablesClient">
+    <table border="1" class="TableOrderHistory">
+        <caption>
+            <b>Twoja Historia Zamówień</b>
+        </caption>
+        <thead>
+            <tr>
+                <th>Nr. Zamówienia</th>
+                <th>Data Zamówienia</th>
+                <th>Status</th>
+                <th>Adres Wysyłki</th>
+                <th>Email</th>
+                <th>Szczegóły</th>
+                <th>Cena</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.OrderId</td>
+                        <td>@order.OrderDate.ToString()</td>
+                        <td>@order.Status</td>
+                        <td>@order.Address</td>
+                        <td>@order.Email</td>
+                        <td>
+                            <a asp-action="OrderDetails" asp-controller="Client" asp-route-id="@order.OrderId">Szczegóły</a>
+                        </td>
+                        <td>@order.TotalPrice.ToString("c")</td>
+                    </tr>
+                }
+            }
+            else
+            {
                 <tr>
-                    <td><b>Nr. Zamówienia</b></td>
-                    <td><b>Data Zamówienia</b></td>
-                    <td><b>Status</b></td>
-                    <td><b>Adres Wysyłki</b></td>
-                    <td><b>Email</b></td>
-                    <td><b>Szczegóły</b></td>
-                    <td><b>Cena</b></td>
+                    <td colspan="7">Brak zamówień</td>
                 </tr>
-                <tr>
-                    <td colspan="7">Brak danych usług</td>
-                </tr>
-            </table>
-        </div>
-</body>
+            }
+        </tbody>
+    </table>
+</div>

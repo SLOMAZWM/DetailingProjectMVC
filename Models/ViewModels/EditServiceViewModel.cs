@@ -50,6 +50,9 @@ namespace ProjektLABDetailing.Models.ViewModels
         [Required(ErrorMessage = "Materiały są wymagane")]
         public string Materials { get; set; }
 
+        [Required(ErrorMessage = "Kondycja jest wymagana")]
+        public string Condition { get; set; }
+
         [Required(ErrorMessage = "Uwagi dla klienta są wymagane")]
         public string ClientRemarks { get; set; }
 
