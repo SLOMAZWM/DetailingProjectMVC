@@ -50,7 +50,10 @@ body {
     padding-bottom: 1.5%;
     font-family: 'Century Gothic';
     box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
-    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
     .menu a {
@@ -77,6 +80,32 @@ body {
 }
 
 /*========================================================================================================================Menu========================================================================================================================*/
+
+
+.BackWeb {
+    background-image: url("/Pictures/BackWeb.png");
+    letter-spacing: 3px;
+    padding-bottom: 10%;
+    padding-top: 15%;
+    -webkit-box-shadow: 1px 19px 24px 0px rgba(53, 53, 53, 1);
+    -moz-box-shadow: 1px 19px 24px 0px rgba(53, 53, 53, 1);
+    box-shadow: 1px 19px 24px 0px rgba(53, 53, 53, 1);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.Markam h1 {
+    margin-top: 0%;
+    margin-bottom: 5%;
+    margin-left: 5%;
+    font-size: 500%;
+}
+
+.BackWeb p {
+    margin-right: 5%;
+}
 
 
 /*========================================================================================================================Login=======================================================================================================================*/
@@ -605,7 +634,7 @@ td {
     padding-bottom: 0.1%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 15%;
+    margin-top: 5%;
     transition: 1s;
     box-shadow: 0px 10px 10px 5px rgba(0,0,0,0.25);
     border-radius: 20px;
@@ -755,8 +784,9 @@ td {
 }
 
 .ChangingOldData {
-    margin-left: auto;
-    margin-right: auto;
+    margin-top: 3%;
+    margin-left: 35%;
+    margin-right: 35%;
     letter-spacing: 3px;
 }
 
@@ -858,18 +888,12 @@ td {
 .CDUButton button {
     margin-top: 10%;
     margin-bottom: 5%;
-    background-color: #fe935c;
-    border: none;
-    padding-left: 10%;
-    padding-right: 10%;
+    margin-left: 5%;
     padding-top: 3%;
     padding-bottom: 3%;
-    border-radius: 3%;
     transition: ease-in-out 0.5s;
     font-size: 110%;
     cursor: pointer;
-    margin-left: auto;
-    margin-right: auto;
 }
 
     .CDUButton button:hover {
@@ -891,7 +915,7 @@ td {
 .Contact {
     background-image: linear-gradient(to left top, #ffc75f, #ffbd61, #ffb363, #ffaa67, #ffa16b, #ff9a6e, #ff9372, #ff8c76, #ff847b, #ff7d81, #ff7689, #ff6f91);
     box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
-    margin-top: 20%;
+    margin-top: 5%;
     color: white;
     text-align: center;
     padding-top: 0.01%;
@@ -1282,6 +1306,7 @@ button.ButtonEditServicesStyle {
 }
 /*====================================================================================================================PPF=============================================================================================================================*/
 
+/*===================================================================================================================Card=============================================================================================================================*/
 
 .AddToCartButton {
     background-color: #ff7f50;
@@ -1308,7 +1333,7 @@ button.ButtonEditServicesStyle {
     border: 2px solid #ff9372;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
     width: 80%;
     max-width: 600px;
     margin: 20px auto;
@@ -1385,3 +1410,37 @@ button {
     button:hover {
         background-color: #ff6347;
     }
+
+/*===================================================================================================================Card=============================================================================================================================*/
+
+/*==================================================================================================================Yt Link===========================================================================================================================*/
+
+.YoutubeLink {
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.YoutubeLink p {
+    text-align: left;
+    letter-spacing: 2px;
+    margin-top: 13%;
+    margin-right: 1%;
+}
+
+.YoutubeLink iframe {
+    margin-top: 5%;
+    margin-left: 10%;
+    border-radius: 15px;
+    width: 700px;
+    height: 450px;
+    box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.25);
+    transition: 0.5s;
+    margin-right: 5%;
+}
+
+    .YoutubeLink iframe:hover {
+        box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.45);
+    }
+
+/*==================================================================================================================Yt Link===========================================================================================================================*/

@@ -8,7 +8,7 @@
         };
 
         function scrollFunction() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 1800) {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 3600) {
                 backToTopBtn.style.display = "block";
                 backToTopBtn.classList.add("show");
             } else {
