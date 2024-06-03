@@ -98,7 +98,7 @@ namespace ProjektLABDetailing.Controllers
                     {
                         UserId = user.Id,
                         User = user,
-                        Email = user.Email,  // Ensure email is set
+                        Email = user.Email,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         PhoneNumber = user.PhoneNumber
@@ -122,7 +122,7 @@ namespace ProjektLABDetailing.Controllers
                         NormalizedUserName = order.Email.ToUpper(),
                         NormalizedEmail = order.Email.ToUpper()
                     },
-                    Email = order.Email,  // Ensure email is set
+                    Email = order.Email,
                     FirstName = order.FirstName,
                     LastName = order.LastName,
                     PhoneNumber = order.PhoneNumber
@@ -136,6 +136,7 @@ namespace ProjektLABDetailing.Controllers
             order.Status = "Pending";
             order.TotalPrice = _cart.TotalPrice;
 
+            // Dodaj produkty do zamówienia
             foreach (var item in order.CartItems)
             {
                 var product = await _context.Products.FindAsync(item.ProductId);
@@ -152,6 +153,8 @@ namespace ProjektLABDetailing.Controllers
             return RedirectToAction("OrderConfirmation", new { id = order.OrderId });
         }
 
+
+        [HttpGet]
         public async Task<IActionResult> OrderConfirmation(int id)
         {
             var order = await _context.OrderProducts
@@ -188,6 +191,7 @@ namespace ProjektLABDetailing.Controllers
 
             return View(orderDetailsViewModel);
         }
+
 
     }
 }
