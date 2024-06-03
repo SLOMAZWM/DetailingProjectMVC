@@ -70,6 +70,11 @@ namespace ProjektLABDetailing.Models
             SaveCart(cart);
         }
 
+        public void Clear()
+        {
+            SaveCart(new List<CartItem>());
+        }
+
         private void SaveCart(List<CartItem> cart)
         {
             var session = _httpContextAccessor.HttpContext.Session;

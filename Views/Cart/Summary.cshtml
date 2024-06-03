@@ -1,7 +1,12 @@
 ﻿@model ProjektLABDetailing.Models.Cart
 
+@{
+    ViewData["Title"] = "Cart Summary";
+}
+
+<h2>Twój koszyk</h2>
+
 <div class="cart-summary">
-    <h3>Twój koszyk</h3>
     <ul>
         @foreach (var item in Model.Items)
         {
@@ -21,6 +26,6 @@
     </ul>
     <p><strong>Całkowita cena: </strong> @Model.TotalPrice.ToString("c")</p>
     <form method="get" asp-action="Checkout" asp-controller="Cart">
-        <button type="submit" class="checkout-button">Przejdź do zamówienia</button>
+        <button type="submit" class="btn btn-primary">Przejdź do zamówienia</button>
     </form>
 </div>

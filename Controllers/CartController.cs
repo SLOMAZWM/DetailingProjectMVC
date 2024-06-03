@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProjektLABDetailing.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProjektLABDetailing.Data;
+using ProjektLABDetailing.Models;
+using ProjektLABDetailing.Models.User;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProjektLABDetailing.Controllers
@@ -9,11 +14,13 @@ namespace ProjektLABDetailing.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly Cart _cart;
+        private readonly UserManager<User> _userManager;
 
-        public CartController(ApplicationDbContext context, Cart cart)
+        public CartController(ApplicationDbContext context, Cart cart, UserManager<User> userManager)
         {
             _context = context;
             _cart = cart;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -55,10 +62,79 @@ namespace ProjektLABDetailing.Controllers
             return View(_cart);
         }
 
-        public IActionResult Checkout()
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
         {
-            // Implement the checkout logic here
-            return View();
+            var order = new OrderProduct();
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    order.FirstName = user.FirstName;
+                    order.LastName = user.LastName;
+                }
+            }
+            return View(order);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Checkout(OrderProduct order)
+        {
+            if (ModelState.IsValid)
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    var user = await _userManager.GetUserAsync(User);
+                    order.ClientId = int.TryParse(user.Id, out int userId) ? userId : 0;
+                }
+                else
+                {
+                    order.ClientId = GenerateGuestClientId();
+                }
+
+                order.OrderDate = DateTime.Now;
+                order.Status = "Pending";
+                order.TotalPrice = _cart.TotalPrice;
+
+                foreach (var item in _cart.Items)
+                {
+                    order.Products.Add(new Product
+                    {
+                        ProductId = item.ProductId,
+                        Name = item.ProductName,
+                        Quantity = (short)item.Quantity,
+                        Price = item.Price
+                    });
+                }
+
+                _context.OrderProducts.Add(order);
+                await _context.SaveChangesAsync();
+                _cart.Clear();
+
+                return RedirectToAction("OrderConfirmation", new { id = order.OrderId });
+            }
+
+            return View(order);
+        }
+
+        public async Task<IActionResult> OrderConfirmation(int id)
+        {
+            var order = await _context.OrderProducts
+                .Include(o => o.Products)
+                .FirstOrDefaultAsync(o => o.OrderId == id);
+            return View(order);
+        }
+
+        private int GenerateGuestClientId()
+        {
+            int newId;
+            do
+            {
+                newId = new Random().Next(10000, 99999);
+            } while (_context.OrderProducts.Any(o => o.ClientId == newId));
+
+            return newId;
         }
     }
 }

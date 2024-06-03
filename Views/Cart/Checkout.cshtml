@@ -1,0 +1,130 @@
+﻿@model ProjektLABDetailing.Models.OrderProduct
+
+@{
+    ViewData["Title"] = "Podsumowanie zamówienia";
+}
+
+<h2>Podsumowanie Zamówienia</h2>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-action="Checkout" method="post">
+        <div class="form-group">
+            <label asp-for="FirstName">Imię</label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName">Nazwisko</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address">Adres</label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="City">Miasto</label>
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PostalCode">Kod Pocztowy</label>
+            <input asp-for="PostalCode" class="form-control" />
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PaymentMethod">Metoda Płatności</label>
+            <select asp-for="PaymentMethod" class="form-control">
+                <option value="">Wybierz...</option>
+                <option value="Karta kredytowa">Karta kredytowa</option>
+                <option value="Przelew bankowy">Przelew bankowy</option>
+                <option value="Płatność przy odbiorze">Płatność przy odbiorze</option>
+            </select>
+            <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DeliveryMethod">Metoda Dostawy</label>
+            <select asp-for="DeliveryMethod" class="form-control">
+                <option value="">Wybierz...</option>
+                <option value="Kurier">Kurier</option>
+                <option value="Paczkomat">Paczkomat</option>
+                <option value="Odbiór osobisty">Odbiór osobisty</option>
+            </select>
+            <span asp-validation-for="DeliveryMethod" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="TotalPrice">Całkowita Cena</label>
+            <input asp-for="TotalPrice" class="form-control" readonly />
+        </div>
+        <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
+    </form>
+}
+else
+{
+    <div>
+        <h3>Masz konto?</h3>
+        <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Zaloguj się</a>
+        <a asp-controller="Account" asp-action="Register" class="btn btn-secondary">Zarejestruj się</a>
+    </div>
+    <div>
+        <h3>Chcesz zamówić jako gość?</h3>
+        <form asp-action="Checkout" method="post">
+            <div class="form-group">
+                <label asp-for="FirstName">Imię</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName">Nazwisko</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address">Adres</label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City">Miasto</label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PostalCode">Kod Pocztowy</label>
+                <input asp-for="PostalCode" class="form-control" />
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentMethod">Metoda Płatności</label>
+                <select asp-for="PaymentMethod" class="form-control">
+                    <option value="">Wybierz...</option>
+                    <option value="Karta kredytowa">Karta kredytowa</option>
+                    <option value="Przelew bankowy">Przelew bankowy</option>
+                    <option value="Płatność przy odbiorze">Płatność przy odbiorze</option>
+                </select>
+                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeliveryMethod">Metoda Dostawy</label>
+                <select asp-for="DeliveryMethod" class="form-control">
+                    <option value="">Wybierz...</option>
+                    <option value="Kurier">Kurier</option>
+                    <option value="Paczkomat">Paczkomat</option>
+                    <option value="Odbiór osobisty">Odbiór osobisty</option>
+                </select>
+                <span asp-validation-for="DeliveryMethod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalPrice">Całkowita Cena</label>
+                <input asp-for="TotalPrice" class="form-control" readonly />
+            </div>
+            <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
+        </form>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
