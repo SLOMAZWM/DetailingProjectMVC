@@ -41,7 +41,7 @@ builder.Services.AddScoped<Cart>();
 
 var app = builder.Build();
 
-// Seed database with starts rows
+// Seed database with initial rows
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -50,6 +50,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = services.GetRequiredService<ApplicationDbContext>();
     await ApplicationDbInitializer.SeedRolesAsync(userManager, roleManager);
     ApplicationDbInitializer.SeedServices(dbContext);
+    ApplicationDbInitializer.SeedProducts(dbContext);
 }
 
 // Configure the HTTP request pipeline.
