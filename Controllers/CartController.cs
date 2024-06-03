@@ -65,7 +65,10 @@ namespace ProjektLABDetailing.Controllers
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
-            var order = new OrderProduct();
+            var order = new OrderProduct
+            {
+                CartItems = _cart.Items.ToList()
+            };
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);
@@ -97,7 +100,7 @@ namespace ProjektLABDetailing.Controllers
                 order.Status = "Pending";
                 order.TotalPrice = _cart.TotalPrice;
 
-                foreach (var item in _cart.Items)
+                foreach (var item in order.CartItems)
                 {
                     order.Products.Add(new Product
                     {
@@ -131,7 +134,7 @@ namespace ProjektLABDetailing.Controllers
             int newId;
             do
             {
-                newId = new Random().Next(10000, 99999);
+                newId = new Random().Next(-999999, -1);
             } while (_context.OrderProducts.Any(o => o.ClientId == newId));
 
             return newId;

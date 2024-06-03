@@ -33,16 +33,6 @@ namespace ProjektLABDetailing.Models
 
     public class OrderProduct : Order
     {
-        public int OrderId { get; set; }
-        public int ClientId { get; set; }
-        public DateTime OrderDate { get; set; }
-
-        [Required]
-        public decimal TotalPrice { get; set; }
-
-        [Required]
-        public string Status { get; set; }
-
         [Required(ErrorMessage = "Imię jest wymagane.")]
         public string FirstName { get; set; }
 
@@ -66,5 +56,9 @@ namespace ProjektLABDetailing.Models
         public string DeliveryMethod { get; set; }
 
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+
+        public List<CartItem> CartItems { get; set; } = new List<CartItem>();
     }
+
+
 }
