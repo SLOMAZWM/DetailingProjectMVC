@@ -297,6 +297,35 @@ namespace ProjektLABDetailing.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("ProjektLABDetailing.Models.OrderProductDetail", b =>
+                {
+                    b.Property<int>("OrderProductDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderProductDetailId"));
+
+                    b.Property<int>("OrderProductId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderProductDetailId");
+
+                    b.HasIndex("OrderProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderProductDetail");
+                });
+
             modelBuilder.Entity("ProjektLABDetailing.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -663,6 +692,25 @@ namespace ProjektLABDetailing.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("ProjektLABDetailing.Models.OrderProductDetail", b =>
+                {
+                    b.HasOne("ProjektLABDetailing.Models.OrderProduct", "OrderProduct")
+                        .WithMany("OrderProductDetails")
+                        .HasForeignKey("OrderProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjektLABDetailing.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderProduct");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ProjektLABDetailing.Models.User.Client", b =>
                 {
                     b.HasOne("ProjektLABDetailing.Models.User.User", "User")
@@ -711,6 +759,11 @@ namespace ProjektLABDetailing.Migrations
                     b.Navigation("Clients");
 
                     b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("ProjektLABDetailing.Models.OrderProduct", b =>
+                {
+                    b.Navigation("OrderProductDetails");
                 });
 #pragma warning restore 612, 618
         }

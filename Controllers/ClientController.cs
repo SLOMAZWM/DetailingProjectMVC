@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using ProjektLABDetailing.Data;
 using Microsoft.EntityFrameworkCore;
 using ProjektLABDetailing.Models.ViewModels;
+using System.Linq;
 
 namespace ProjektLABDetailing.Controllers
 {
@@ -41,10 +42,11 @@ namespace ProjektLABDetailing.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }
+
         [HttpGet]
         public IActionResult ChangeDataUser()
         {
-            return RedirectToAction("ChangeDataUser", "Account" );
+            return RedirectToAction("ChangeDataUser", "Account");
         }
 
         [HttpGet]
@@ -71,7 +73,6 @@ namespace ProjektLABDetailing.Controllers
             return View(services);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> OrderHistory()
         {
@@ -89,6 +90,8 @@ namespace ProjektLABDetailing.Controllers
 
             var orders = await _context.OrderProducts
                 .Where(op => op.Client.UserId == user.Id)
+                .Include(op => op.OrderProductDetails)
+                    .ThenInclude(opd => opd.Product)
                 .ToListAsync();
 
             return View(orders);
@@ -110,7 +113,10 @@ namespace ProjektLABDetailing.Controllers
             }
 
             var order = await _context.OrderProducts
-                .Include(o => o.Products)
+                .Include(o => o.Client)
+                    .ThenInclude(c => c.User)
+                .Include(o => o.OrderProductDetails)
+                    .ThenInclude(opd => opd.Product)
                 .SingleOrDefaultAsync(o => o.OrderId == id && o.Client.UserId == user.Id);
 
             if (order == null)
@@ -121,9 +127,9 @@ namespace ProjektLABDetailing.Controllers
             var orderDetailsViewModel = new OrderDetailsViewModel
             {
                 OrderId = order.OrderId,
-                ClientName = $"{order.FirstName} {order.LastName}",
-                ClientEmail = order.Email,
-                ClientPhoneNumber = order.PhoneNumber,
+                ClientName = $"{order.Client.User.FirstName} {order.Client.User.LastName}",
+                ClientEmail = order.Client.User.Email,
+                ClientPhoneNumber = order.Client.User.PhoneNumber,
                 Address = order.Address,
                 City = order.City,
                 PostalCode = order.PostalCode,
@@ -132,19 +138,16 @@ namespace ProjektLABDetailing.Controllers
                 OrderDate = order.OrderDate,
                 TotalPrice = order.TotalPrice,
                 Status = order.Status,
-                Products = order.Products.Select(p => new OrderProductDetail
+                Products = order.OrderProductDetails.Select(opd => new OrderProductDetail
                 {
-                    ProductId = p.ProductId,
-                    Name = p.Name,
-                    Quantity = p.Quantity,
-                    Price = p.Price
+                    ProductId = opd.ProductId,
+                    Name = opd.Product.Name,
+                    Quantity = opd.Quantity,
+                    Price = opd.Price
                 }).ToList()
             };
 
             return View(orderDetailsViewModel);
         }
-
-
     }
-
 }

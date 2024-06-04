@@ -56,7 +56,8 @@ namespace ProjektLABDetailing.Controllers
                 .Where(op => op.Status == "Zakończone")
                 .Include(o => o.Client)
                     .ThenInclude(c => c.User)
-                .Include(o => o.Products)
+                .Include(o => o.OrderProductDetails)
+                    .ThenInclude(opd => opd.Product)
                 .ToListAsync();
 
             var orderServices = await _context.OrderServices
@@ -69,7 +70,7 @@ namespace ProjektLABDetailing.Controllers
 
             var orderTotals = orderProducts.ToDictionary(
                 order => order.OrderId,
-                order => order.Products.Sum(p => p.Price)
+                order => order.OrderProductDetails.Sum(opd => opd.Price * opd.Quantity)
             );
 
             var model = new HistoryViewModel
@@ -81,7 +82,6 @@ namespace ProjektLABDetailing.Controllers
 
             return View(model);
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Services()
@@ -148,7 +148,6 @@ namespace ProjektLABDetailing.Controllers
                 }
             }
         }
-
 
         [HttpGet]
         public IActionResult AddService()
@@ -391,7 +390,6 @@ namespace ProjektLABDetailing.Controllers
             }
         }
 
-
         private List<SelectListItem> GetServicesList()
         {
             return _context.Services
@@ -410,12 +408,13 @@ namespace ProjektLABDetailing.Controllers
                 .Where(op => op.Status != "Zakończone")
                 .Include(o => o.Client)
                     .ThenInclude(c => c.User)
-                .Include(o => o.Products)
+                .Include(o => o.OrderProductDetails)
+                    .ThenInclude(opd => opd.Product)
                 .ToListAsync();
 
             var orderTotals = orderProducts.ToDictionary(
                 order => order.OrderId,
-                order => order.Products.Sum(p => p.Price)
+                order => order.OrderProductDetails.Sum(opd => opd.Price * opd.Quantity)
             );
 
             var model = new OrderProductsViewModel
@@ -455,7 +454,6 @@ namespace ProjektLABDetailing.Controllers
                 }
             }
         }
-
 
         private List<string> ValidateAddServiceViewModel(AddServiceViewModel model)
         {
@@ -561,7 +559,8 @@ namespace ProjektLABDetailing.Controllers
             var order = await _context.OrderProducts
                 .Include(o => o.Client)
                     .ThenInclude(c => c.User)
-                .Include(o => o.Products)
+                .Include(o => o.OrderProductDetails)
+                    .ThenInclude(opd => opd.Product)
                 .FirstOrDefaultAsync(o => o.OrderId == id);
 
             if (order == null)
@@ -583,12 +582,12 @@ namespace ProjektLABDetailing.Controllers
                 OrderDate = order.OrderDate,
                 TotalPrice = order.TotalPrice,
                 Status = order.Status,
-                Products = order.Products.Select(p => new OrderProductDetail
+                Products = order.OrderProductDetails.Select(opd => new ProjektLABDetailing.Models.ViewModels.OrderProductDetail
                 {
-                    ProductId = p.ProductId,
-                    Name = p.Name,
-                    Quantity = p.Quantity,
-                    Price = p.Price
+                    ProductId = opd.ProductId,
+                    Name = opd.Product.Name,
+                    Quantity = opd.Quantity,
+                    Price = opd.Price
                 }).ToList()
             };
 
