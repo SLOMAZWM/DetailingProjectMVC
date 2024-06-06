@@ -4,109 +4,115 @@
     ViewData["Title"] = "Podsumowanie zamówienia";
 }
 
-<h2>Podsumowanie Zamówienia</h2>
+<h2 class="summary-title">Podsumowanie Zamówienia</h2>
 
-<div class="checkout">
-    <p>Imię</p>
-    <div class="checkout1">
-        <input type="text" class="checkoutforms" placeholder="Imię"/>
-    </div>
+@using (Html.BeginForm("Checkout", "Cart", FormMethod.Post))
+{
+    <div class="checkout">
+        <div class="form-group">
+            <label for="FirstName">Imię</label>
+            <input asp-for="FirstName" class="form-control" placeholder="Imię" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
 
-    <p>Nazwisko</p>
-    <div class="checkout1">
-        <input type="text" class="checkoutforms" placeholder="Nazwisko" />
-    </div>
+        <div class="form-group">
+            <label for="LastName">Nazwisko</label>
+            <input asp-for="LastName" class="form-control" placeholder="Nazwisko" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
 
-    <p>Adres E-Mail</p>
-    <div class="checkout1">
-        <input type="text" class="checkoutforms" placeholder="E-mail" />
-    </div>
+        <div class="form-group">
+            <label for="Email">Adres E-Mail</label>
+            <input asp-for="Email" class="form-control" placeholder="E-mail" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
 
-    <p>Numer Telefonu</p>
-    <div class="checkout1">
-        <input type="text" class="checkoutforms" placeholder="Numer Telefonu" />
-    </div>
+        <div class="form-group">
+            <label for="PhoneNumber">Numer Telefonu</label>
+            <input asp-for="PhoneNumber" class="form-control" placeholder="Numer Telefonu" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
 
-    <p>Adres</p>
-    <div class="checkout1">
-        <input type="text" class="checkoutforms" placeholder="Adres" />
-    </div>
+        <div class="form-group">
+            <label for="Address">Adres</label>
+            <input asp-for="Address" class="form-control" placeholder="Adres" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
 
-    <p>Miasto</p>
-    <div class="checkout1">
-        <input type="text" class="checkoutforms" placeholder="Miasto" />
-    </div>
+        <div class="form-group">
+            <label for="City">Miasto</label>
+            <input asp-for="City" class="form-control" placeholder="Miasto" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
 
-    <p>Kod Pocztowy</p>
-    <div class="checkout1">
-        <input type="text" class="checkoutforms" placeholder="Kod Pocztowy" />
-    </div>
+        <div class="form-group">
+            <label for="PostalCode">Kod Pocztowy</label>
+            <input asp-for="PostalCode" class="form-control" placeholder="Kod Pocztowy" />
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
 
-    <p>Metoda Płatności</p>
-    <div class="checkout1">
-        <select class="Platnosci" id="Platnosci" name="MetodaPlatnosci">
-            <optgroup label="Wybierz">
-                <option value="Wybierz">Wybierz</option>
+        <div class="form-group">
+            <label for="PaymentMethod">Metoda Płatności</label>
+            <select asp-for="PaymentMethod" class="form-control">
+                <option value="">Wybierz</option>
                 <option value="Przelewy">Przelewy 24</option>
                 <option value="Visa">Visa</option>
-                <option value="PayPall">PayPall</option>
+                <option value="PayPal">PayPal</option>
                 <option value="Blik">Blik</option>
-                <option value="Mastercard">mastercard</option>
+                <option value="Mastercard">Mastercard</option>
                 <option value="GotowkaPrzyOdbiorze">Gotówka przy odbiorze</option>
                 <option value="BankowoscOnline">Bankowość Online</option>
-            </optgroup>
-        </select>
-    </div>
+            </select>
+            <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+        </div>
 
-
-    
-    <p>Sposób dostawy</p>
-    <div class="checkout1">
-        <select class="Dostawa" id="Dostawa" name="MetodaDostawy">
-            <optgroup label="Wybierz">
-                <option value="Wybierz">Wybierz</option>
+        <div class="form-group">
+            <label for="DeliveryMethod">Sposób dostawy</label>
+            <select asp-for="DeliveryMethod" class="form-control">
+                <option value="">Wybierz</option>
                 <option value="Kurier">Kurier - od 17.99 zł</option>
                 <option value="OdbiorNaMiejscu">Odbiór na miejscu</option>
                 <option value="InPost">InPost Paczkomat 24/7 od 10,99 zł</option>
-            </optgroup>
-        </select>
+            </select>
+            <span asp-validation-for="DeliveryMethod" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Cena całkowita</label>
+            <input type="text" class="form-control" value="@Model.TotalPrice.ToString("c")" readonly />
+        </div>
     </div>
 
-    <p>Cena</p>
-    <div class="checkout1">
-        <input type="text" class="checkoutforms" />
-    </div>
-</div>
-
-<div class="ProductsCheckout">
-    <h3>Produkty</h3>
-    <table class="tablecheckout">
-        <thead>
-            <tr>
-                <th>Nazwa</th>
-                <th>Ilość</th>
-                <th>Cena</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CartItems)
-            {
+    <div class="ProductsCheckout">
+        <h3>Produkty</h3>
+        <table class="table tablecheckout">
+            <thead>
                 <tr>
-                    <td>@item.ProductName</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.Price.ToString("c")</td>
+                    <th>Nazwa</th>
+                    <th>Ilość</th>
+                    <th>Cena</th>
                 </tr>
-                <input type="hidden" name="CartItems[@item.ProductId].ProductId" value="@item.ProductId" />
-                <input type="hidden" name="CartItems[@item.ProductId].ProductName" value="@item.ProductName" />
-                <input type="hidden" name="CartItems[@item.ProductId].Quantity" value="@item.Quantity" />
-                <input type="hidden" name="CartItems[@item.ProductId].Price" value="@item.Price" />
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price.ToString("c")</td>
+                    </tr>
+                    <input type="hidden" name="CartItems[@item.ProductId].ProductId" value="@item.ProductId" />
+                    <input type="hidden" name="CartItems[@item.ProductId].ProductName" value="@item.ProductName" />
+                    <input type="hidden" name="CartItems[@item.ProductId].Quantity" value="@item.Quantity" />
+                    <input type="hidden" name="CartItems[@item.ProductId].Price" value="@item.Price" />
+                }
+            </tbody>
+        </table>
 
+        <button type="submit" class="btn btn-primary checkout-button">Złóż zamówienie</button>
+    </div>
+}
 
-    <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
-</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
