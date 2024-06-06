@@ -54,17 +54,22 @@
 </table>
 
 <div class="buttonsServicesalign">
-    <button type="button" class="ButtonAddServicesStyle" id="AddServiceButton">Dodaj Usługę</button>
-    <button type="button" class="ButtonEditServicesStyle" id="editServiceButton">Edytuj Usługę</button>
-    <button type="button" class="ButtonEditServicesStyle" id="addImagesButton">Dodaj Zdjęcia</button>
+    <button type="button" class="ButtonAddServicesStyle" id="AddServiceButton" data-url="@Url.Action("AddService", "Employee")">Dodaj Usługę</button>
+    <button type="button" class="ButtonEditServicesStyle" id="editServiceButton" data-url="@Url.Action("EditService", "Employee")">Edytuj Usługę</button>
+    <button type="button" class="ButtonEditServicesStyle" id="addImagesButton" data-url="@Url.Action("AddCarImages", "Employee")">Dodaj Zdjęcia</button>
 </div>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const checkboxes = document.querySelectorAll('.order-checkbox');
+            const addButton = document.getElementById('AddServiceButton');
             const editButton = document.getElementById('editServiceButton');
             const addImagesButton = document.getElementById('addImagesButton');
+
+            addButton.addEventListener('click', function () {
+                window.location.href = addButton.dataset.url;
+            });
 
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
@@ -82,7 +87,7 @@
                 const selectedCheckbox = document.querySelector('.order-checkbox:checked');
                 if (selectedCheckbox) {
                     const orderId = selectedCheckbox.value;
-                    const url = '@Url.Action("EditService", "Employee")' + '?selectedOrderId=' + orderId;
+                    const url = editButton.dataset.url + '?selectedOrderId=' + orderId;
                     window.location.href = url;
                 } else {
                     alert('Proszę zaznaczyć jedną usługę do edycji.');
@@ -93,7 +98,7 @@
                 const selectedCheckbox = document.querySelector('.order-checkbox:checked');
                 if (selectedCheckbox) {
                     const carId = selectedCheckbox.value;
-                    const url = '@Url.Action("AddCarImages", "Employee")' + '?carId=' + carId;
+                    const url = addImagesButton.dataset.url + '?carId=' + carId;
                     window.location.href = url;
                 } else {
                     alert('Proszę zaznaczyć jedną usługę do dodania zdjęć.');
@@ -102,4 +107,3 @@
         });
     </script>
 }
-
