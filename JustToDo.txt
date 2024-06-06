@@ -1,15 +1,1 @@
-﻿Marcin:
-
--Dodanie logiki kontrolera do dodawania uslugi
--Edytowanie uslugi zrobienie checkboxa i podstrony z uzupelnionym (plus walidacja do maksy 1 zaznaczonego checkboxa)
--Zrobienie wyszukiwarki do wyszukiwania uslug i zamowien, jak zrobi to Kamil
-
-
-Kamil:
-
--Historia od pracownika (dodac wyszukiwarke dla wyszukiwania uslug i zamowien, po wpisaniu)
--Stylizacja Historii
--Stylizacja zmiany danych
--Panel dla Klienta
--Strona glowna
--FIlmiki dla galerii
+﻿Zrobić przycisk w wyborze uslugi (pracownik) do dodawania nielimitowanej ilosci zdjec (tyle ile bedzie chcial, uzyc ajaxa do odswiezania strony?)
