@@ -593,5 +593,63 @@ namespace ProjektLABDetailing.Controllers
 
             return View(orderDetailsViewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddCarImages(int carId)
+        {
+            var car = await _context.Cars.FindAsync(carId);
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            var model = new AddCarImagesViewModel
+            {
+                CarId = carId,
+                CarDetails = $"{car.Brand} {car.Model}"
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddCarImages(AddCarImagesViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                foreach (var file in model.Images)
+                {
+                    var filePath = Path.Combine(uploadsFolder, file.FileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    var carImage = new CarImage
+                    {
+                        CarId = model.CarId,
+                        ImagePath = $"/uploads/{file.FileName}",
+                        Title = model.Title,
+                        Description = model.Description
+                    };
+
+                    _context.CarImages.Add(carImage);
+                }
+
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Zdjęcia zostały dodane pomyślnie.";
+
+                return RedirectToAction(nameof(Services));
+            }
+
+            return View(model);
+        }
     }
 }

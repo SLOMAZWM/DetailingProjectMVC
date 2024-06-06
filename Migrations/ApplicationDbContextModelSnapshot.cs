@@ -229,6 +229,38 @@ namespace ProjektLABDetailing.Migrations
                     b.ToTable("Cars");
                 });
 
+            modelBuilder.Entity("ProjektLABDetailing.Models.CarImage", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("ImageId");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("CarImages");
+                });
+
             modelBuilder.Entity("ProjektLABDetailing.Models.CartItem", b =>
                 {
                     b.Property<int>("CartItemId")
@@ -674,6 +706,17 @@ namespace ProjektLABDetailing.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("ProjektLABDetailing.Models.CarImage", b =>
+                {
+                    b.HasOne("ProjektLABDetailing.Models.Car", "Car")
+                        .WithMany("CarImages")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+                });
+
             modelBuilder.Entity("ProjektLABDetailing.Models.Order", b =>
                 {
                     b.HasOne("ProjektLABDetailing.Models.User.Client", "Client")
@@ -740,6 +783,11 @@ namespace ProjektLABDetailing.Migrations
                         .HasForeignKey("CarId");
 
                     b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("ProjektLABDetailing.Models.Car", b =>
+                {
+                    b.Navigation("CarImages");
                 });
 
             modelBuilder.Entity("ProjektLABDetailing.Models.User.Client", b =>

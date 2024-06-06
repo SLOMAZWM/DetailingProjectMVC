@@ -56,6 +56,7 @@
 <div class="buttonsServicesalign">
     <a asp-controller="Employee" asp-action="AddService" class="ButtonAddServicesStyle">Dodaj Usługę</a>
     <button type="button" class="ButtonEditServicesStyle" id="editServiceButton">Edytuj Usługę</button>
+    <button type="button" class="ButtonAddImagesStyle" id="addImagesButton">Dodaj Zdjęcia</button>
 </div>
 
 @section Scripts {
@@ -63,6 +64,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const checkboxes = document.querySelectorAll('.order-checkbox');
             const editButton = document.getElementById('editServiceButton');
+            const addImagesButton = document.getElementById('addImagesButton');
 
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
@@ -86,6 +88,19 @@
                     alert('Proszę zaznaczyć jedną usługę do edycji.');
                 }
             });
+
+            addImagesButton.addEventListener('click', function () {
+                const selectedCheckbox = document.querySelector('.order-checkbox:checked');
+                if (selectedCheckbox) {
+                    const carId = selectedCheckbox.value;
+                    const url = '@Url.Action("AddCarImages", "Employee")' + '?carId=' + carId;
+                    window.location.href = url;
+                } else {
+                    alert('Proszę zaznaczyć jedną usługę do dodania zdjęć.');
+                }
+            });
         });
     </script>
+}
+
 }
