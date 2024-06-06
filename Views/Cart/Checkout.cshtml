@@ -43,7 +43,7 @@
     </div>
 
     <p>Metoda Płatności</p>
-    <div class="checkout2">
+    <div class="checkout1">
         <select class="Platnosci" id="Platnosci" name="MetodaPlatnosci">
             <optgroup label="Wybierz">
                 <option value="Wybierz">Wybierz</option>
@@ -58,8 +58,10 @@
         </select>
     </div>
 
-    <p>Miasto</p>
-    <div class="checkout2">
+
+    
+    <p>Sposób dostawy</p>
+    <div class="checkout1">
         <select class="Dostawa" id="Dostawa" name="MetodaDostawy">
             <optgroup label="Wybierz">
                 <option value="Wybierz">Wybierz</option>
@@ -72,11 +74,11 @@
 
     <p>Cena</p>
     <div class="checkout1">
-        <input type="text" class="checkoutforms" placeholder="Cena" />
+        <input type="text" class="checkoutforms" />
     </div>
 </div>
 
-
+<div class="ProductsCheckout">
     <h3>Produkty</h3>
     <table class="table">
         <thead>
@@ -102,8 +104,9 @@
         </tbody>
     </table>
 
-    <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
 
+    <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
+</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
