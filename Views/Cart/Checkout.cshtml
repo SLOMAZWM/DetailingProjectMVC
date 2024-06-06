@@ -10,49 +10,49 @@
 {
     <div class="checkout">
         <div class="form-group">
-            <label for="FirstName">Imię</label>
+            <label for="FirstName">Imię<br /></label>
             <input asp-for="FirstName" class="form-control" placeholder="Imię" />
             <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="LastName">Nazwisko</label>
+            <label for="LastName">Nazwisko<br /></label>
             <input asp-for="LastName" class="form-control" placeholder="Nazwisko" />
             <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="Email">Adres E-Mail</label>
+            <label for="Email">Adres E-Mail<br /></label>
             <input asp-for="Email" class="form-control" placeholder="E-mail" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="PhoneNumber">Numer Telefonu</label>
+            <label for="PhoneNumber">Numer Telefonu<br /></label>
             <input asp-for="PhoneNumber" class="form-control" placeholder="Numer Telefonu" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="Address">Adres</label>
+            <label for="Address">Adres<br /></label>
             <input asp-for="Address" class="form-control" placeholder="Adres" />
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="City">Miasto</label>
+            <label for="City">Miasto<br /></label>
             <input asp-for="City" class="form-control" placeholder="Miasto" />
             <span asp-validation-for="City" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="PostalCode">Kod Pocztowy</label>
+            <label for="PostalCode">Kod Pocztowy<br /></label>
             <input asp-for="PostalCode" class="form-control" placeholder="Kod Pocztowy" />
             <span asp-validation-for="PostalCode" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="PaymentMethod">Metoda Płatności</label>
+            <label for="PaymentMethod">Metoda Płatności<br /></label>
             <select asp-for="PaymentMethod" class="form-control">
                 <option value="">Wybierz</option>
                 <option value="Przelewy">Przelewy 24</option>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="form-group">
-            <label for="DeliveryMethod">Sposób dostawy</label>
+            <label for="DeliveryMethod">Sposób dostawy<br /></label>
             <select asp-for="DeliveryMethod" class="form-control">
                 <option value="">Wybierz</option>
                 <option value="Kurier">Kurier - od 17.99 zł</option>
@@ -78,7 +78,7 @@
         </div>
 
         <div class="form-group">
-            <label>Cena całkowita</label>
+            <label>Cena całkowita<br /></label>
             <input type="text" class="form-control" value="@Model.TotalPrice.ToString("c")" readonly />
         </div>
     </div>

@@ -1538,13 +1538,13 @@ button {
     }
 
     .tablecheckout th {
-        background-color: #ff6f91;
-        font-family: 'Century Gothic', sans-serif;
+        background-color: none;
+        font-family: 'Century Gothic';
     }
 
     .tablecheckout td {
-        background-color: #555555;
-        font-family: 'Century Gothic', sans-serif;
+        background-color: none;
+        font-family: 'Century Gothic';
     }
 
 .checkout-button {
@@ -1570,5 +1570,4 @@ button {
 .checkout {
     text-align: center;
 }
-/*=================================================================================================================Checkout===========================================================================================================================*/
-
+/*=================================================================================================================Checkout==========================================================================================================================
