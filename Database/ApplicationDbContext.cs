@@ -21,6 +21,7 @@ namespace ProjektLABDetailing.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<CarImage> CarImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -85,6 +86,25 @@ namespace ProjektLABDetailing.Data
                 .WithMany(e => e.Orders)
                 .HasForeignKey(o => o.EmployeeId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CarImage>()
+                .HasOne(ci => ci.Car)
+                .WithMany(c => c.CarImages)
+                .HasForeignKey(ci => ci.CarId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CarImage>()
+                .Property(ci => ci.ImagePath)
+                .IsRequired();
+
+            modelBuilder.Entity<CarImage>()
+                .Property(ci => ci.Title)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            modelBuilder.Entity<CarImage>()
+                .Property(ci => ci.Description)
+                .HasMaxLength(500);
         }
     }
 }

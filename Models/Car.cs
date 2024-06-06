@@ -23,5 +23,7 @@ namespace ProjektLABDetailing.Models
         public int Mileage { get; set; }
         [Required]
         public string Condition { get; set; }
+
+        public virtual ICollection<CarImage> CarImages { get; set; } = new List<CarImage>(); // Dodano
     }
 }
