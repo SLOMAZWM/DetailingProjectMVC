@@ -136,13 +136,19 @@ namespace ProjektLABDetailing.Controllers
             order.Status = "Pending";
             order.TotalPrice = _cart.TotalPrice;
 
-            // Dodaj produkty do zamówienia
-            foreach (var item in order.CartItems)
+            foreach (var item in _cart.Items)
             {
                 var product = await _context.Products.FindAsync(item.ProductId);
                 if (product != null)
                 {
-                    order.Products.Add(product);
+                    var orderProductDetail = new ProjektLABDetailing.Models.OrderProductDetail
+                    {
+                        ProductId = product.ProductId,
+                        Product = product,
+                        Quantity = item.Quantity,
+                        Price = item.Price
+                    };
+                    order.OrderProductDetails.Add(orderProductDetail);
                 }
             }
 
@@ -153,12 +159,12 @@ namespace ProjektLABDetailing.Controllers
             return RedirectToAction("OrderConfirmation", new { id = order.OrderId });
         }
 
-
         [HttpGet]
         public async Task<IActionResult> OrderConfirmation(int id)
         {
             var order = await _context.OrderProducts
-                .Include(o => o.Products)
+                .Include(o => o.OrderProductDetails)
+                .ThenInclude(opd => opd.Product)
                 .FirstOrDefaultAsync(o => o.OrderId == id);
 
             if (order == null)
@@ -180,18 +186,16 @@ namespace ProjektLABDetailing.Controllers
                 OrderDate = order.OrderDate,
                 TotalPrice = order.TotalPrice,
                 Status = order.Status,
-                Products = order.Products.Select(p => new OrderProductDetail
+                Products = order.OrderProductDetails.Select(opd => new ProjektLABDetailing.Models.ViewModels.OrderProductDetail
                 {
-                    ProductId = p.ProductId,
-                    Name = p.Name,
-                    Quantity = p.Quantity,
-                    Price = p.Price
+                    ProductId = opd.ProductId,
+                    Name = opd.Product.Name,
+                    Quantity = opd.Quantity,
+                    Price = opd.Price
                 }).ToList()
             };
 
             return View(orderDetailsViewModel);
         }
-
-
     }
 }

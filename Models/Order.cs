@@ -63,7 +63,25 @@ namespace ProjektLABDetailing.Models
 
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
+        public virtual ICollection<OrderProductDetail> OrderProductDetails { get; set; } = new List<OrderProductDetail>();
+
         [NotMapped]
         public List<CartItem> CartItems { get; set; } = new List<CartItem>();
+    }
+
+    public class OrderProductDetail
+    {
+        public int OrderProductDetailId { get; set; }
+        public int OrderProductId { get; set; }
+        public OrderProduct OrderProduct { get; set; }
+
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
+
+        [Required]
+        public int Quantity { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Price { get; set; }
     }
 }
