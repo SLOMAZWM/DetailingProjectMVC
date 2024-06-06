@@ -1489,8 +1489,8 @@ button {
     width: 25%;
     padding: 1%;
     border-radius: 10px;
-    border: 1px black solid;
-    background-color: grey
+    background-image: linear-gradient(to bottom, #676767, #626262, #5e5e5e, #595959, #555555, #555555, #555555, #555555, #595959, #5e5e5e, #626262, #676767);
+    opacity: 80%;
 }
 
 .checkout1 input {
@@ -1508,6 +1508,10 @@ button {
 
 .ProductsCheckout {
     text-align: center;
+}
+
+.tablecheckout {
+    margin-left: 45%;
 }
 
 /*=================================================================================================================Checkout===========================================================================================================================*/
