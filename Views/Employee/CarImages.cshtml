@@ -1,0 +1,73 @@
+﻿@model ProjektLABDetailing.Models.ViewModels.CarImagesViewModel
+
+@{
+    ViewData["Title"] = "Zdjęcia Auta";
+}
+
+<h2>Zdjęcia Auta</h2>
+
+<div class="car-images-container">
+    <h3>Dodaj nowe zdjęcia</h3>
+    <form asp-action="UploadImages" asp-controller="Employee" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="CarId" value="@Model.CarId" />
+        <div class="form-group">
+            <label for="Images">Wybierz zdjęcia:</label>
+            <input type="file" name="Images" multiple class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Prześlij</button>
+    </form>
+
+    <h3>Obecne zdjęcia</h3>
+    <div class="existing-images">
+        @foreach (var image in Model.ExistingImages)
+        {
+            <div class="image-item">
+                <img src="@Url.Content(image.Url)" alt="Zdjęcie auta" class="car-image" />
+                <form asp-action="DeleteImage" asp-controller="Employee" method="post" style="display:inline;">
+                    <input type="hidden" name="ImageId" value="@image.Id" />
+                    <button type="submit" class="btn btn-danger">Usuń</button>
+                </form>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Dodaj tutaj dowolny kod JavaScript, jeśli jest potrzebny
+    </script>
+}
+
+<style>
+    .car-images-container {
+        margin: 0 auto;
+        max-width: 800px;
+    }
+
+        .car-images-container h3 {
+            text-align: center;
+        }
+
+    .existing-images {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .image-item {
+        margin: 10px;
+        position: relative;
+    }
+
+    .car-image {
+        max-width: 200px;
+        max-height: 200px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .image-item form {
+        text-align: center;
+        margin-top: 5px;
+    }
+</style>

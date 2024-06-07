@@ -6,6 +6,7 @@ using ProjektLABDetailing.Models;
 using ProjektLABDetailing.Models.User;
 using ProjektLABDetailing.Models.ViewModels;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -66,6 +67,12 @@ namespace ProjektLABDetailing.Controllers
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
+            if (_cart.Items.Count == 0)
+            {
+                TempData["ErrorMessage"] = "Twój koszyk jest pusty. Nie można złożyć zamówienia.";
+                return RedirectToAction("Summary");
+            }
+
             var order = new OrderProduct
             {
                 TotalPrice = _cart.TotalPrice,
@@ -88,6 +95,18 @@ namespace ProjektLABDetailing.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(OrderProduct order)
         {
+            var validationErrors = ValidateOrder(order);
+            if (validationErrors.Any())
+            {
+                foreach (var error in validationErrors)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
+
+                order.CartItems = _cart.Items.ToList();
+                return View(order);
+            }
+
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);
@@ -157,6 +176,61 @@ namespace ProjektLABDetailing.Controllers
             _cart.Clear();
 
             return RedirectToAction("OrderConfirmation", new { id = order.OrderId });
+        }
+
+        private List<string> ValidateOrder(OrderProduct order)
+        {
+            var errors = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(order.FirstName))
+            {
+                errors.Add("Imię jest wymagane.");
+            }
+            if (string.IsNullOrWhiteSpace(order.LastName))
+            {
+                errors.Add("Nazwisko jest wymagane.");
+            }
+            if (string.IsNullOrWhiteSpace(order.Email))
+            {
+                errors.Add("Adres e-mail jest wymagany.");
+            }
+            else
+            {
+                if (!new EmailAddressAttribute().IsValid(order.Email))
+                {
+                    errors.Add("Nieprawidłowy format adresu e-mail.");
+                }
+                else if (order.Email.Count(c => c == '@') != 1)
+                {
+                    errors.Add("Adres e-mail musi zawierać dokładnie jeden znak '@'.");
+                }
+            }
+            if (string.IsNullOrWhiteSpace(order.PhoneNumber) || !new PhoneAttribute().IsValid(order.PhoneNumber))
+            {
+                errors.Add("Nieprawidłowy format numeru telefonu.");
+            }
+            if (string.IsNullOrWhiteSpace(order.Address))
+            {
+                errors.Add("Adres jest wymagany.");
+            }
+            if (string.IsNullOrWhiteSpace(order.City))
+            {
+                errors.Add("Miasto jest wymagane.");
+            }
+            if (string.IsNullOrWhiteSpace(order.PostalCode))
+            {
+                errors.Add("Kod pocztowy jest wymagany.");
+            }
+            if (string.IsNullOrWhiteSpace(order.PaymentMethod))
+            {
+                errors.Add("Metoda płatności jest wymagana.");
+            }
+            if (string.IsNullOrWhiteSpace(order.DeliveryMethod))
+            {
+                errors.Add("Sposób dostawy jest wymagany.");
+            }
+
+            return errors;
         }
 
         [HttpGet]

@@ -40,6 +40,8 @@ namespace ProjektLABDetailing.Models
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Adres e-mail jest wymagany.")]
+        [EmailAddress(ErrorMessage = "Nieprawidłowy format adresu e-mail.")]
+        [RegularExpression(@"^[^@]+@[^@]+\.[^@]+$", ErrorMessage = "Adres e-mail musi zawierać dokładnie jeden znak '@'.")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Numer telefonu jest wymagany.")]

@@ -1,1 +1,4 @@
 ﻿Zrobić przycisk w wyborze uslugi (pracownik) do dodawania nielimitowanej ilosci zdjec (tyle ile bedzie chcial, uzyc ajaxa do odswiezania strony?)
+
+Naprawic:
+

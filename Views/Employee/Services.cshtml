@@ -56,7 +56,7 @@
 <div class="buttonsServicesalign">
     <button type="button" class="ButtonAddServicesStyle" id="AddServiceButton" data-url="@Url.Action("AddService", "Employee")">Dodaj Usługę</button>
     <button type="button" class="ButtonEditServicesStyle" id="editServiceButton" data-url="@Url.Action("EditService", "Employee")">Edytuj Usługę</button>
-    <button type="button" class="ButtonEditServicesStyle" id="addImagesButton" data-url="@Url.Action("AddCarImages", "Employee")">Dodaj Zdjęcia</button>
+    <button type="button" class="ButtonEditServicesStyle" id="ImagesButton" data-url="@Url.Action("CarImages", "Employee")">Zdjęcia auta</button>
 </div>
 
 @section Scripts {
@@ -65,7 +65,7 @@
             const checkboxes = document.querySelectorAll('.order-checkbox');
             const addButton = document.getElementById('AddServiceButton');
             const editButton = document.getElementById('editServiceButton');
-            const addImagesButton = document.getElementById('addImagesButton');
+            const imagesButton = document.getElementById('ImagesButton');
 
             addButton.addEventListener('click', function () {
                 window.location.href = addButton.dataset.url;
@@ -94,11 +94,11 @@
                 }
             });
 
-            addImagesButton.addEventListener('click', function () {
+            imagesButton.addEventListener('click', function () {
                 const selectedCheckbox = document.querySelector('.order-checkbox:checked');
                 if (selectedCheckbox) {
                     const carId = selectedCheckbox.value;
-                    const url = addImagesButton.dataset.url + '?carId=' + carId;
+                    const url = imagesButton.dataset.url + '?carId=' + carId;
                     window.location.href = url;
                 } else {
                     alert('Proszę zaznaczyć jedną usługę do dodania zdjęć.');
@@ -107,3 +107,4 @@
         });
     </script>
 }
+
