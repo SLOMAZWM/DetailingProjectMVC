@@ -1678,3 +1678,68 @@ button {
         background-color: #555555; 
         font-family: 'Century Gothic', sans-serif; 
     }
+
+    /*CarImages*/
+
+.car-images-container {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+    .car-images-container h3 {
+        text-align: center;
+    }
+
+.existing-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.image-item {
+    margin: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.car-image {
+    max-width: 200px;
+    max-height: 200px;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+    .car-image.enlarged {
+        position: fixed;
+        z-index: 1000;
+        max-width: 90%;
+        max-height: 90%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        cursor: zoom-out;
+    }
+
+.image-item h4 {
+    margin-bottom: 5px;
+}
+
+.image-item p {
+    margin-top: 5px;
+}
+
+.car-image.enlarged {
+    width: auto;
+    height: auto;
+    max-width: 90%;
+    max-height: 90%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

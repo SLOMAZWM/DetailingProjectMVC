@@ -621,6 +621,90 @@ namespace ProjektLABDetailing.Controllers
             return View(model);
         }
 
+        private static readonly string[] AllowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+
+        [HttpPost]
+        public async Task<IActionResult> UploadImages(AddCarImagesViewModel viewModel)
+        {
+            var invalidFiles = viewModel.Images.Where(image =>
+            {
+                var extension = Path.GetExtension(image.FileName).ToLower();
+                return !AllowedExtensions.Contains(extension);
+            }).ToList();
+
+            if (invalidFiles.Any())
+            {
+                return Json(new { success = false, errors = "Nieprawidłowy typ pliku! Tylko format .jpg, .jpeg, .png, .gif jest dozwolony." });
+            }
+
+            if (viewModel.Images != null && viewModel.Images.Count > 0)
+            {
+                foreach (var image in viewModel.Images)
+                {
+                    if (image.Length > 0)
+                    {
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/addedCarImages");
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await image.CopyToAsync(stream);
+                        }
+
+                        var carImage = new CarImage
+                        {
+                            CarId = viewModel.CarId,
+                            ImagePath = $"/addedCarImages/{uniqueFileName}",
+                            Title = viewModel.Title,
+                            Description = viewModel.Description
+                        };
+
+                        _context.CarImages.Add(carImage);
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            var carImages = await _context.CarImages.Where(ci => ci.CarId == viewModel.CarId).Select(ci => new ImageViewModel
+            {
+                Id = ci.ImageId,
+                Url = ci.ImagePath,
+                Title = ci.Title,
+                Description = ci.Description
+            }).ToListAsync();
+
+            return Json(new { success = true, images = carImages });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteImage(int imageId)
+        {
+            var image = await _context.CarImages.FindAsync(imageId);
+            if (image == null)
+            {
+                return Json(new { success = false });
+            }
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImagePath.TrimStart('/'));
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+            _context.CarImages.Remove(image);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true });
+        }
+
 
     }
 }
+
