@@ -29,7 +29,7 @@
                             <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
                             <td>@order.Client?.User?.Email</td>
                             <td>@order.Client?.User?.FirstName  @order.Client?.User?.LastName</td>
-                            <td><a href="/OrderProductsDetails/@order.OrderId">Szczegóły zamówienia</a></td>
+                            <td><a href="@Url.Action("OrderDetails", "Employee", new { id = order.OrderId })">Szczegóły</a></td>
                             <td>@(Model.OrderTotals.TryGetValue(order.OrderId, out var total) ? total.ToString("C") : "N/A")</td>
                         </tr>
                     }
@@ -70,7 +70,7 @@
                                 <ul>
                                     @foreach (var s in service.Services)
                                     {
-                                        @s.Name
+                                        <li>@s.Name</li>
                                     }
                                 </ul>
                             </td>
