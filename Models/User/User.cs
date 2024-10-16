@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjektLABDetailing.Models.User
@@ -16,5 +15,7 @@ namespace ProjektLABDetailing.Models.User
 
         public ICollection<Client> Clients { get; set; } = new List<Client>();
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+
+        public ICollection<Role> Roles { get; set; } = new List<Role>();
     }
 }
