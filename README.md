@@ -196,14 +196,6 @@ Aplikacja jest w pełni responsywna, zapewniając optymalne doświadczenie użyt
 - **Ochrona Przed Atakami**: Implementacja zabezpieczeń przeciwko SQL Injection, Cross-Site Scripting (XSS), Cross-Site Request Forgery (CSRF).
 - **SSL/TLS**: Szyfrowanie komunikacji między klientem a serwerem za pomocą protokołu HTTPS.
 
-## Kontakt
-
-W razie pytań lub potrzeby wsparcia, prosimy o kontakt:
-
-- **Email**: support@detailingfirma.pl
-- **Telefon**: +48 123 456 789
-- **Adres**: Ul. Przykładowa 1, 00-001 Warszawa
-
 ---
 
-*Dokumentacja została przygotowana na październik 2024 roku. Wszystkie prawa zastrzeżone.*
+*Dokumentacja została przygotowana na czerwiec 2024 roku. Wszystkie prawa zastrzeżone.*
