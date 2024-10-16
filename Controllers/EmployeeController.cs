@@ -634,7 +634,7 @@ namespace ProjektLABDetailing.Controllers
 
             if (invalidFiles.Any())
             {
-                return Json(new { success = false, errors = "Nieprawidłowy typ pliku! Tylko format .jpg, .jpeg, .png, .gif jest dozwolony." });
+                return Json(new { success = false, errors = "Nieprawidłowy typ pliku! Tylko format .jpg, .jpeg, .png, .gif .rav jest dozwolony." });
             }
 
             if (viewModel.Images != null && viewModel.Images.Count > 0)
